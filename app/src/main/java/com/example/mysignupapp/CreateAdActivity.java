@@ -217,7 +217,7 @@ public class CreateAdActivity extends DrawerBaseActivity
                     String image_number_now = "Images: " + imageUris.size() + "/5";
                     image_number.setText(image_number_now);
                 }
-                if(imageUris.size() >= 2)
+                else if(imageUris.size() >= 2)
                 {
                     imageUris.remove(position);
                     imageIs.setImageURI(imageUris.get(0));
@@ -297,7 +297,8 @@ public class CreateAdActivity extends DrawerBaseActivity
         });
 
         storageReference = FirebaseStorage.getInstance().getReference("Ads") ;
-        create_ad_button.setOnClickListener(new View.OnClickListener() {
+        create_ad_button.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {

@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 public class ChooseOfferActivity extends Activity
 {
     ImageView cancel_button;
@@ -19,6 +21,10 @@ public class ChooseOfferActivity extends Activity
 
     boolean i_offer_money;
     boolean i_offer_ad;
+
+    String from_id;
+    String to_id;
+    String about_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -45,6 +51,10 @@ public class ChooseOfferActivity extends Activity
 
         getWindow().setAttributes(params);
 
+        from_id = getIntent().getStringExtra("SENDER");
+        to_id = getIntent().getStringExtra("RECEIVER");
+        about_id = getIntent().getStringExtra("AD_ID");
+
         cancel_button.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -59,12 +69,14 @@ public class ChooseOfferActivity extends Activity
             @Override
             public void onClick(View v)
             {
-                Toast.makeText(ChooseOfferActivity.this, "Money offer selected", Toast.LENGTH_SHORT).show();
                 i_offer_money = true;
                 i_offer_ad = false;
                 Intent to_offer = new Intent(ChooseOfferActivity.this, MakeOffer.class);
                 to_offer.putExtra("OFFER_MONEY", i_offer_money);
                 to_offer.putExtra("OFFER_AD", i_offer_ad);
+                to_offer.putExtra("OFFER_FROM", from_id);
+                to_offer.putExtra("OFFER_TO", to_id);
+                to_offer.putExtra("OFFER_ABOUT", about_id);
                 startActivity(to_offer);
             }
         });
@@ -74,12 +86,14 @@ public class ChooseOfferActivity extends Activity
             @Override
             public void onClick(View v)
             {
-                Toast.makeText(ChooseOfferActivity.this, "Ad offer selected", Toast.LENGTH_SHORT).show();
                 i_offer_money = false;
                 i_offer_ad = true;
                 Intent to_offer = new Intent(ChooseOfferActivity.this, MakeOffer.class);
                 to_offer.putExtra("OFFER_MONEY", i_offer_money);
                 to_offer.putExtra("OFFER_AD", i_offer_ad);
+                to_offer.putExtra("OFFER_FROM", from_id);
+                to_offer.putExtra("OFFER_TO", to_id);
+                to_offer.putExtra("OFFER_ABOUT", about_id);
                 startActivity(to_offer);
             }
         });

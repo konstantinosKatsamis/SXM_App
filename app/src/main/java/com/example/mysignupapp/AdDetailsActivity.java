@@ -54,6 +54,8 @@ public class AdDetailsActivity extends DrawerBaseActivity
     TextView switch_ad;
     TextView description_ad;
 
+    HashMap<String, Object> map_of_ad;
+
     private ViewPager2 viewPager2;
 
     private Handler handler_for_images = new Handler();
@@ -91,7 +93,7 @@ public class AdDetailsActivity extends DrawerBaseActivity
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
-                HashMap<String, Object> map_of_ad = (HashMap<String, Object>) snapshot.getValue();
+                map_of_ad = (HashMap<String, Object>) snapshot.getValue();
                 title = (String) map_of_ad.get("Title");
                 category = (String) map_of_ad.get("Category");
                 id = (String) map_of_ad.get("ID");
@@ -194,7 +196,12 @@ public class AdDetailsActivity extends DrawerBaseActivity
             @Override
             public void onClick(View v)
             {
-                startActivity(new Intent(AdDetailsActivity.this, ChooseOfferActivity.class));
+                Intent request_intent = new Intent(AdDetailsActivity.this, ChooseOfferActivity.class);
+                request_intent.putExtra("RECEIVER", publisher);
+                request_intent.putExtra("SENDER", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                request_intent.putExtra("AD_ID", id);
+
+                startActivity(request_intent);
             }
         });
     }
