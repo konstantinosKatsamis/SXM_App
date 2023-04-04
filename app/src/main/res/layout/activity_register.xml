@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/signuptitle"
-        android:text="Sign up"
+        android:text="Sign up!"
         android:textSize="35dp"
         android:textStyle="bold"
         android:textColor="@color/white"
