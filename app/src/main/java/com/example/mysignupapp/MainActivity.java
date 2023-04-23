@@ -31,6 +31,16 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+        button_for_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View ownerView) {
+
+                Intent intent_for_home = new Intent(MainActivity.this, HomeActivity.class);
+                startActivity(intent_for_home);
+
+            }
+        });
     }
 
     @Override
