@@ -7,8 +7,10 @@ import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -33,7 +35,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         googleMap.setIndoorEnabled(false);
         LatLng Athens = new LatLng(38.02159245725065, 23.801417816361493);
         map.addMarker(new MarkerOptions().position(Athens).title("Athens"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(Athens));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(Athens, 16));
 
     }
 }
