@@ -57,6 +57,7 @@ public class Register extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
+                Log.d("Reg", "Sign in button pressed");
                 Intent register_to_login = new Intent(Register.this, MainActivity.class);
                 startActivity(register_to_login);
             }
@@ -67,57 +68,74 @@ public class Register extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
+                Log.d("Reg", "Create Account Button pressed");
+
                 TextInputLayout FIRST_NAME_textInputLayout = (TextInputLayout) findViewById(R.id.first_name_textfield);
                 firstName = FIRST_NAME_textInputLayout.getEditText().getText().toString().trim();
+                Log.d("Reg", "First Name: " + firstName);
 
                 TextInputLayout LAST_NAME_textInputLayout = (TextInputLayout) findViewById(R.id.last_name_textfield);
                 lastName = LAST_NAME_textInputLayout.getEditText().getText().toString().trim();
+                Log.d("Reg", "Last Name: " + lastName);
 
                 TextInputLayout USERNAME_textInputLayout = (TextInputLayout) findViewById(R.id.username_textfield);
                 userName = USERNAME_textInputLayout.getEditText().getText().toString().trim();
+                Log.d("Reg", "Username: " + userName);
 
                 TextInputLayout EMAIL_textInputLayout = (TextInputLayout) findViewById(R.id.email_address_textfield);
-                String email = EMAIL_textInputLayout.getEditText().getText().toString().trim();
+                email = EMAIL_textInputLayout.getEditText().getText().toString().trim();
+                Log.d("Reg", "Email: " + email);
 
                 TextInputLayout PASSWORD_1_textInputLayout = (TextInputLayout) findViewById(R.id.password_textfield);
                 password = PASSWORD_1_textInputLayout.getEditText().getText().toString().trim();
-
-                year = datePicker.getDatePicker().getYear();
+                Log.d("Reg", "Password1: " + password);
 
                 TextInputLayout PASSWORD_2_textInputLayout = (TextInputLayout) findViewById(R.id.password_confirm);
                 re_enter_password = PASSWORD_2_textInputLayout.getEditText().getText().toString().trim();
+                Log.d("Reg", "Password2: " + re_enter_password);
+
+                year = datePicker.getDatePicker().getYear();
+                birthDate = makeDateString(datePicker.getDatePicker().getDayOfMonth(), datePicker.getDatePicker().getMonth(), datePicker.getDatePicker().getYear());
+                int user_age = LocalDate.now().getYear() - year;
+
+                Log.d("Reg", "Date chosen from datePicker: " + birthDate);
+                Log.d("Reg", "Year chosen from datePicker: " + year);
+                Log.d("Reg", "Calculated user age: " + user_age);
 
                 if(!checkFirstName(firstName))
                 {
                     showPop(v, "First Name input incorrect!");
-                    Log.d("Reg", "First Name written: " + firstName);
                 }
                 else if(!checkLastName(lastName))
                 {
                     showPop(v, "Last Name input incorrect!");
-                    Log.d("Reg", "Last Name written: " + lastName);
                 }
 
                 else if(!checkUserName(userName))
                 {
                     showPop(v, "Username input incorrect!");
-                    Log.d("Reg", "Username written: " + userName);
                 }
                 else if(!checkEmail(email))
                 {
                     showPop(v, "Email input incorrect!");
-                    Log.d("Reg", "Email written: " + email);
                 }
                 else if(!checkAge(year))
                 {
                     showPop(v, "You must be over 16 to create account!");
-                    Log.d("Reg", "Age calculated: " + (LocalDate.now().getYear() - year));
                 }
                 else if(!checkPasswords(password, re_enter_password))
                 {
                     showPop(v, "Password inputs incorrect!");
-                    Log.d("Reg", "Password1: " + password);
-                    Log.d("Reg", "Password2: " + re_enter_password);
+                }
+                else if
+                (checkFirstName(firstName)
+                                && checkLastName(lastName)
+                                && checkUserName(userName)
+                                && checkEmail(email)
+                                && checkAge(year)
+                                && checkPasswords(password, re_enter_password))
+                {
+                    Log.d("Reg", "All fields are correct syntax-wise!");
                 }
             }
         });

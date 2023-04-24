@@ -22,8 +22,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                //Intent to_map = new Intent(HomeActivity.this, Map_Activity.class);
-                //startActivity(to_map);
+                Intent to_map = new Intent(HomeActivity.this, MapActivity.class);
+                startActivity(to_map);
             }
         });
     }
