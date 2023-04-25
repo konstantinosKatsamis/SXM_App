@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 public class HomeActivity extends AppCompatActivity {
 
     ImageButton to_map_button;
+    ImageButton to_create_Ad_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,12 +18,22 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.quick_menu_main);
 
         to_map_button = findViewById(R.id.map_mode);
+        to_create_Ad_button = findViewById(R.id.create_ad_mode);
 
         to_map_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 Intent to_map = new Intent(HomeActivity.this, MapActivity.class);
+                startActivity(to_map);
+            }
+        });
+
+        to_create_Ad_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Intent to_map = new Intent(HomeActivity.this, CreateAd.class);
                 startActivity(to_map);
             }
         });
