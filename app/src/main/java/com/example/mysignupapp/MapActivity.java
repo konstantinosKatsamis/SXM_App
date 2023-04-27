@@ -3,6 +3,7 @@ package com.example.mysignupapp;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,21 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
+//        builder.setTitle("Confirmation"); del
+        builder.setMessage("We are already here");
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+
+            }
+        }, 4000); // 3000 milliseconds = 3 seconds
 
 
 //        System.out.println("MapActivity===========================================================================================================================================================\n"); del
@@ -56,8 +72,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             @Override
             public void run()
             {
-                // We create and start a new Intent from splash activity to MainActivity
-                // MainActivity : Sign in/ Login screen
                 map = googleMap;
                 googleMap.setIndoorEnabled(false);
                 LatLng Athens = new LatLng(receivedCurrentLocation.latitude, receivedCurrentLocation.longitude);

@@ -3,6 +3,7 @@ package com.example.mysignupapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -44,13 +45,14 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity implements LocationListener {
 
     ImageButton to_map_button;
 
 //    Button button_location; del
-    TextView textView_location;
+//    TextView textView_location; del
     LocationManager locationManager;
 
     LatLng currentLocation;
@@ -84,13 +86,28 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             {
                 getLocation();
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+//                builder.setTitle("");
+                builder.setMessage("Google Maps is Loading...");
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+
+                    }
+                }, 4500); // 3000 milliseconds = 3 seconds
+
+
+
                 new Handler().postDelayed(new Runnable()
                 {
                     @Override
                     public void run()
                     {
-                        // We create and start a new Intent from splash activity to MainActivity
-                        // MainActivity : Sign in/ Login screen
                         Intent to_map = new Intent(HomeActivity.this, MapActivity.class);
                         to_map.putExtra("currentLocation", currentLocation);
                         startActivity(to_map);
@@ -132,7 +149,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
             String address = addresses.get(0).getAddressLine(0);
 
-            textView_location.setText(address);
+//            textView_location.setText(address); del
 
         }catch (Exception e){
             e.printStackTrace();
