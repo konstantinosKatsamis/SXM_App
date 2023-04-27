@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +40,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -46,9 +49,11 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     ImageButton to_map_button;
 
-    Button button_location;
+//    Button button_location; del
     TextView textView_location;
     LocationManager locationManager;
+
+    LatLng currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +62,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
         to_map_button = findViewById(R.id.map_mode);
 
-        textView_location = findViewById(R.id.text_location);
-        button_location = findViewById(R.id.button_location);
+//        textView_location = findViewById(R.id.text_location); del
+//        button_location = findViewById(R.id.button_location); del
 
         if(ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(HomeActivity.this, new String[]{
@@ -66,19 +71,35 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             }, 100);
         }
 
-        button_location.setOnClickListener(new View.OnClickListener() {
+        /* button_location.setOnClickListener(new View.OnClickListener() { del
             @Override
             public void onClick(View v) {
-                getLocation();
+//                getLocation();
             }
-        });
+        });*/
 
         to_map_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
-                Intent to_map = new Intent(HomeActivity.this, MapActivity.class);
-                startActivity(to_map);
+                getLocation();
+
+                new Handler().postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        // We create and start a new Intent from splash activity to MainActivity
+                        // MainActivity : Sign in/ Login screen
+                        Intent to_map = new Intent(HomeActivity.this, MapActivity.class);
+                        to_map.putExtra("currentLocation", currentLocation);
+                        startActivity(to_map);
+
+                    }
+                },4500);
+
+
+
             }
         });
     }
@@ -86,6 +107,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     @SuppressLint("MissingPermission")
     private void getLocation() {
+//        System.out.println("getLocation() ----------------------------------------------------------------------------------------------------------------------------------------"); del
 
         try {
             locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
@@ -99,9 +121,11 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onLocationChanged(Location location) {
-        Toast.makeText(this, ""+location.getLatitude()+","+location.getLongitude(), Toast.LENGTH_SHORT).show();
+//        System.out.println("onLocationChanged() ----------------------------------------------------------------------------------------------------------------------------------------"); del
+//        Toast.makeText(this, ""+location.getLatitude()+","+location.getLongitude(), Toast.LENGTH_SHORT).show(); del
 
-        System.out.println(location.getLatitude() + "   " + location.getLongitude()); // Result: 37.99991190433502   23.73816668987274
+//        System.out.println(location.getLatitude() + "   " + location.getLongitude()); // Result: 37.99991190433502   23.73816668987274 del
+        setCurrentLocation(location.getLatitude(), location.getLongitude());
 
         try {
             Geocoder geocoder = new Geocoder(HomeActivity.this, Locale.getDefault());
@@ -129,5 +153,10 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    public void setCurrentLocation(double lat, double lon){
+//        System.out.println("SETTER IS TAKING ACTION ----------------------------------------------------------------------------------------------------------------------------------------"); del
+        this.currentLocation = new LatLng(lat, lon);
     }
 }
