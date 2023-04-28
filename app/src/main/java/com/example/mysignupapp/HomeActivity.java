@@ -50,6 +50,7 @@ import java.util.Map;
 public class HomeActivity extends AppCompatActivity implements LocationListener {
 
     ImageButton to_map_button;
+    ImageButton to_create_Ad_button;
 
 //    Button button_location; del
 //    TextView textView_location; del
@@ -63,6 +64,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         setContentView(R.layout.quick_menu_main);
 
         to_map_button = findViewById(R.id.map_mode);
+        to_create_Ad_button = findViewById(R.id.create_ad_mode);
 
 //        textView_location = findViewById(R.id.text_location); del
 //        button_location = findViewById(R.id.button_location); del
@@ -117,6 +119,15 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
 
 
+            }
+        });
+
+        to_create_Ad_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Intent to_map = new Intent(HomeActivity.this, CreateAd.class);
+                startActivity(to_map);
             }
         });
     }
