@@ -1,5 +1,6 @@
 package com.example.mysignupapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -8,11 +9,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
 {
     Button button_for_login; // the button "Enter". Used to enter from login to home screen
     Button button_for_register; // the button "Sign up". Used to register a new account
+
+   FirebaseFirestore fireStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +34,8 @@ public class MainActivity extends AppCompatActivity
         //we give our buttons ids from the activity_main.xml file
         button_for_login = findViewById(R.id.completeLogin);
         button_for_register = findViewById(R.id.register_button);
+
+        fireStore = FirebaseFirestore.getInstance();
 
         //When we press the "Sign up" button
         button_for_register.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +65,24 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+        Map<String, Object> users = new HashMap<>();
+        users.put("firstName", "EASY");
+        users.put("lastName", "TUTO");
+        users.put("description", "Sub");
+
+        fireStore.collection(" users").add(users).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(getApplicationContext(), "SUCCESS", Toast.LENGTH_LONG).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     //In case we press the back button we have a choice to exit and close the app

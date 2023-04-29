@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "455610602483",
+    "project_id": "sxm-app-adac5",
+    "storage_bucket": "sxm-app-adac5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:455610602483:android:7706e6cc83d47eb032f886",
+        "android_client_info": {
+          "package_name": "com.example.mysignupapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "455610602483-bmmmr8qp3r4pittakmtb2k2ja8ip6vpo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mysignupapp",
+            "certificate_hash": "62aada020bd719a258b8158f62b926798c3d09d5"
+          }
+        },
+        {
+          "client_id": "455610602483-b0eo4ropqc54gtj4f8cmqekg8l0bb0i7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9SFp6K9l3YqI3gFjypJvtcqgKK4PRL0g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "455610602483-b0eo4ropqc54gtj4f8cmqekg8l0bb0i7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
