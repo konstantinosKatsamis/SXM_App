@@ -1,5 +1,6 @@
 package com.example.mysignupapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,10 +14,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +45,10 @@ public class Register extends AppCompatActivity
     int year;
     String password;
     String re_enter_password;
+
+    FirebaseFirestore fireStore;
+
+    String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +150,31 @@ public class Register extends AppCompatActivity
                                 && checkPasswords(password, re_enter_password))
                 {
                     Log.d("Reg", "All fields are correct syntax-wise!");
+                    System.out.println("HA HA EMPIKEN ---------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                    fireStore = FirebaseFirestore.getInstance();
+
+                    User usr = new User(firstName, lastName, birthDate, email, userName, password);
+
+//                    Map<String, Object> users = new HashMap<>();
+//                    users.put("firstName", "EASY");
+//                    users.put("lastName", "TUTO");
+//                    users.put("description", "Sub");
+
+                    fireStore.collection("users").add(usr).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            setuserID(documentReference.getId());
+                            Log.d("Reg", getUserID());
+                            Toast.makeText(getApplicationContext(), "Register successfully completed", Toast.LENGTH_LONG).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
+
             }
         });
     }
@@ -261,4 +299,13 @@ public class Register extends AppCompatActivity
     {
         datePicker.show();
     }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setuserID(String userID) {
+        this.userID = userID;
+    }
+
 }
