@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,6 +27,8 @@ import java.util.Locale;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -52,16 +55,65 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     ImageButton to_map_button;
     ImageButton to_create_Ad_button;
 
+    ImageButton to_filters;
+
 //    Button button_location; del
 //    TextView textView_location; del
     LocationManager locationManager;
-
     LatLng currentLocation;
+
+    RecyclerView adList;
+    AdAdapter adapter;
+    List<String> titles;
+    List<Integer> images;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quick_menu_main);
+
+        adList = findViewById(R.id.adList);
+        titles = new ArrayList<>();
+        images = new ArrayList<>();
+
+        titles.add("Ad 1");
+        titles.add("Ad 2");
+        titles.add("Ad 3");
+        titles.add("Ad 4");
+        titles.add("Ad 5");
+        titles.add("Ad 6");
+        titles.add("Ad 7");
+        titles.add("Ad 8");
+        titles.add("Ad 9");
+        titles.add("Ad 10");
+        titles.add("Ad 11");
+        titles.add("Ad 12");
+        titles.add("Ad 13");
+        titles.add("Ad 14");
+        titles.add("Ad 15");
+
+
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+        images.add(R.drawable.twitter);
+
+        adapter = new AdAdapter(this, titles, images);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+        adList.setLayoutManager(gridLayoutManager);
+        adList.setAdapter(adapter);
 
         to_map_button = findViewById(R.id.map_mode);
         to_create_Ad_button = findViewById(R.id.create_ad_mode);
@@ -119,6 +171,16 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
 
 
+            }
+        });
+
+        to_filters = findViewById(R.id.filter_mode);
+
+        to_filters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent to_filter = new Intent(HomeActivity.this, FilterActivity.class);
+                startActivity(to_filter);
             }
         });
 

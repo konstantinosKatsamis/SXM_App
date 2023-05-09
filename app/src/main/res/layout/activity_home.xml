@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ACE9F1"
+        android:id="@+id/adList"
+        android:padding="16dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
