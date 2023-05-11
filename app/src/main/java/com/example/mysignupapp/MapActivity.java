@@ -82,6 +82,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 //                System.out.println("LONGITUDE: " + receivedCurrentLocation.longitude); del
 
             }
-        },9000);
+        },4500);
     }
 }
