@@ -4,28 +4,43 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     GoogleMap map;
     LatLng receivedCurrentLocation;
 
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        if(currentUser != null)
+        {
+            Toast.makeText(MapActivity.this, "YOU EXIST", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(MapActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
 //        builder.setTitle("Confirmation"); del
@@ -54,8 +69,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         } else {
             System.out.println("ReceivingActivity" + "Location parameter is null");
         }
-
-
 
 //        System.out.println("==========================================================================================================================================================="); del
 

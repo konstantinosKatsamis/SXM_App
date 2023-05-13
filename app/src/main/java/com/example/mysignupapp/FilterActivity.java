@@ -11,9 +11,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -23,6 +26,8 @@ import java.util.Locale;
 
 public class FilterActivity extends AppCompatActivity
 {
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
     String[] criteria ={"User rank", "Increasing price", "Decreasing price", "Item trade off", "Price Only", "Trade off only"};
 
     AutoCompleteTextView choices;
@@ -49,6 +54,18 @@ public class FilterActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        if(currentUser != null)
+        {
+            Toast.makeText(FilterActivity.this, "YOU EXIST", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(FilterActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
+        }
 
         choices  = findViewById(R.id.autocomplete_text);
 

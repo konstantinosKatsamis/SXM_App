@@ -21,9 +21,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,7 +33,7 @@ import java.util.regex.Pattern;
 public class Register extends AppCompatActivity
 {
     private FirebaseAuth mAuth;
-
+    private FirebaseUser currentUser;
     private DatePickerDialog datePicker;
     private Button dateOfBirthButton;
     Button verification;
@@ -46,16 +48,23 @@ public class Register extends AppCompatActivity
     String password;
     String re_enter_password;
 
+    ArrayList<Ad> user_ads;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
 
-        if(mAuth.getCurrentUser() != null)
+        if(currentUser != null)
         {
-
+            Toast.makeText(Register.this, "YOU EXIST", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(Register.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
         }
 
         initDatePicker();
@@ -112,8 +121,10 @@ public class Register extends AppCompatActivity
                 Log.d("Reg", "Password2: " + re_enter_password);
 
                 year = datePicker.getDatePicker().getYear();
-                birthDate = makeDateString(datePicker.getDatePicker().getDayOfMonth(), datePicker.getDatePicker().getMonth(), datePicker.getDatePicker().getYear());
+                birthDate = makeDateString(datePicker.getDatePicker().getDayOfMonth(), datePicker.getDatePicker().getMonth() + 1, datePicker.getDatePicker().getYear());
                 int user_age = LocalDate.now().getYear() - year;
+
+                user_ads = new ArrayList<>();
 
                 Log.d("Reg", "Date chosen from datePicker: " + birthDate);
                 Log.d("Reg", "Year chosen from datePicker: " + year);
@@ -179,9 +190,10 @@ public class Register extends AppCompatActivity
                             Log.d("Reg", "Successful");
                             Log.d("Reg", "Username: " + new_user_username);
                             Log.d("Reg", "Password: " + new_user_password);
-                            Log.d("Reg", "User: " +  FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-                            User newUser = new User(firstName, lastName, birthDate, email, new_user_username, new_user_password);
-                            FirebaseDatabase.getInstance().getReference("users")
+                            Log.d("Reg", "User: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            User newUser = new User(FirebaseAuth.getInstance().getCurrentUser().getUid(), firstName, lastName,
+                                    birthDate, email, new_user_username, new_user_password,user_ads);
+                            FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override

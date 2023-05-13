@@ -45,6 +45,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 import java.util.Locale;
@@ -67,10 +69,25 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     List<String> titles;
     List<Integer> images;
 
+    FirebaseAuth mAuth;
+    FirebaseUser me;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quick_menu_main);
+
+        mAuth = FirebaseAuth.getInstance();
+        me = mAuth.getCurrentUser();
+
+        if(me != null)
+        {
+            Toast.makeText(HomeActivity.this, "YOU EXIST", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(HomeActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
+        }
 
         adList = findViewById(R.id.adList);
         titles = new ArrayList<>();

@@ -17,10 +17,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity
 {
     private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
     Button button_for_login; // the button "Enter". Used to enter from login to home screen
     Button button_for_register; // the button "Sign up". Used to register a new account
     String exist_username;
@@ -32,10 +34,15 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
 
-        if(mAuth.getCurrentUser() != null)
+        if(currentUser != null)
         {
-
+            Toast.makeText(MainActivity.this, "YOU EXIST", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(MainActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
         }
 
         //we give our buttons ids from the activity_main.xml file

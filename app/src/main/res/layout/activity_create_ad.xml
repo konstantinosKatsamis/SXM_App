@@ -108,22 +108,24 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            <TextView
+                android:id="@+id/switch_multiple_selector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:hint="Preferred items for switch">
-
-                <AutoCompleteTextView
-                    android:id="@+id/preferred_textfield"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none" />
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_centerInParent="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:drawable/editbox_background"
+                android:drawableEnd="@android:drawable/arrow_down_float"
+                android:drawablePadding="16dp"
+                android:hint="Categories for switching"
+                android:padding="13dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
         </LinearLayout>
-
 
         <RelativeLayout
             android:background="@color/black"
@@ -173,7 +175,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/login_button"
+            android:id="@+id/create_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
