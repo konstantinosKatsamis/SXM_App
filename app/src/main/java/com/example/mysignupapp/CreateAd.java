@@ -27,7 +27,6 @@ import android.widget.ViewSwitcher;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +36,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.ktx.Firebase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -45,6 +43,8 @@ import com.google.firebase.storage.StorageTask;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class CreateAd extends AppCompatActivity
 {
@@ -69,16 +69,19 @@ public class CreateAd extends AppCompatActivity
     String price_input;
     ArrayList<String> switch_inputs;
 
-    TextView multiple_selections;
-    boolean[] selectedDay;
+    TextView switch_selections;
+    boolean[] selected_switch;
 
-    ArrayList<Integer> daylist = new ArrayList<>();
-    String[] dayArray = {"Collectors", "Vehicles", "Books", "Men Clothing", "Women Clothing", "Music", "Sports"};
-
+    ArrayList<Integer> switch_list = new ArrayList<>();
+    String[] category_array = {"Collectors", "Vehicles", "Books", "Men Clothing", "Women Clothing", "Music", "Sports"};
 
     private static final int PICK_IMAGES_CODE = 0;
 
     int position = 0;
+
+    TextInputLayout TITLE_textInputLayout;
+
+    TextInputLayout PRICE_textInputLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +99,7 @@ public class CreateAd extends AppCompatActivity
         {
             Toast.makeText(CreateAd.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
         }
+
         switch_inputs = new ArrayList<>();
 
         storageReference = FirebaseStorage.getInstance().getReference("Ads");
@@ -105,14 +109,18 @@ public class CreateAd extends AppCompatActivity
         adapterItems = new ArrayAdapter<String>(this, R.layout.list_item, items);
         autoCompleteTxt.setAdapter(adapterItems);
 
+        TITLE_textInputLayout = (TextInputLayout) findViewById(R.id.title_textfield);
+
+        PRICE_textInputLayout = (TextInputLayout) findViewById(R.id.price_textfield);
+
         autoCompleteTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
+                category_input = item;
                 Toast.makeText(getApplicationContext(), "Item: " + item, Toast.LENGTH_SHORT).show();
             }
         });
-
 
         imageIs = findViewById(R.id.imagesIs);
         previousBtn = findViewById(R.id.previousBtn);
@@ -162,33 +170,25 @@ public class CreateAd extends AppCompatActivity
             }
         });
 
-        TextInputLayout TITLE_textInputLayout = (TextInputLayout) findViewById(R.id.title_textfield);
-        title_input = TITLE_textInputLayout.getEditText().getText().toString().trim();
+        switch_selections = findViewById(R.id.switch_multiple_selector);
 
-        AutoCompleteTextView CATEGORY_textInputLayout = findViewById(R.id.select_category);
-        category_input = CATEGORY_textInputLayout.getText().toString().trim();
-
-        TextInputLayout PRICE_textInputLayout = (TextInputLayout) findViewById(R.id.price_textfield);
-        price_input = PRICE_textInputLayout.getEditText().getText().toString().trim();
-
-        multiple_selections = findViewById(R.id.switch_multiple_selector);
-        selectedDay = new boolean[dayArray.length];
+        selected_switch = new boolean[category_array.length];
 
         create_ad_button = findViewById(R.id.create_button);
-        multiple_selections.setOnClickListener(new View.OnClickListener() {
+        switch_selections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateAd.this);
                 builder.setTitle("Category");
                 builder.setCancelable(false);
-                builder.setMultiChoiceItems(dayArray, selectedDay, new DialogInterface.OnMultiChoiceClickListener() {
+                builder.setMultiChoiceItems(category_array, selected_switch, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                         if (isChecked) {
-                            daylist.add(which);
-                            Collections.sort(daylist);
+                            switch_list.add(which);
+                            Collections.sort(switch_list);
                         } else {
-                            daylist.remove(Integer.valueOf(which));
+                            switch_list.remove(Integer.valueOf(which));
                         }
                     }
                 });
@@ -198,16 +198,16 @@ public class CreateAd extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int which) {
                         StringBuilder stringBuilder = new StringBuilder();
 
-                        for (int j = 0; j < daylist.size(); j++) {
-                            stringBuilder.append(dayArray[daylist.get(j)]);
-                            switch_inputs.add(dayArray[daylist.get(j)]);
+                        for (int j = 0; j < switch_list.size(); j++) {
+                            stringBuilder.append(category_array[switch_list.get(j)]);
+                            switch_inputs.add(category_array[switch_list.get(j)]);
 
-                            if (j != daylist.size() - 1) {
+                            if (j != switch_list.size() - 1) {
                                 stringBuilder.append(", ");
                             }
                         }
 
-                        multiple_selections.setText(stringBuilder.toString());
+                        switch_selections.setText(stringBuilder.toString());
                     }
                 });
 
@@ -221,11 +221,11 @@ public class CreateAd extends AppCompatActivity
                 builder.setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for (int j = 0; j < selectedDay.length; j++) {
-                            selectedDay[j] = false;
-                            daylist.clear();
+                        for (int j = 0; j < selected_switch.length; j++) {
+                            selected_switch[j] = false;
+                            switch_list.clear();
                             switch_inputs.clear();
-                            multiple_selections.setText("");
+                            switch_selections.setText("");
                         }
 
                     }
@@ -238,8 +238,11 @@ public class CreateAd extends AppCompatActivity
         storageReference = FirebaseStorage.getInstance().getReference("Ads") ;
         create_ad_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
+
                 makeAd();
+
             }
         });
 
@@ -248,91 +251,117 @@ public class CreateAd extends AppCompatActivity
     private void makeAd()
     {
         ProgressDialog progressDialog = new ProgressDialog(CreateAd.this);
-        progressDialog.setMessage("Posting ad...");
+        progressDialog.setMessage("Creating ad...");
         progressDialog.show();
 
-        if (imageUris.size() > 0) {
-            StorageReference fileReference = storageReference.child(System.currentTimeMillis()
-                    + "." + getFileExtension(imageUris.get(0)));
+        title_input = TITLE_textInputLayout.getEditText().getText().toString();
+        price_input = PRICE_textInputLayout.getEditText().getText().toString();
 
-            uploadTask = fileReference.putFile(imageUris.get(0));
-            uploadTask.continueWithTask(new Continuation()
+        if (imageUris.size() > 0)
+        {
+            ArrayList<String> myurls = new ArrayList<>();
+
+            for(int i = 0; i < imageUris.size(); i++)
             {
-                @Override
-                public Object then(@NonNull Task task) throws Exception {
-                    if (!task.isSuccessful())
-                    {
-                        throw task.getException();
-                    }
-                    return fileReference.getDownloadUrl();
-                }
-            }).addOnCompleteListener((OnCompleteListener<Uri>) task -> {
-                if(task.isSuccessful())
+
+                StorageReference fileReference = storageReference.child(System.currentTimeMillis()
+                        + "." + getFileExtension(imageUris.get(i)));
+
+                uploadTask = fileReference.putFile(imageUris.get(i));
+                uploadTask.continueWithTask(new Continuation()
                 {
-                    Uri image = task.getResult();
-                    String myurl = image.toString();
-                    myurls.add(myurl);
-
-                    Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls);
-
-                    if(new_ad == null)
-                    {
-                        Toast.makeText(CreateAd.this, "Failed!!!!!!!!!!!!!!!!!", Toast.LENGTH_LONG).show();
-                    }
-
-                    String user_id = mAuth.getCurrentUser().getUid();
-
-                    FirebaseDatabase db = FirebaseDatabase.getInstance();
-
-                    DatabaseReference user_ref = db.getReference("Users/" + user_id);
-                    user_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot)
+                    @Override
+                    public Object then(@NonNull Task task) throws Exception {
+                        if (!task.isSuccessful())
                         {
-                            User user_now = snapshot.getValue(User.class);
-                            user_now.getAds().add(new_ad);
-                            user_ref.setValue(user_now);
+                            throw task.getException();
                         }
+                        return fileReference.getDownloadUrl();
+                    }
+                }).addOnCompleteListener((OnCompleteListener<Uri>) task -> {
+                    if(task.isSuccessful())
+                    {
+                        Uri image = task.getResult();
+                        String myurl = image.toString();
+                        myurls.add(myurl);
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error)
+                        if(myurls.size() == imageUris.size())
                         {
-                            Toast.makeText(CreateAd.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                            try
+                            {
+                                Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls);
+                                Toast.makeText(CreateAd.this, "Success!!!!!!!!!!!!!!!!!", Toast.LENGTH_LONG).show();
+                                String user_id = mAuth.getCurrentUser().getUid();
+
+                                FirebaseDatabase db = FirebaseDatabase.getInstance();
+
+                                DatabaseReference user_ref = db.getReference("Users/" + user_id);
+                                user_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot)
+                                    {
+                                        User user_now = snapshot.getValue(User.class);
+                                        user_now.getAds().add(new_ad);
+                                        user_ref.setValue(user_now);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error)
+                                    {
+                                        Toast.makeText(CreateAd.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Ads");
+                                String adId = reference.push().getKey();
+
+                                HashMap<String, Object> hashMap = new HashMap<>();
+                                hashMap.put("ID", adId);
+                                hashMap.put("Images", myurls);
+                                hashMap.put("Publisher", currentUser.getUid());
+                                hashMap.put("Title", title_input);
+
+                                if(price_input.equals("0"))
+                                {
+                                    hashMap.put("Price", "Free");
+                                }
+                                else
+                                {
+                                    hashMap.put("Price", price_input + "$");
+                                }
+
+                                hashMap.put("Category", category_input);
+                                hashMap.put("Switch", switch_inputs);
+
+                                reference.child(category_input + " " + title_input).setValue(hashMap);
+
+                                progressDialog.dismiss();
+
+                                startActivity(new Intent(CreateAd.this, HomeActivity.class));
+                                finish();
+
+                            }
+                            catch(NullPointerException e)
+                            {
+                                Toast.makeText(CreateAd.this, "Success!!!!!!!!!!!!!!!!!", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    });
-
-                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Ads");
-                    String adId = reference.push().getKey();
-
-                    HashMap<String, Object> hashMap = new HashMap<>();
-                    hashMap.put("adId", adId);
-                    hashMap.put("adIimage", myurl);
-                    hashMap.put("publisher", currentUser.getUid());
-                    hashMap.put("title", title_input);
-                    hashMap.put("price", price_input);
-                    hashMap.put("category", category_input);
-                    hashMap.put("switch", switch_inputs);
-
-                    reference.child(adId).setValue(hashMap);
-
-                    progressDialog.dismiss();
-
-                    startActivity(new Intent(CreateAd.this, HomeActivity.class));
-                    finish();
-                }
-                else
+                    }
+                    else
+                    {
+                        Toast.makeText(CreateAd.this, "Failed to post!", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener()
                 {
-                    Toast.makeText(CreateAd.this, "Failed to post!", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(new OnFailureListener()
-            {
-                @Override
-                public void onFailure(@NonNull Exception e)
-                {
-                    Toast.makeText(CreateAd.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else
+                    @Override
+                    public void onFailure(@NonNull Exception e)
+                    {
+                        Toast.makeText(CreateAd.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+        else
         {
             Toast.makeText(CreateAd.this, "No image selected", Toast.LENGTH_SHORT).show();
         }
