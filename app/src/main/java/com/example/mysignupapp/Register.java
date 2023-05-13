@@ -1,5 +1,6 @@
 package com.example.mysignupapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +14,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -22,6 +30,8 @@ import java.util.regex.Pattern;
 
 public class Register extends AppCompatActivity
 {
+    private FirebaseAuth mAuth;
+
     private DatePickerDialog datePicker;
     private Button dateOfBirthButton;
     Button verification;
@@ -40,6 +50,13 @@ public class Register extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        if(mAuth.getCurrentUser() != null)
+        {
+
+        }
 
         initDatePicker();
         dateOfBirthButton = findViewById(R.id.datePickerButton);
@@ -136,9 +153,60 @@ public class Register extends AppCompatActivity
                                 && checkPasswords(password, re_enter_password))
                 {
                     Log.d("Reg", "All fields are correct syntax-wise!");
+                    registerUser();
                 }
             }
         });
+    }
+
+    private void registerUser()
+    {
+        String new_user_username = userName;
+        String new_user_password = password;
+
+        Log.d("Reg", "Entered Register User");
+        Log.d("Reg", "Username: " + new_user_username);
+        Log.d("Reg", "Password: " + new_user_password);
+
+
+        mAuth.createUserWithEmailAndPassword(new_user_username + "@mydomain.com", new_user_password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if(task.isSuccessful())
+                        {
+                            Log.d("Reg", "Successful");
+                            Log.d("Reg", "Username: " + new_user_username);
+                            Log.d("Reg", "Password: " + new_user_password);
+                            Log.d("Reg", "User: " +  FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                            User newUser = new User(firstName, lastName, birthDate, email, new_user_username, new_user_password);
+                            FirebaseDatabase.getInstance().getReference("users")
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            EnterHome();
+                                        }
+                                    });
+                        }
+                        else
+                        {
+                            Log.d("Reg", "!");
+                            Log.d("Reg", "!");
+                            Log.d("Reg", "!");
+                            Toast.makeText(Register.this, "Authentication failed!",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    public void EnterHome()
+    {
+        Intent register_to_home = new Intent(this, HomeActivity.class);
+        startActivity(register_to_home);
+        finish();
     }
 
     public void showPop(View view, String error_message)
