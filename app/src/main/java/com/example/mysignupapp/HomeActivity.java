@@ -1,9 +1,11 @@
 package com.example.mysignupapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -14,43 +16,30 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity implements LocationListener {
 
@@ -63,12 +52,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 //    TextView textView_location; del
     LocationManager locationManager;
     LatLng currentLocation;
-
     RecyclerView adList;
     AdAdapter adapter;
-    List<String> titles;
-    List<Integer> images;
-
+    List<HashMap<String, Object>> all_ads;
     FirebaseAuth mAuth;
     FirebaseUser me;
 
@@ -90,47 +76,43 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         }
 
         adList = findViewById(R.id.adList);
-        titles = new ArrayList<>();
-        images = new ArrayList<>();
 
-        titles.add("Ad 1");
-        titles.add("Ad 2");
-        titles.add("Ad 3");
-        titles.add("Ad 4");
-        titles.add("Ad 5");
-        titles.add("Ad 6");
-        titles.add("Ad 7");
-        titles.add("Ad 8");
-        titles.add("Ad 9");
-        titles.add("Ad 10");
-        titles.add("Ad 11");
-        titles.add("Ad 12");
-        titles.add("Ad 13");
-        titles.add("Ad 14");
-        titles.add("Ad 15");
+        ProgressDialog progressDialog = new ProgressDialog(HomeActivity.this);
+        progressDialog.setMessage("Loading ads...");
+        progressDialog.show();
 
+        DatabaseReference ads_ref = FirebaseDatabase.getInstance().getReference("Ads");
 
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
+        all_ads = new ArrayList<>();
 
-        adapter = new AdAdapter(this, titles, images);
+        adapter = new AdAdapter(this, all_ads);
+        ads_ref.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                int count = 1;
+                all_ads.clear();
+                for(DataSnapshot adSnapshot : snapshot.getChildren())
+                {
+                    HashMap<String, Object> ad_from_Ads = (HashMap<String, Object>) adSnapshot.getValue();
+                    Log.d("A", "Ad number " + count);
+                    count++;
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-        adList.setLayoutManager(gridLayoutManager);
-        adList.setAdapter(adapter);
+                    all_ads.add(ad_from_Ads);
+                }
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(HomeActivity.this, 2, GridLayoutManager.VERTICAL, false);
+                adList.setLayoutManager(gridLayoutManager);
+                adList.setAdapter(adapter);
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error)
+            {
+
+            }
+        });
 
         to_map_button = findViewById(R.id.map_mode);
         to_create_Ad_button = findViewById(R.id.create_ad_mode);
