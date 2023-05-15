@@ -13,6 +13,7 @@
         android:src="@drawable/free_item_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="fitCenter"
         app:layout_constraintWidth_percent="0.50"/>
 
     <TextView
@@ -25,7 +26,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ad_image">
     </TextView>
-
-
+    
 
 </androidx.constraintlayout.widget.ConstraintLayout>

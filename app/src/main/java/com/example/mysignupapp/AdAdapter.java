@@ -49,7 +49,7 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
         }
         else
         {
-            holder.image.setImageResource(R.drawable.twitter);
+            holder.image.setImageResource(R.drawable.no_image_input);
         }
         if(ad.get("Title").toString() != null)
         {

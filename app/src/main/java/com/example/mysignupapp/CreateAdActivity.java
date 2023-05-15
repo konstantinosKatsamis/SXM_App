@@ -10,6 +10,8 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -80,6 +83,8 @@ public class CreateAdActivity extends AppCompatActivity
     TextInputLayout TITLE_textInputLayout;
 
     TextInputLayout PRICE_textInputLayout;
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,9 +243,7 @@ public class CreateAdActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-
                 makeAd();
-
             }
         });
 
@@ -405,5 +408,20 @@ public class CreateAdActivity extends AppCompatActivity
                 }
             }
         }
+    }
+
+    @Override
+    protected void onStart()
+    {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 }

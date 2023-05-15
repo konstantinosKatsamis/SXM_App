@@ -37,23 +37,6 @@
         android:layout_marginBottom="16dp"
         android:hint="Price range:">
 
-        <TextView
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="15dp"
-            android:text="Range:"
-            android:textSize="18sp" />
-
-
-        <com.google.android.material.slider.RangeSlider
-            android:layout_width="300dp"
-            android:id="@+id/price_slider"
-            android:value="100"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:valueFrom="0"
-            android:valueTo="1000"/>
 
         <AutoCompleteTextView
             android:id="@+id/autocomplete_text2"
@@ -67,6 +50,7 @@
         android:id="@+id/category_multiple_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/secondInputLayout"
         android:layout_centerInParent="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -83,7 +67,7 @@
     <Button
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/category_multiple_selector"
         android:text="Search"
         android:gravity="center"
         android:layout_centerHorizontal="true"

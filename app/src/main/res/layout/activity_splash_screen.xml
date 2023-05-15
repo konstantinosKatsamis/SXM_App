@@ -7,52 +7,64 @@
     android:background="@drawable/gray"
     tools:context=".SplashScreenActivity">
 
-
     <TextView
         android:id="@+id/letter_S"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/letter_X"
         android:layout_centerInParent="true"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="80dp"
         android:text="S"
         android:textColor="#74E379"
-        android:textSize="100dp"
+        android:textSize="80sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.231"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
     </TextView>
 
     <TextView
         android:id="@+id/mart_text"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:text="mart"
         android:textColor="#74E379"
-        android:textSize="90dp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.619"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:textSize="60sp"
+        app:layout_constraintBottom_toBottomOf="@id/letter_S"
+        app:layout_constraintLeft_toLeftOf="@id/letter_S"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="115dp">
+    </TextView>
 
+    <TextView
+        android:id="@+id/e_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="e"
+        android:textColor="#74E379"
+        android:textSize="60sp"
+        app:layout_constraintBottom_toBottomOf="@id/letter_X"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="25dp">
     </TextView>
 
     <TextView
         android:id="@+id/letter_X"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/letter_M"
         android:layout_centerInParent="true"
         android:layout_marginTop="28dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginStart="60dp"
         android:text="X"
         android:textColor="#74E379"
-        android:textSize="100dp"
+        android:textSize="80sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.236"
@@ -62,69 +74,50 @@
 
     <TextView
         android:id="@+id/change_text"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="16dp"
         android:text="change"
         android:textColor="#74E379"
-        android:textSize="80dp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.886"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:textSize="60sp"
+        app:layout_constraintBottom_toBottomOf="@id/letter_X"
+        app:layout_constraintLeft_toLeftOf="@id/letter_X"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="115dp">
     </TextView>
 
-
-    <TextView
-        android:id="@+id/letter_e"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="204dp"
-        android:text="e"
-        android:textColor="#74E379"
-        android:textSize="80dp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toStartOf="@+id/letter_X"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </TextView>
 
     <TextView
         android:id="@+id/letter_M"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginStart="60dp"
         android:text="M"
         android:textColor="#74E379"
-        android:textSize="100dp"
+        android:textSize="80sp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.236"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/letter_X"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/letter_X">
     </TextView>
 
     <TextView
         android:id="@+id/arket_text"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="368dp"
+        android:layout_marginTop="16dp"
         android:text="arket"
         android:textColor="#74E379"
-        android:textSize="80dp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.637"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></TextView>
+        android:textSize="60sp"
+        app:layout_constraintBottom_toBottomOf="@id/letter_M"
+        app:layout_constraintLeft_toLeftOf="@id/letter_M"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="135dp">
+    </TextView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

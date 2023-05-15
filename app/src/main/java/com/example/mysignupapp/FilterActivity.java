@@ -5,6 +5,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +15,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,8 +37,6 @@ public class FilterActivity extends AppCompatActivity
 
     ArrayAdapter<String> adapter_items;
 
-    RangeSlider price_range_slider;
-
     String[] prices_range ={"0-20", "20-50", "50-100", "100-500", "500+"};
 
     AutoCompleteTextView prices;
@@ -47,6 +48,8 @@ public class FilterActivity extends AppCompatActivity
 
     ArrayList<Integer> daylist = new ArrayList<>();
     String[] dayArray = {"Collectors", "Vehicles", "Books", "Men Clothing", "Women Clothing", "Music", "Sports"};
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
 
     @Override
@@ -94,18 +97,6 @@ public class FilterActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 String item = parent.getItemAtPosition(position).toString();
-            }
-        });
-
-
-        price_range_slider = findViewById(R.id.price_slider);
-        price_range_slider.setLabelFormatter(new LabelFormatter() {
-            @NonNull
-            @Override
-            public String getFormattedValue(float value) {
-                NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
-                currencyFormat.setCurrency(Currency.getInstance(Locale.GERMANY));
-                return currencyFormat.format(value);
             }
         });
 
@@ -186,5 +177,20 @@ public class FilterActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    @Override
+    protected void onStart()
+    {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 }

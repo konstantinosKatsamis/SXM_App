@@ -116,21 +116,11 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         to_map_button = findViewById(R.id.map_mode);
         to_create_Ad_button = findViewById(R.id.create_ad_mode);
 
-//        textView_location = findViewById(R.id.text_location); del
-//        button_location = findViewById(R.id.button_location); del
-
         if(ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(HomeActivity.this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION
             }, 100);
         }
-
-        /* button_location.setOnClickListener(new View.OnClickListener() { del
-            @Override
-            public void onClick(View v) {
-//                getLocation();
-            }
-        });*/
 
         to_map_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,8 +142,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
                     }
                 }, 4500); // 3000 milliseconds = 3 seconds
-
-
 
                 new Handler().postDelayed(new Runnable()
                 {
@@ -209,10 +197,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onLocationChanged(Location location) {
-//        System.out.println("onLocationChanged() ----------------------------------------------------------------------------------------------------------------------------------------"); del
-//        Toast.makeText(this, ""+location.getLatitude()+","+location.getLongitude(), Toast.LENGTH_SHORT).show(); del
 
-//        System.out.println(location.getLatitude() + "   " + location.getLongitude()); // Result: 37.99991190433502   23.73816668987274 del
         setCurrentLocation(location.getLatitude(), location.getLongitude());
 
         try {
@@ -244,7 +229,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     }
 
     public void setCurrentLocation(double lat, double lon){
-//        System.out.println("SETTER IS TAKING ACTION ----------------------------------------------------------------------------------------------------------------------------------------"); del
         this.currentLocation = new LatLng(lat, lon);
     }
 }

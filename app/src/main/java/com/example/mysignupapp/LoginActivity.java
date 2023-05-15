@@ -6,12 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -34,6 +37,8 @@ public class LoginActivity extends AppCompatActivity
     Button button_for_register; // the button "Sign up". Used to register a new account
     String exist_username; // input for username
     String exist_password; // input for password
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,5 +166,20 @@ public class LoginActivity extends AppCompatActivity
         AlertDialog alert = builder.create();
         alert.show();
 
+    }
+
+    @Override
+    protected void onStart()
+    {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 }

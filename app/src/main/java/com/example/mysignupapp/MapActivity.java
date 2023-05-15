@@ -4,10 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.AlertDialog;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,6 +27,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +96,22 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 map.addMarker(new MarkerOptions().position(Athens).title("Athens"));
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(Athens, 16));
 
-//                System.out.println("LATITUDE: " + receivedCurrentLocation.latitude); del
-//                System.out.println("LONGITUDE: " + receivedCurrentLocation.longitude); del
-
             }
-        },4500);
+        },9000);
+    }
+
+    @Override
+    protected void onStart()
+    {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 }

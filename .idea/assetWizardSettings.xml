@@ -24,7 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\Admin\AppData\Local\Temp\baseline_money_off_24.xml" />
+                                                <entry key="imagePath" value="C:\Users\Admin\AppData\Local\Temp\baseline_image_not_supported_24.xml" />
                                                 <entry key="opacityPercent" value="80" />
                                               </map>
                                             </option>
@@ -36,7 +36,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/money_off/baseline_money_off_24.xml" />
+                                                <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/image_not_supported/baseline_image_not_supported_24.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -80,9 +80,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="free_item_icon" />
+                                      <entry key="outputName" value="no_image_input" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="ff0000" />
+                                      <entry key="themeColor" value="6e8678" />
                                     </map>
                                   </option>
                                 </PersistentState>
