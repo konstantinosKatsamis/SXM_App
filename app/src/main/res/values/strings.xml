@@ -12,4 +12,7 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="Sort">Sort by:</string>
+    
+    <string name="Drawer_open">Drawer open</string>
+    <string name="Drawer_close">Drawer close</string>
 </resources>

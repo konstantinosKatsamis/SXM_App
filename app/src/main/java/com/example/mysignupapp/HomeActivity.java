@@ -67,10 +67,22 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     List<String> titles;
     List<Integer> images;
 
+    private Button button_for_dashboard;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quick_menu_main);
+
+        button_for_dashboard = findViewById(R.id.button_for_dashboard);
+        button_for_dashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this, DashboardActivity.class);
+                startActivity(i);
+
+            }
+        });
 
         adList = findViewById(R.id.adList);
         titles = new ArrayList<>();

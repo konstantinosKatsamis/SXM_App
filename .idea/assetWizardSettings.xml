@@ -335,7 +335,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/search/baseline_search_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/home/baseline_home_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -346,7 +346,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="search_bar_icon" />
+                            <entry key="outputName" value="ic_baseline_home_24" />
                             <entry key="sourceFile" value="C:\Users\Admin\Desktop\SXM_App-main\SXM_App-main" />
                           </map>
                         </option>
