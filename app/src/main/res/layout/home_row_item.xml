@@ -1,21 +1,31 @@
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
         android:id="@+id/ad_image"
-        android:layout_width="150dp"
+        android:layout_width="0dp"
         android:layout_height="150dp"
-        android:src="@drawable/free_item_icon"/>
+        android:src="@drawable/free_item_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.50"/>
 
     <TextView
         android:id="@+id/ad_title_1"
-        android:layout_width="100dp"
-        android:textSize="20sp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ad Title 1"/>
+        android:layout_marginTop="10sp"
+        android:text="Title: "
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ad_image">
+    </TextView>
 
-</LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

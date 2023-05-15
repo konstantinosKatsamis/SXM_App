@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp"
-        tools:context="com.example.mysignupapp.Register">
+        tools:context="com.example.mysignupapp.RegisterActivity">
 
         <TextView
             android:id="@+id/registerTitle"

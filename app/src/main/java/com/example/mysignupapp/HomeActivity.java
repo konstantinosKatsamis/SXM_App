@@ -40,7 +40,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
 public class HomeActivity extends AppCompatActivity implements LocationListener {
 
     ImageButton to_map_button;
@@ -187,7 +186,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             @Override
             public void onClick(View v)
             {
-                Intent to_map = new Intent(HomeActivity.this, CreateAd.class);
+                Intent to_map = new Intent(HomeActivity.this, CreateAdActivity.class);
                 startActivity(to_map);
             }
         });

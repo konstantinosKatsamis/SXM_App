@@ -9,7 +9,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ACE9F1"
+        android:background="@drawable/gray"
         android:id="@+id/adList"
         android:padding="16dp">
 

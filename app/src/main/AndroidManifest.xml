@@ -16,7 +16,7 @@
             android:name=".FilterActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateAd"
+            android:name=".CreateAdActivity"
             android:exported="false" />
         <activity
             android:name=".MapActivity"
@@ -44,10 +44,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Register"
+            android:name=".RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="false" />
     </application>
 

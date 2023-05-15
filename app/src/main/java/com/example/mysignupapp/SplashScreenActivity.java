@@ -23,7 +23,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             {
                 // We create and start a new Intent from splash activity to MainActivity
                 // MainActivity : Sign in/ Login screen
-                Intent login_intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                Intent login_intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
                 startActivity(login_intent);
                 finish();
 
