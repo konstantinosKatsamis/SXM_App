@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.example.mysignupapp.databinding.ActivityMapBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -17,15 +18,19 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallback {
 
     GoogleMap map;
     LatLng receivedCurrentLocation;
 
+    ActivityMapBinding activityMapBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        activityMapBinding = ActivityMapBinding.inflate(getLayoutInflater());
+        setContentView(activityMapBinding.getRoot());
+        allocateActivityTitle("Find Ads using the Map");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
 //        builder.setTitle("Confirmation"); del

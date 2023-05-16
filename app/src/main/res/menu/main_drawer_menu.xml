@@ -2,13 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
 
-        <item android:id="@+id/nav_account"
-            android:icon="@drawable/ic_baseline_person_outline_24"
-            android:title="My Account"/>
-
         <item android:id="@+id/nav_home"
             android:icon="@drawable/ic_baseline_home_24"
             android:title="Home"/>
+
+        <item android:id="@+id/nav_my_ads"
+            android:icon="@drawable/ic_baseline_all_inbox_24"
+            android:title="My Ads"/>
+
+        <item android:id="@+id/nav_account"
+            android:icon="@drawable/ic_baseline_person_outline_24"
+            android:title="My Account"/>
 
         <item android:id="@+id/nav_logout"
             android:icon="@drawable/ic_baseline_logout_24"

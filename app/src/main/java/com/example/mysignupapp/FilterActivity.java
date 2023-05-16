@@ -20,8 +20,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.Locale;
+import com.example.mysignupapp.databinding.ActivityFilterBinding;
 
-public class FilterActivity extends AppCompatActivity
+public class FilterActivity extends DrawerBaseActivity
 {
     String[] criteria ={"User rank", "Increasing price", "Decreasing price", "Item trade off", "Price Only", "Trade off only"};
 
@@ -43,12 +44,15 @@ public class FilterActivity extends AppCompatActivity
     ArrayList<Integer> daylist = new ArrayList<>();
     String[] dayArray = {"Collectors", "Vehicles", "Books", "Men Clothing", "Women Clothing", "Music", "Sports"};
 
+    ActivityFilterBinding activityFilterBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_filter);
+        activityFilterBinding = ActivityFilterBinding.inflate(getLayoutInflater());
+        setContentView(activityFilterBinding.getRoot());
+        allocateActivityTitle("Filters");
 
         choices  = findViewById(R.id.autocomplete_text);
 

@@ -1,188 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:android2="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical">
+    tools:context=".CreateAd">
 
-    <LinearLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:android2="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp"
-        tools:context="com.example.mysignupapp.Register">
-
-        <TextView
-            android:id="@+id/registerTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="25dp"
-            android:background="@color/white"
-            android:gravity="center"
-            android:text="Create your SXM Ad"
-            android:textColor="#2196F3"
-            android:textSize="25sp"
-            android:textStyle="italic"
-            tools:ignore="TextContrastCheck" />
-
-
-        <TextView
-            android:id="@+id/register_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/welcomeMessage"
-            android:layout_gravity="center"
-            android:layout_margin="15dp"
-            android:background="@color/white"
-            android:text="Please fill all fields below to create your new SXM ad!"
-            android:textColor="#2196F3"
-            android:textSize="15sp"
-            tools:ignore="TextContrastCheck" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="20dp"
+            tools:context="com.example.mysignupapp.Register">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:hint="Select Category">
-
-                <AutoCompleteTextView
-                    android:id="@+id/select_category"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/title_textfield"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="15dp"
-                android:hint="Title of Ad"
-                android:textColorHint="#000000">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#FFFFFF"
-                    android:inputType="text"
-                    android:textColor="#000000"
-                    android:textColorHint="#000000"
-                    tools:ignore="TextContrastCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/price_textfield"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="15dp"
-                android:hint="Price(if needed)"
-                android:textColorHint="#000000">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#FFFFFF"
-                    android:inputType="text"
-                    android:textColor="#000000"
-                    android:textColorHint="#000000"
-                    tools:ignore="TextContrastCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:hint="Preferred items for switch">
-
-                <AutoCompleteTextView
-                    android:id="@+id/preferred_textfield"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-
-        <RelativeLayout
-            android:background="@color/black"
-            android:layout_height="400dp"
-            android:id="@+id/relative_for_image"
-            android:layout_gravity="center"
-            android:layout_width="400dp"
-            tools:context=".MainActivity">
-
-            <ImageSwitcher
-                android:id="@+id/imagesIs"
-                android:layout_width="match_parent"
-                android:layout_height="400dp" />
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/relative_for_image">
-
-            <Button
-                android:id="@+id/previousBtn"
-                android:text="Previous"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
-
-            <Button
-                android:id="@+id/nextBtn"
-                android:text="Next"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_alignParentEnd="true"
+            <TextView
+                android:id="@+id/registerTitle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="25dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="Create your SXM Ad"
+                android:textColor="#2196F3"
+                android:textSize="25sp"
+                android:textStyle="italic"
+                tools:ignore="TextContrastCheck" />
 
-            <Button
-                android:id="@+id/pickImagesBtn"
-                style="@style/Widget.AppCompat.Button.Colored"
+
+            <TextView
+                android:id="@+id/register_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/welcomeMessage"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:background="@color/white"
+                android:text="Please fill all fields below to create your new SXM ad!"
+                android:textColor="#2196F3"
+                android:textSize="15sp"
+                tools:ignore="TextContrastCheck" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:text="Pick Images" />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:hint="Select Category">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/select_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/title_textfield"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="15dp"
+                    android:hint="Title of Ad"
+                    android:textColorHint="#000000">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#FFFFFF"
+                        android:inputType="text"
+                        android:textColor="#000000"
+                        android:textColorHint="#000000"
+                        tools:ignore="TextContrastCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
 
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/price_textfield"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="15dp"
+                    android:hint="Price(if needed)"
+                    android:textColorHint="#000000">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#FFFFFF"
+                        android:inputType="text"
+                        android:textColor="#000000"
+                        android:textColorHint="#000000"
+                        tools:ignore="TextContrastCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:hint="Preferred items for switch">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/preferred_textfield"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:background="@color/black"
+                android:layout_height="400dp"
+                android:id="@+id/relative_for_image"
+                android:layout_gravity="center"
+                android:layout_width="400dp"
+                tools:context=".MainActivity">
+
+                <ImageSwitcher
+                    android:id="@+id/imagesIs"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/relative_for_image">
+
+                <Button
+                    android:id="@+id/previousBtn"
+                    android:text="Previous"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <Button
+                    android:id="@+id/nextBtn"
+                    android:text="Next"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/pickImagesBtn"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:text="Pick Images" />
+
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/login_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:backgroundTint="#1F91EC"
+                android:text="Create Ad"
+                android:textColor="#FFFFFF"
+                tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:backgroundTint="#1F91EC"
-            android:text="Create Ad"
-            android:textColor="#FFFFFF"
-            tools:ignore="TextContrastCheck" />
+    </ScrollView>
 
-    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>

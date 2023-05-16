@@ -17,9 +17,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.example.mysignupapp.databinding.ActivityCreateAdBinding;
+
 import java.util.ArrayList;
 
-public class CreateAd extends AppCompatActivity {
+public class CreateAd extends DrawerBaseActivity {
 
     String[] items =  {"Collectors", "Vehicles", "Books", "Men Clothing", "Women Clothing", "Music", "Sports"};
     AutoCompleteTextView autoCompleteTxt;
@@ -31,11 +33,15 @@ public class CreateAd extends AppCompatActivity {
     private ArrayList<Uri> imageUris;
     private static final int PICK_IMAGES_CODE = 0;
 
+    ActivityCreateAdBinding activityCreateAdBinding;
+
     int position = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_ad);
+        activityCreateAdBinding = ActivityCreateAdBinding.inflate(getLayoutInflater());
+        setContentView(activityCreateAdBinding.getRoot());
+        allocateActivityTitle("CreateAd");
 
         autoCompleteTxt = findViewById(R.id.select_category);
 

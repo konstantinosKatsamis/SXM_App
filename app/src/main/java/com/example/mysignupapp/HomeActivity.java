@@ -50,7 +50,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class HomeActivity extends AppCompatActivity implements LocationListener {
+import com.example.mysignupapp.databinding.ActivityHomeBinding;
+
+public class HomeActivity extends DrawerBaseActivity implements LocationListener {
 
     ImageButton to_map_button;
     ImageButton to_create_Ad_button;
@@ -67,22 +69,16 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     List<String> titles;
     List<Integer> images;
 
-    private Button button_for_dashboard;
+    ActivityHomeBinding activityHomeBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.quick_menu_main);
+        activityHomeBinding =ActivityHomeBinding.inflate(getLayoutInflater());
+        setContentView(activityHomeBinding.getRoot());
+        allocateActivityTitle("Home");
 
-        button_for_dashboard = findViewById(R.id.button_for_dashboard);
-        button_for_dashboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(HomeActivity.this, DashboardActivity.class);
-                startActivity(i);
 
-            }
-        });
 
         adList = findViewById(R.id.adList);
         titles = new ArrayList<>();
