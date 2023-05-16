@@ -1,6 +1,7 @@
 package com.example.mysignupapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -26,7 +27,8 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
         container.addView(view);
         super.setContentView(drawerLayout);
 
-        Toolbar toolbar = drawerLayout.findViewById(R.id.toolbar);
+        Toolbar toolbar = drawerLayout.findViewById(R.id.toolBar);
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_dehaze_24);
         setSupportActionBar(toolbar);
 
         NavigationView navigationView = drawerLayout.findViewById(R.id.nav_view);

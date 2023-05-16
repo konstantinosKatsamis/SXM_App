@@ -36,11 +36,6 @@
             android:value="@string/map_key" />
 
         <activity
-            android:name=".QuickMenuActivity"
-            android:exported="false"
-            android:label="@string/title_activity_quick_menu"
-            android:theme="@style/Theme.MySignupApp.NoActionBar" />
-        <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity

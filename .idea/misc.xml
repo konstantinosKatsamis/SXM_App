@@ -29,9 +29,15 @@
         <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/activity_quick_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/activity_register.xml" value="0.203125" />
         <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/activity_splash_screen.xml" value="0.203125" />
-        <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/content_layout.xml" value="0.1" />
-        <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/main_drawer_header.xml" value="0.30085470085470084" />
-        <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/quick_menu_main.xml" value="0.33425925925925926" />
+        <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/app_bar_quick_menu.xml" value="0.10740740740740741" />
+        <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/content_layout.xml" value="0.18" />
+        <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/content_quick_menu.xml" value="0.10740740740740741" />
+        <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/fragment_slideshow.xml" value="0.10740740740740741" />
+        <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/list_item.xml" value="0.10740740740740741" />
+        <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/main_drawer_header.xml" value="0.1" />
+        <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/nav_header_quick_menu.xml" value="0.10740740740740741" />
+        <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/quick_menu_main.xml" value="0.2520775623268698" />
+        <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/layout/sort_collection.xml" value="0.1" />
         <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/menu/activity_main_drawer.xml" value="0.36102564102564105" />
         <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/menu/main_drawer_menu.xml" value="0.1" />
         <entry key="..\:/Users/user/Documents/AUEB-Projects/InformationSystemsApplicationsDevelopment/SXM_App/app/src/main/res/menu/quick_menu.xml" value="0.25277777777777777" />
