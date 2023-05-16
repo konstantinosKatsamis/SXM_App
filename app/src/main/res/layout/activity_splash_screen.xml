@@ -7,117 +7,75 @@
     android:background="@drawable/gray"
     tools:context=".SplashScreenActivity">
 
-    <TextView
-        android:id="@+id/letter_S"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/letter_X"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="16dp"
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="70dp"
+        android:layout_height="125dp"
         android:layout_marginStart="60dp"
-        android:layout_marginEnd="80dp"
-        android:text="S"
-        android:textColor="#74E379"
-        android:textSize="80sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.231"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/letter_s"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </TextView>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/mart_text"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="mart"
-        android:textColor="#74E379"
-        android:textSize="60sp"
-        app:layout_constraintBottom_toBottomOf="@id/letter_S"
-        app:layout_constraintLeft_toLeftOf="@id/letter_S"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="115dp">
-    </TextView>
-
-    <TextView
-        android:id="@+id/e_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="e"
-        android:textColor="#74E379"
-        android:textSize="60sp"
-        app:layout_constraintBottom_toBottomOf="@id/letter_X"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="25dp">
-    </TextView>
-
-    <TextView
-        android:id="@+id/letter_X"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/letter_M"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="80dp"
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="70dp"
+        android:layout_height="125dp"
         android:layout_marginStart="60dp"
-        android:text="X"
-        android:textColor="#74E379"
-        android:textSize="80sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.236"
+        android:src="@drawable/letter_x"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/letter_S">
-    </TextView>
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
-    <TextView
-        android:id="@+id/change_text"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="change"
-        android:textColor="#74E379"
-        android:textSize="60sp"
-        app:layout_constraintBottom_toBottomOf="@id/letter_X"
-        app:layout_constraintLeft_toLeftOf="@id/letter_X"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="115dp">
-    </TextView>
-
-
-    <TextView
-        android:id="@+id/letter_M"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="80dp"
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="70dp"
+        android:layout_height="125dp"
         android:layout_marginStart="60dp"
-        android:text="M"
-        android:textColor="#74E379"
-        android:textSize="80sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.236"
+        android:src="@drawable/letter_m"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/letter_X">
-    </TextView>
+        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
-    <TextView
-        android:id="@+id/arket_text"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="arket"
-        android:textColor="#74E379"
-        android:textSize="60sp"
-        app:layout_constraintBottom_toBottomOf="@id/letter_M"
-        app:layout_constraintLeft_toLeftOf="@id/letter_M"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="135dp">
-    </TextView>
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="161dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/mart_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="74dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="200dp"
+        android:src="@drawable/e_text"
+        app:layout_constraintEnd_toStartOf="@+id/imageView5"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="170dp"
+        android:layout_height="79dp"
+        android:layout_marginBottom="324dp"
+        android:src="@drawable/arket_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/imageView6" />
+
+    <ImageView
+        android:layout_width="192dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/change_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/imageView5"
+        app:layout_constraintTop_toBottomOf="@+id/imageView7" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

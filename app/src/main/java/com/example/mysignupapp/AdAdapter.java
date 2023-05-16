@@ -38,9 +38,9 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
         HashMap<String, Object> ad = ads.get(position);
-        holder.title.setText(ad.get("Title").toString());
 
         ArrayList<String> images_views = (ArrayList<String>) ad.get("Images");
+        ArrayList<String> switches = (ArrayList<String>) ad.get("Switch");
 
         if(images_views != null && images_views.size() > 0)
         {
@@ -51,6 +51,7 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
         {
             holder.image.setImageResource(R.drawable.no_image_input);
         }
+
         if(ad.get("Title").toString() != null)
         {
             holder.title.setText(ad.get("Title").toString());
@@ -58,6 +59,29 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
         else
         {
             holder.title.setText("No title");
+        }
+
+        if(ad.get("Category").toString() != null)
+        {
+            holder.category.setText(ad.get("Category").toString());
+        }
+        else
+        {
+            holder.category.setText("No category");
+        }
+
+        if(ad.get("Price").toString() != null)
+        {
+            holder.price.setText(ad.get("Price").toString());
+        }
+        else
+        {
+            holder.price.setText("No price");
+        }
+
+        if(switches.size() > 0)
+        {
+            holder.switchable.setVisibility(View.VISIBLE);
         }
 
     }
@@ -71,12 +95,19 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
     {
         ImageView image;
         TextView title;
+        TextView category;
+        TextView price;
+
+        ImageView switchable;
 
         public ViewHolder(@NonNull View itemView)
         {
             super(itemView);
             image = itemView.findViewById(R.id.ad_image);
             title = itemView.findViewById(R.id.ad_title_1);
+            category = itemView.findViewById(R.id.ad_category);
+            price = itemView.findViewById(R.id.ad_price);
+            switchable = itemView.findViewById(R.id.ad_switch);
         }
     }
 }

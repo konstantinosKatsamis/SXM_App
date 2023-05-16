@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@drawable/gray"
     android:orientation="vertical">
 
     <LinearLayout
@@ -17,30 +18,29 @@
 
         <TextView
             android:id="@+id/registerTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
-            android:background="@color/white"
             android:gravity="center"
             android:text="Create your SXM Ad"
-            android:textColor="#2196F3"
-            android:textSize="25sp"
+            android:textColor="#9CD6DD"
+            android:textSize="35sp"
             android:textStyle="italic"
             tools:ignore="TextContrastCheck" />
 
 
         <TextView
             android:id="@+id/register_message"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/welcomeMessage"
             android:layout_gravity="center"
-            android:layout_margin="15dp"
-            android:background="@color/white"
+            android:layout_margin="20dp"
             android:text="Please fill all fields below to create your new SXM ad!"
-            android:textColor="#2196F3"
-            android:textSize="15sp"
+            android:textColor="#9CD6DD"
+            android:textSize="20sp"
+            android:gravity="center"
             tools:ignore="TextContrastCheck" />
 
         <LinearLayout
@@ -54,13 +54,14 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:textColorHint="#9CD6DD"
                 android:hint="Select Category">
 
                 <AutoCompleteTextView
                     android:id="@+id/select_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="#9CD6DD"
                     android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -152,39 +153,47 @@
                 android:text="Previous"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:backgroundTint="#9CD6DD"
                 android:layout_width="wrap_content"/>
-
-            <Button
-                android:id="@+id/nextBtn"
-                android:text="Next"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_alignParentEnd="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/pickImagesBtn"
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
+                android:layout_width="120dp"
+                android:backgroundTint="#9CD6DD"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:text="Pick Images" />
 
-
+            <Button
+                android:id="@+id/nextBtn"
+                android:text="Next"
+                android:backgroundTint="#9CD6DD"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_alignParentBottom="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/create_button"
+        <ImageButton
+            android:id="@+id/deleteBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:backgroundTint="#1F91EC"
+            android:layout_alignParentBottom="true"
+            android:backgroundTint="@color/white"
+            android:layout_gravity="center"
+            android:src="@drawable/delete_image"/>
+
+        <Button
+            android:id="@+id/create_button"
             android:text="Create Ad"
-            android:textColor="#FFFFFF"
-            tools:ignore="TextContrastCheck" />
-
+            android:backgroundTint="#9CD6DD"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
-
 </ScrollView>

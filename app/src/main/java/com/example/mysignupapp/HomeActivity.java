@@ -98,7 +98,10 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                     Log.d("A", "Ad number " + count);
                     count++;
 
-                    all_ads.add(ad_from_Ads);
+                    if(!(ad_from_Ads != null && ad_from_Ads.get("Publisher").equals(me.getUid())))
+                    {
+                        all_ads.add(ad_from_Ads);
+                    }
                 }
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(HomeActivity.this, 2, GridLayoutManager.VERTICAL, false);
                 adList.setLayoutManager(gridLayoutManager);

@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -58,6 +59,8 @@ public class CreateAdActivity extends AppCompatActivity
     private ImageSwitcher imageIs;
     private Button previousBtn, nextBtn, pickImagesBtn;
     private Button create_ad_button;
+
+    private ImageButton delete_image;
 
     private ArrayList<Uri> imageUris;
     private ArrayList<String> myurls;
@@ -129,6 +132,7 @@ public class CreateAdActivity extends AppCompatActivity
         previousBtn = findViewById(R.id.previousBtn);
         nextBtn = findViewById(R.id.nextBtn);
         pickImagesBtn = findViewById(R.id.pickImagesBtn);
+        delete_image = findViewById(R.id.deleteBtn);
 
         imageUris = new ArrayList<>();
         myurls = new ArrayList<>();
@@ -155,7 +159,7 @@ public class CreateAdActivity extends AppCompatActivity
                     position--;
                     imageIs.setImageURI(imageUris.get(position));
                 } else {
-                    Toast.makeText(CreateAdActivity.this, "No Previous images...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateAdActivity.this, "No Previous images", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -168,7 +172,28 @@ public class CreateAdActivity extends AppCompatActivity
                     position++;
                     imageIs.setImageURI(imageUris.get(position));
                 } else {
-                    Toast.makeText(CreateAdActivity.this, "No More images...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateAdActivity.this, "No More images", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        delete_image.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if(position == 0 && imageUris.size() == 1)
+                {
+                    imageIs.setImageURI(null);
+                    imageUris.remove(imageUris.get(position));
+                }
+
+                //TODO: Case multiple pictures
+
+
+                else if(imageUris.isEmpty())
+                {
+                    Toast.makeText(CreateAdActivity.this, "No images to delete", Toast.LENGTH_SHORT).show();
                 }
             }
         });
