@@ -40,6 +40,7 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
         HashMap<String, Object> ad = ads.get(position);
 
         ArrayList<String> images_views = (ArrayList<String>) ad.get("Images");
+
         ArrayList<String> switches = (ArrayList<String>) ad.get("Switch");
 
         if(images_views != null && images_views.size() > 0)
@@ -52,7 +53,7 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
             holder.image.setImageResource(R.drawable.no_image_input);
         }
 
-        if(ad.get("Title").toString() != null)
+        if(ad.get("Title") != null)
         {
             holder.title.setText(ad.get("Title").toString());
         }
@@ -61,7 +62,7 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
             holder.title.setText("No title");
         }
 
-        if(ad.get("Category").toString() != null)
+        if(ad.get("Category") != null)
         {
             holder.category.setText(ad.get("Category").toString());
         }
@@ -70,7 +71,7 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
             holder.category.setText("No category");
         }
 
-        if(ad.get("Price").toString() != null)
+        if(ad.get("Price") != null)
         {
             holder.price.setText(ad.get("Price").toString());
         }
@@ -79,7 +80,7 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
             holder.price.setText("No price");
         }
 
-        if(switches.size() > 0)
+        if(switches != null && switches.size() > 0)
         {
             holder.switchable.setVisibility(View.VISIBLE);
         }

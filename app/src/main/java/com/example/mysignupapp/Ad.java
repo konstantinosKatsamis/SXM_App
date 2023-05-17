@@ -8,8 +8,8 @@ public class Ad implements Serializable
     String title;
     String category;
     String price;
-    ArrayList<String> categories_for_switching;
-    ArrayList<String> images;
+    ArrayList<String> categories_for_switching = new ArrayList<>();
+    ArrayList<String> images = new ArrayList<>();
     Ad(){}
 
     public Ad(String title, String category, String price, ArrayList<String> categories_for_switching, ArrayList<String> images) {
