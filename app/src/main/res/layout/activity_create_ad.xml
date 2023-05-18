@@ -55,6 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="#9CD6DD"
+                android:background="@color/black"
                 android:hint="Select Category">
 
                 <AutoCompleteTextView
@@ -126,6 +127,41 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/black" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/description_textfield"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:hint="Description"
+                android:textColorHint="#000000">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#FFFFFF"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHint="#000000"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/image_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:drawablePadding="16dp"
+                android:padding="13dp"
+                android:gravity="center"
+                android:textColor="#9CD6DD"
+                android:text="Images: "
+                android:textColorHint="@color/black"/>
+
         </LinearLayout>
 
         <RelativeLayout
@@ -151,6 +187,7 @@
             <Button
                 android:id="@+id/previousBtn"
                 android:text="Previous"
+                android:textColor="@color/white"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -164,11 +201,13 @@
                 android:backgroundTint="#9CD6DD"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:text="Pick Images" />
+                android:text="Pick Images"
+                android:textColor="@color/white"/>
 
             <Button
                 android:id="@+id/nextBtn"
                 android:text="Next"
+                android:textColor="@color/white"
                 android:backgroundTint="#9CD6DD"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_alignParentBottom="true"
@@ -187,8 +226,19 @@
             android:src="@drawable/delete_image"/>
 
         <Button
+            android:id="@+id/smart_check"
+            android:text="Smart Check"
+            android:backgroundTint="#FAA71A"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_height="wrap_content"/>
+
+        <Button
             android:id="@+id/create_button"
             android:text="Create Ad"
+            android:textColor="@color/white"
             android:backgroundTint="#9CD6DD"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"

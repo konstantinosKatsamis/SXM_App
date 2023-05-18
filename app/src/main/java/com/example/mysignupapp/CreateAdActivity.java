@@ -75,6 +75,8 @@ public class CreateAdActivity extends DrawerBaseActivity
     ArrayList<String> switch_inputs;
 
     TextView switch_selections;
+
+    TextView image_number;
     boolean[] selected_switch;
 
     ArrayList<Integer> switch_list = new ArrayList<>();
@@ -138,9 +140,13 @@ public class CreateAdActivity extends DrawerBaseActivity
         nextBtn = findViewById(R.id.nextBtn);
         pickImagesBtn = findViewById(R.id.pickImagesBtn);
         delete_image = findViewById(R.id.deleteBtn);
+        image_number = (TextView) findViewById(R.id.image_number);
 
         imageUris = new ArrayList<>();
         myurls = new ArrayList<>();
+
+        String image_number_so_far = "Images: " + imageUris.size() + "/5";
+        image_number.setText(image_number_so_far);
 
         imageIs.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
@@ -152,8 +158,16 @@ public class CreateAdActivity extends DrawerBaseActivity
 
         pickImagesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                pickImagesIntent();
+            public void onClick(View v)
+            {
+                if(imageUris.size() >= 5)
+                {
+                    Toast.makeText(CreateAdActivity.this, "Max image input reached!", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    pickImagesIntent();
+                }
             }
         });
 
@@ -163,9 +177,10 @@ public class CreateAdActivity extends DrawerBaseActivity
                 if (position > 0) {
                     position--;
                     imageIs.setImageURI(imageUris.get(position));
-                } else {
+                }
+                else
+                {
                     Toast.makeText(CreateAdActivity.this, "No Previous images", Toast.LENGTH_SHORT).show();
-
                 }
             }
         });
@@ -176,7 +191,9 @@ public class CreateAdActivity extends DrawerBaseActivity
                 if (position < imageUris.size() - 1) {
                     position++;
                     imageIs.setImageURI(imageUris.get(position));
-                } else {
+                }
+                else
+                {
                     Toast.makeText(CreateAdActivity.this, "No More images", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -187,15 +204,20 @@ public class CreateAdActivity extends DrawerBaseActivity
             @Override
             public void onClick(View v)
             {
-                if(position == 0 && imageUris.size() == 1)
+                if(imageUris.size() == 1)
                 {
                     imageIs.setImageURI(null);
-                    imageUris.remove(imageUris.get(position));
+                    imageUris.remove(position);
+                    String image_number_now = "Images: " + imageUris.size() + "/5";
+                    image_number.setText(image_number_now);
                 }
-
-                //TODO: Case multiple pictures
-
-
+                if(imageUris.size() >= 2)
+                {
+                    imageUris.remove(position);
+                    imageIs.setImageURI(imageUris.get(0));
+                    String image_number_now = "Images: " + imageUris.size() + "/5";
+                    image_number.setText(image_number_now);
+                }
                 else if(imageUris.isEmpty())
                 {
                     Toast.makeText(CreateAdActivity.this, "No images to delete", Toast.LENGTH_SHORT).show();
@@ -416,13 +438,22 @@ public class CreateAdActivity extends DrawerBaseActivity
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGES_CODE) {
+        if (requestCode == PICK_IMAGES_CODE)
+        {
 
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK)
+            {
 
-                if (data.getClipData() != null) {
+                if(data.getClipData() != null)
+                {
 
                     int count = data.getClipData().getItemCount();
+
+                    if(count > 5)
+                    {
+                        count = 5;
+                    }
+
                     for (int i = 0; i < count; i++) {
                         Uri imageUri = data.getClipData().getItemAt(i).getUri();
                         imageUris.add(imageUri);
@@ -430,12 +461,16 @@ public class CreateAdActivity extends DrawerBaseActivity
 
                     imageIs.setImageURI(imageUris.get(0));
                     position = 0;
-                } else {
+                }
+                else
+                {
                     Uri imageUri = data.getData();
                     imageUris.add(imageUri);
                     imageIs.setImageURI(imageUris.get(0));
                     position = 0;
                 }
+                String image_number_so_far = "Images: " + imageUris.size() + "/5";
+                image_number.setText(image_number_so_far);
             }
         }
     }
