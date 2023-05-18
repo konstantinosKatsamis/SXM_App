@@ -1,9 +1,11 @@
 package com.example.mysignupapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -14,41 +16,29 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.gms.maps.model.LatLng;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import com.example.mysignupapp.databinding.ActivityHomeBinding;
 
@@ -63,11 +53,11 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
 //    TextView textView_location; del
     LocationManager locationManager;
     LatLng currentLocation;
-
     RecyclerView adList;
     AdAdapter adapter;
-    List<String> titles;
-    List<Integer> images;
+    List<HashMap<String, Object>> all_ads;
+    FirebaseAuth mAuth;
+    FirebaseUser me;
 
     ActivityHomeBinding activityHomeBinding;
 
@@ -80,67 +70,68 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
 
 
 
+        mAuth = FirebaseAuth.getInstance();
+        me = mAuth.getCurrentUser();
+
+        if(me != null)
+        {
+            Toast.makeText(HomeActivity.this, "YOU EXIST", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(HomeActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
+        }
+
         adList = findViewById(R.id.adList);
-        titles = new ArrayList<>();
-        images = new ArrayList<>();
 
-        titles.add("Ad 1");
-        titles.add("Ad 2");
-        titles.add("Ad 3");
-        titles.add("Ad 4");
-        titles.add("Ad 5");
-        titles.add("Ad 6");
-        titles.add("Ad 7");
-        titles.add("Ad 8");
-        titles.add("Ad 9");
-        titles.add("Ad 10");
-        titles.add("Ad 11");
-        titles.add("Ad 12");
-        titles.add("Ad 13");
-        titles.add("Ad 14");
-        titles.add("Ad 15");
+        ProgressDialog progressDialog = new ProgressDialog(HomeActivity.this);
+        progressDialog.setMessage("Loading ads...");
+        progressDialog.show();
 
+        DatabaseReference ads_ref = FirebaseDatabase.getInstance().getReference("Ads");
 
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
-        images.add(R.drawable.twitter);
+        all_ads = new ArrayList<>();
 
-        adapter = new AdAdapter(this, titles, images);
+        adapter = new AdAdapter(this, all_ads);
+        ads_ref.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                int count = 1;
+                all_ads.clear();
+                for(DataSnapshot adSnapshot : snapshot.getChildren())
+                {
+                    HashMap<String, Object> ad_from_Ads = (HashMap<String, Object>) adSnapshot.getValue();
+                    Log.d("A", "Ad number " + count);
+                    count++;
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-        adList.setLayoutManager(gridLayoutManager);
-        adList.setAdapter(adapter);
+                    if(!(ad_from_Ads != null && ad_from_Ads.get("Publisher").equals(me.getUid())))
+                    {
+                        all_ads.add(ad_from_Ads);
+                    }
+                }
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(HomeActivity.this, 2, GridLayoutManager.VERTICAL, false);
+                adList.setLayoutManager(gridLayoutManager);
+                adList.setAdapter(adapter);
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error)
+            {
+
+            }
+        });
 
         to_map_button = findViewById(R.id.map_mode);
         to_create_Ad_button = findViewById(R.id.create_ad_mode);
-
-//        textView_location = findViewById(R.id.text_location); del
-//        button_location = findViewById(R.id.button_location); del
 
         if(ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(HomeActivity.this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION
             }, 100);
         }
-
-        /* button_location.setOnClickListener(new View.OnClickListener() { del
-            @Override
-            public void onClick(View v) {
-//                getLocation();
-            }
-        });*/
 
         to_map_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,8 +153,6 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
 
                     }
                 }, 4500); // 3000 milliseconds = 3 seconds
-
-
 
                 new Handler().postDelayed(new Runnable()
                 {
@@ -196,7 +185,7 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
             @Override
             public void onClick(View v)
             {
-                Intent to_map = new Intent(HomeActivity.this, CreateAd.class);
+                Intent to_map = new Intent(HomeActivity.this, CreateAdActivity.class);
                 startActivity(to_map);
             }
         });
@@ -219,10 +208,7 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
 
     @Override
     public void onLocationChanged(Location location) {
-//        System.out.println("onLocationChanged() ----------------------------------------------------------------------------------------------------------------------------------------"); del
-//        Toast.makeText(this, ""+location.getLatitude()+","+location.getLongitude(), Toast.LENGTH_SHORT).show(); del
 
-//        System.out.println(location.getLatitude() + "   " + location.getLongitude()); // Result: 37.99991190433502   23.73816668987274 del
         setCurrentLocation(location.getLatitude(), location.getLongitude());
 
         try {
@@ -254,7 +240,6 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
     }
 
     public void setCurrentLocation(double lat, double lon){
-//        System.out.println("SETTER IS TAKING ACTION ----------------------------------------------------------------------------------------------------------------------------------------"); del
         this.currentLocation = new LatLng(lat, lon);
     }
 }

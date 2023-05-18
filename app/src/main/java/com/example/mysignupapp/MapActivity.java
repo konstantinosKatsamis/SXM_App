@@ -4,33 +4,48 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.AlertDialog;
-import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Toast;
 
-import com.example.mysignupapp.databinding.ActivityMapBinding;
+import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallback {
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     GoogleMap map;
     LatLng receivedCurrentLocation;
 
-    ActivityMapBinding activityMapBinding;
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityMapBinding = ActivityMapBinding.inflate(getLayoutInflater());
-        setContentView(activityMapBinding.getRoot());
-        allocateActivityTitle("Find Ads using the Map");
+        setContentView(R.layout.activity_map);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        if(currentUser != null)
+        {
+            Toast.makeText(MapActivity.this, "YOU EXIST", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(MapActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
 //        builder.setTitle("Confirmation"); del
@@ -60,8 +75,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
             System.out.println("ReceivingActivity" + "Location parameter is null");
         }
 
-
-
 //        System.out.println("==========================================================================================================================================================="); del
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -83,10 +96,22 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                 map.addMarker(new MarkerOptions().position(Athens).title("Athens"));
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(Athens, 16));
 
-//                System.out.println("LATITUDE: " + receivedCurrentLocation.latitude); del
-//                System.out.println("LONGITUDE: " + receivedCurrentLocation.longitude); del
-
             }
-        },4500);
+        },9000);
+    }
+
+    @Override
+    protected void onStart()
+    {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 }
