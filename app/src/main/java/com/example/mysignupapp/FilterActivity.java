@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mysignupapp.Utility.NetworkChangeListener;
+import com.example.mysignupapp.databinding.ActivityFilterBinding;
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +28,7 @@ import java.util.Collections;
 import java.util.Currency;
 import java.util.Locale;
 
-public class FilterActivity extends AppCompatActivity
+public class FilterActivity extends DrawerBaseActivity
 {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
@@ -51,12 +52,15 @@ public class FilterActivity extends AppCompatActivity
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
+    ActivityFilterBinding activityFilterBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_filter);
+        activityFilterBinding = ActivityFilterBinding.inflate(getLayoutInflater());
+        setContentView(activityFilterBinding.getRoot());
+        allocateActivityTitle("Choose Filters");
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();

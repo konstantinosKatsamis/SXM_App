@@ -28,6 +28,7 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.example.mysignupapp.Utility.NetworkChangeListener;
+import com.example.mysignupapp.databinding.ActivityCreateAdBinding;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -48,7 +49,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class CreateAdActivity extends AppCompatActivity
+public class CreateAdActivity extends DrawerBaseActivity
 {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
@@ -89,10 +90,14 @@ public class CreateAdActivity extends AppCompatActivity
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
+    ActivityCreateAdBinding activityCreateAdBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_ad);
+        activityCreateAdBinding = ActivityCreateAdBinding.inflate(getLayoutInflater());
+        setContentView(activityCreateAdBinding.getRoot());
+        allocateActivityTitle("Ad Creation");
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();

@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.example.mysignupapp.Utility.NetworkChangeListener;
+import com.example.mysignupapp.databinding.ActivityMapBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -20,7 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallback {
 
     GoogleMap map;
     LatLng receivedCurrentLocation;
@@ -30,10 +31,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
+    ActivityMapBinding activityMapBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        activityMapBinding = ActivityMapBinding.inflate(getLayoutInflater());
+        setContentView(activityMapBinding.getRoot());
+        allocateActivityTitle("Find Ads");
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
