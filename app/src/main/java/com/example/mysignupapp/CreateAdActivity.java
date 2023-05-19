@@ -53,7 +53,9 @@ public class CreateAdActivity extends DrawerBaseActivity
 {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
-    String[] items = {"Collectors", "Vehicles", "Books", "Men Clothing", "Women Clothing", "Music", "Sports"};
+
+    String[] items = {"Vehicles", "Men Clothing", "Women Clothing", "Music",
+            "Sports", "Office", "Books", "Electronics", "Toys", "Movies", "Collectibles"};
     AutoCompleteTextView autoCompleteTxt;
     ArrayAdapter<String> adapterItems;
 
@@ -72,6 +74,7 @@ public class CreateAdActivity extends DrawerBaseActivity
     String title_input;
     String category_input;
     String price_input;
+    String description_input;
     ArrayList<String> switch_inputs;
 
     TextView switch_selections;
@@ -80,7 +83,8 @@ public class CreateAdActivity extends DrawerBaseActivity
     boolean[] selected_switch;
 
     ArrayList<Integer> switch_list = new ArrayList<>();
-    String[] category_array = {"Collectors", "Vehicles", "Books", "Men Clothing", "Women Clothing", "Music", "Sports"};
+    String[] category_array = {"Vehicles", "Men Clothing", "Women Clothing", "Music",
+            "Sports", "Office", "Books", "Electronics", "Toys", "Movies", "Collectibles"};
 
     private static final int PICK_IMAGES_CODE = 0;
 
@@ -89,6 +93,8 @@ public class CreateAdActivity extends DrawerBaseActivity
     TextInputLayout TITLE_textInputLayout;
 
     TextInputLayout PRICE_textInputLayout;
+
+    TextInputLayout DESCRIPTION_textInputLayout;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
@@ -125,6 +131,8 @@ public class CreateAdActivity extends DrawerBaseActivity
         TITLE_textInputLayout = (TextInputLayout) findViewById(R.id.title_textfield);
 
         PRICE_textInputLayout = (TextInputLayout) findViewById(R.id.price_textfield);
+
+        DESCRIPTION_textInputLayout = (TextInputLayout) findViewById(R.id.description_textfield);
 
         autoCompleteTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -309,6 +317,7 @@ public class CreateAdActivity extends DrawerBaseActivity
 
         title_input = TITLE_textInputLayout.getEditText().getText().toString();
         price_input = PRICE_textInputLayout.getEditText().getText().toString();
+        description_input = DESCRIPTION_textInputLayout.getEditText().getText().toString();
 
         if (imageUris.size() > 0)
         {
@@ -342,7 +351,7 @@ public class CreateAdActivity extends DrawerBaseActivity
                         {
                             try
                             {
-                                Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls);
+                                Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls, description_input);
                                 Toast.makeText(CreateAdActivity.this, "Success!!!!!!!!!!!!!!!!!", Toast.LENGTH_LONG).show();
                                 String user_id = mAuth.getCurrentUser().getUid();
 
@@ -384,6 +393,7 @@ public class CreateAdActivity extends DrawerBaseActivity
                                 }
 
                                 hashMap.put("Category", category_input);
+                                hashMap.put("Description", description_input);
                                 hashMap.put("Switch", switch_inputs);
 
                                 reference.child(category_input + " " + title_input).setValue(hashMap);
@@ -453,7 +463,6 @@ public class CreateAdActivity extends DrawerBaseActivity
                     {
                         count = 5;
                     }
-
                     for (int i = 0; i < count; i++) {
                         Uri imageUri = data.getClipData().getItemAt(i).getUri();
                         imageUris.add(imageUri);

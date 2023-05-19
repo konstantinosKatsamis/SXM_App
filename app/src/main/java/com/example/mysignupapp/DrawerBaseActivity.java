@@ -8,6 +8,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -56,13 +58,33 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
                 overridePendingTransition(0, 0);
                 break;
             case R.id.nav_account:
-//                TODO intent for account infos
+                startActivity(new Intent(this, UserDetailsActivity.class));
+                overridePendingTransition(0, 0);
                 break;
             case R.id.nav_logout:
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.signOut();
-                startActivity(new Intent(this, LoginActivity.class));
-                overridePendingTransition(0, 0);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.app_name);
+                builder.setIcon(R.drawable.logo_for_appeal);
+                builder.setMessage("Log out from SXM?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                mAuth.signOut();
+                                startActivity(new Intent(DrawerBaseActivity.this, LoginActivity.class));
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert = builder.create();
+                alert.show();
                 break;
         }
 

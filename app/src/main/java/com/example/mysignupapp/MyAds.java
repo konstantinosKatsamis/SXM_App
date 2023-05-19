@@ -1,16 +1,17 @@
 package com.example.mysignupapp;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.mysignupapp.databinding.ActivityMapBinding;
+import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.example.mysignupapp.databinding.ActivityMyAdsBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,6 +34,8 @@ public class MyAds extends DrawerBaseActivity {
     private AdAdapter adapter;
     private FirebaseAuth mAuth;
     private FirebaseUser me;
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,5 +96,20 @@ public class MyAds extends DrawerBaseActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStart()
+    {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 }

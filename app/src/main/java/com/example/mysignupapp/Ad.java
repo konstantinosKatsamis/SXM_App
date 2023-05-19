@@ -8,16 +8,18 @@ public class Ad implements Serializable
     String title;
     String category;
     String price;
+    String description;
     ArrayList<String> categories_for_switching = new ArrayList<>();
     ArrayList<String> images = new ArrayList<>();
     Ad(){}
 
-    public Ad(String title, String category, String price, ArrayList<String> categories_for_switching, ArrayList<String> images) {
+    public Ad(String title, String category, String price, ArrayList<String> categories_for_switching, ArrayList<String> images, String description) {
         this.title = title;
         this.category = category;
         this.price = price;
         this.categories_for_switching = categories_for_switching;
         this.images = images;
+        this.description = description;
     }
 
     public String getTitle() {
@@ -57,5 +59,13 @@ public class Ad implements Serializable
     }
     public void setImages(ArrayList<String> images) {
         this.images = images;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

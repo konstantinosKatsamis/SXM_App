@@ -38,7 +38,7 @@ public class FilterActivity extends DrawerBaseActivity
 
     ArrayAdapter<String> adapter_items;
 
-    String[] prices_range ={"0-20", "20-50", "50-100", "100-500", "500+"};
+    String[] prices_range ={"0-100", "100-500", "500-1000", "1000-10000", "10000+"};
 
     AutoCompleteTextView prices;
 
@@ -48,7 +48,8 @@ public class FilterActivity extends DrawerBaseActivity
     boolean[] selectedDay;
 
     ArrayList<Integer> daylist = new ArrayList<>();
-    String[] dayArray = {"Collectors", "Vehicles", "Books", "Men Clothing", "Women Clothing", "Music", "Sports"};
+    String[] dayArray = {"Vehicles", "Men Clothing", "Women Clothing", "Music",
+            "Sports", "Office", "Books", "Electronics", "Toys", "Movies", "Collectibles"};
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 

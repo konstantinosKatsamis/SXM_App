@@ -8,7 +8,7 @@
     tools:context=".SplashScreenActivity">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/S"
         android:layout_width="70dp"
         android:layout_height="125dp"
         android:layout_marginStart="60dp"
@@ -18,46 +18,48 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/X"
         android:layout_width="70dp"
         android:layout_height="125dp"
         android:layout_marginStart="60dp"
         android:src="@drawable/letter_x"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/S" />
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/M"
         android:layout_width="70dp"
         android:layout_height="125dp"
         android:layout_marginStart="60dp"
         android:src="@drawable/letter_m"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+        app:layout_constraintTop_toBottomOf="@+id/X" />
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/mart_text"
         android:layout_width="161dp"
         android:layout_height="112dp"
         android:layout_marginTop="40dp"
         android:src="@drawable/mart_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/S"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/e_letter"
         android:layout_width="60dp"
         android:layout_height="74dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="200dp"
         android:src="@drawable/e_text"
-        app:layout_constraintEnd_toStartOf="@+id/imageView5"
+        app:layout_constraintEnd_toStartOf="@+id/X"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/arket_text"
         android:layout_width="170dp"
         android:layout_height="79dp"
         android:layout_marginBottom="324dp"
@@ -65,17 +67,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView6" />
+        app:layout_constraintStart_toEndOf="@+id/M" />
 
     <ImageView
+        android:id="@+id/change_text"
         android:layout_width="192dp"
         android:layout_height="73dp"
         android:layout_marginTop="50dp"
         android:src="@drawable/change_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+        app:layout_constraintStart_toEndOf="@+id/X"
+        app:layout_constraintTop_toBottomOf="@+id/mart_text" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

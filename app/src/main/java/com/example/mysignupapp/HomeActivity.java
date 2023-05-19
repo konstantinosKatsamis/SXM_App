@@ -68,8 +68,6 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
         setContentView(activityHomeBinding.getRoot());
         allocateActivityTitle("Home");
 
-
-
         mAuth = FirebaseAuth.getInstance();
         me = mAuth.getCurrentUser();
 
