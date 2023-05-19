@@ -53,7 +53,6 @@ public class MyAds extends DrawerBaseActivity {
         DatabaseReference ads_ref = FirebaseDatabase.getInstance().getReference("Ads");
 
         all_ads = new ArrayList<>();
-        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ");
 
         adapter = new AdAdapter(this, all_ads);
         ads_ref.addValueEventListener(new ValueEventListener()
@@ -61,25 +60,21 @@ public class MyAds extends DrawerBaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
-                System.out.println(" 1++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ");
                 int count = 1;
                 all_ads.clear();
                 boolean ad = false;
                 for(DataSnapshot adSnapshot : snapshot.getChildren())
                 {
-                    System.out.println(" 2++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ");
                     HashMap<String, Object> ad_from_Ads = (HashMap<String, Object>) adSnapshot.getValue();
                     Log.d("A", "Ad number " + count);
                     count++;
 
                     if((ad_from_Ads != null && ad_from_Ads.get("Publisher").equals(me.getUid())))
                     {
-                        System.out.println(" 3++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ");
                         all_ads.add(ad_from_Ads);
                         ad = true;
                     }
                 }
-                System.out.println(" 4++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ");
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(MyAds.this, 2, GridLayoutManager.VERTICAL, false);
                 my_ad_list.setLayoutManager(gridLayoutManager);
                 my_ad_list.setAdapter(adapter);
