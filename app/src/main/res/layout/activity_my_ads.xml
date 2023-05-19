@@ -6,11 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".MyAds">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:id="@+id/my_ad_list"
+        android:textSize="30dp"
+        android:padding="16dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView_my_ads"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My Ads"
+        android:text=""
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
