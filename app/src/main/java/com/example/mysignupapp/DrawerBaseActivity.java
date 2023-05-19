@@ -15,6 +15,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.ktx.Firebase;
 
 public class DrawerBaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -56,7 +59,10 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
 //                TODO intent for account infos
                 break;
             case R.id.nav_logout:
-//                TODO logout activity
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+                startActivity(new Intent(this, LoginActivity.class));
+                overridePendingTransition(0, 0);
                 break;
         }
 
