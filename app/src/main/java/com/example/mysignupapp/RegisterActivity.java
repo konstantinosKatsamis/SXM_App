@@ -1,31 +1,43 @@
 package com.example.mysignupapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -55,6 +67,12 @@ public class RegisterActivity extends AppCompatActivity
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
+    ImageView profile_picture;
+
+    String profile_picture_path;
+
+    StorageReference storageReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+        storageReference = FirebaseStorage.getInstance().getReference("Profiles");
 
         if(currentUser != null)
         {
@@ -83,6 +102,19 @@ public class RegisterActivity extends AppCompatActivity
 
         TextInputLayout PASSWORD_2_textInputLayout = (TextInputLayout) findViewById(R.id.password_confirm);
         re_enter_password = String.valueOf(PASSWORD_2_textInputLayout.getEditText().getText());
+
+        profile_picture = (ImageView) findViewById(R.id.no_profile_picture);
+
+        profile_picture.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent openGalley = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openGalley, 1000);
+
+            }
+        });
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,7 +229,7 @@ public class RegisterActivity extends AppCompatActivity
                             Log.d("Reg", "Password: " + new_user_password);
                             Log.d("Reg", "User: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
                             User newUser = new User(FirebaseAuth.getInstance().getCurrentUser().getUid(), firstName, lastName,
-                                    birthDate, email, new_user_username, new_user_password,user_ads);
+                                    birthDate, email, new_user_username, new_user_password,user_ads, profile_picture_path);
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -355,6 +387,51 @@ public class RegisterActivity extends AppCompatActivity
     {
         unregisterReceiver(networkChangeListener);
         super.onStop();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1000)
+        {
+            if(resultCode == Activity.RESULT_OK)
+            {
+                Uri profile_image_uri = data.getData();
+                uploadImageToStorage(profile_image_uri);
+            }
+        }
+    }
+
+    private void uploadImageToStorage(Uri profile_image_uri)
+    {
+        StorageReference fileReference = storageReference.child(System.currentTimeMillis()
+                + "." + getFileExtension(profile_image_uri));
+
+        fileReference.putFile(profile_image_uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+        {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+            {
+                Toast.makeText(RegisterActivity.this, "Image updated!", Toast.LENGTH_LONG).show();
+                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri)
+                    {
+                        Picasso.get().load(profile_image_uri).into(profile_picture);
+                        profile_picture_path = profile_picture.toString();
+                    }
+                });
+            }
+        });
+    }
+
+    public String getFileExtension(Uri uri)
+    {
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
     public void openBirthDatePicker(View view)

@@ -1,9 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gray"
+    android:padding="15dp"
     tools:context=".UserDetailsActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/user_rank"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:gravity="center"
+        android:background="@color/black"
+        android:text="Rank: "
+        android:textColor="#9CD6DD"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="226dp"
+        android:layout_height="206dp"
+        android:layout_above="@id/user_fullname"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="71dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="54dp"
+        android:background="@drawable/no_profile_pic"/>
+
+    <TextView
+        android:id="@+id/user_fullname"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/black"
+        android:text="Full Name: "
+        android:textColor="#9CD6DD"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/user_username"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/user_fullname"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/black"
+        android:text="Username: "
+        android:textColor="#9CD6DD"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/user_email"
+        android:layout_height="40dp"
+        android:layout_below="@+id/user_username"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/black"
+        android:text="Email address: "
+        android:textColor="#9CD6DD"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/user_email"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/black"
+        android:text="Total ads created: "
+        android:textColor="#9CD6DD"
+        android:textSize="20sp" />
+
+</RelativeLayout>

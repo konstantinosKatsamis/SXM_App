@@ -1,6 +1,5 @@
 package com.example.mysignupapp;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;

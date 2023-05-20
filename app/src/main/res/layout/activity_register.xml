@@ -48,6 +48,14 @@
             android:layout_marginBottom="20dp"
             android:orientation="vertical">
 
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:id="@+id/no_profile_picture"
+                android:background="@drawable/no_profile_pic"/>
+
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/first_name_textfield"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
