@@ -55,6 +55,14 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
                 startActivity(new Intent(this, MyAds.class));
                 overridePendingTransition(0, 0);
                 break;
+            case R.id.nav_my_requests:
+                startActivity(new Intent(this, MyRequests.class));
+                overridePendingTransition(0, 0);
+                break;
+            case R.id.nav_my_appointments:
+                startActivity(new Intent(this, MyAppointments.class));
+                overridePendingTransition(0, 0);
+                break;
             case R.id.nav_account:
 //                TODO intent for account infos
                 break;

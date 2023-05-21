@@ -64,7 +64,7 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityHomeBinding =ActivityHomeBinding.inflate(getLayoutInflater());
+        activityHomeBinding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(activityHomeBinding.getRoot());
         allocateActivityTitle("Home");
 
