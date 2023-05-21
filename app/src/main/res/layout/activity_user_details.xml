@@ -19,20 +19,30 @@
         android:background="@color/black"
         android:text="Rank: "
         android:textColor="#9CD6DD"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 
-    <ImageView
-        android:id="@+id/profile_picture"
-        android:layout_width="226dp"
-        android:layout_height="206dp"
-        android:layout_above="@id/user_fullname"
-        android:layout_alignParentTop="true"
+    <androidx.cardview.widget.CardView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:cardBackgroundColor="#9CD6DD"
+        android:layout_marginBottom="50dp"
+        android:layout_gravity="center"
         android:layout_centerInParent="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="71dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="54dp"
-        android:background="@drawable/no_profile_pic"/>
+        android:layout_below="@id/user_rank"
+        android:layout_marginTop="20dp"
+        android:layout_above="@id/user_fullname"
+        app:cardCornerRadius="150dp"
+        android:shape="ring">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:id="@+id/no_profile_picture"
+            android:scaleType="centerCrop"
+            android:background="@drawable/no_profile_pic"/>
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/user_fullname"
@@ -44,7 +54,7 @@
         android:background="@color/black"
         android:text="Full Name: "
         android:textColor="#9CD6DD"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/user_username"
@@ -57,7 +67,7 @@
         android:background="@color/black"
         android:text="Username: "
         android:textColor="#9CD6DD"
-        android:textSize="20sp"/>
+        android:textSize="15sp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -71,11 +81,12 @@
         android:background="@color/black"
         android:text="Email address: "
         android:textColor="#9CD6DD"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:id="@+id/user_total_ads"
         android:layout_below="@+id/user_email"
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
@@ -84,6 +95,6 @@
         android:background="@color/black"
         android:text="Total ads created: "
         android:textColor="#9CD6DD"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 
 </RelativeLayout>

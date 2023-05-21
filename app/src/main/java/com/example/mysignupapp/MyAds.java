@@ -9,7 +9,9 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.example.mysignupapp.databinding.ActivityMyAdsBinding;
@@ -30,6 +32,8 @@ public class MyAds extends DrawerBaseActivity {
     ActivityMyAdsBinding activityMyAdsBinding;
 
     private RecyclerView my_ad_list;
+
+    AdAdapter.AdViewClickListener listener;
     private List<HashMap<String, Object>> all_ads;
     private AdAdapter adapter;
     private FirebaseAuth mAuth;
@@ -56,8 +60,8 @@ public class MyAds extends DrawerBaseActivity {
         DatabaseReference ads_ref = FirebaseDatabase.getInstance().getReference("Ads");
 
         all_ads = new ArrayList<>();
-
-        adapter = new AdAdapter(this, all_ads);
+        setOnClickAdListener();
+        adapter = new AdAdapter(this, all_ads, listener);
         ads_ref.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -96,6 +100,17 @@ public class MyAds extends DrawerBaseActivity {
             }
         });
 
+    }
+
+    private void setOnClickAdListener()
+    {
+        listener = new AdAdapter.AdViewClickListener() {
+            @Override
+            public void onClick(View v, int position)
+            {
+                Toast.makeText(MyAds.this, "Clicked my Ad: " + all_ads.get(position).get("Title"), Toast.LENGTH_LONG).show();
+            }
+        };
     }
 
     @Override

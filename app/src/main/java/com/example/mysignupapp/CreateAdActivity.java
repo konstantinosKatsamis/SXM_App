@@ -64,10 +64,8 @@ public class CreateAdActivity extends DrawerBaseActivity
     private Button create_ad_button;
 
     private ImageButton delete_image;
-
     private ArrayList<Uri> imageUris;
     private ArrayList<String> myurls;
-
     StorageTask uploadTask;
     StorageReference storageReference;
 

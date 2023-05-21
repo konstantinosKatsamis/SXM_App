@@ -11,7 +11,6 @@ public class User
     public String emailAddress;
     public String username;
     public String password;
-
     public String profile_picture;
     public ArrayList<Ad> ads = new ArrayList<>();
 
