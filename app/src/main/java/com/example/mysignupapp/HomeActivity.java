@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -61,12 +62,24 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
 
     ActivityHomeBinding activityHomeBinding;
 
+    Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityHomeBinding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(activityHomeBinding.getRoot());
         allocateActivityTitle("Home");
+
+        button = findViewById(R.id.ha_btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent to_checkEnLoc = new Intent(HomeActivity.this, CheckEnableLocation.class);
+                startActivity(to_checkEnLoc);
+            }
+        });
+
 
 
 

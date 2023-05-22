@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.ktx.Firebase;
 
-public class DrawerBaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public abstract class DrawerBaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     DrawerLayout drawerLayout;
 
@@ -82,4 +83,12 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
             getSupportActionBar().setTitle(titleString);
         }
     }
+
+    public abstract void onLocationChanged(Location location);
+
+    public abstract void onStatusChanged(String provider, int status, Bundle extras);
+
+    public abstract void onProviderEnabled(String provider);
+
+    public abstract void onProviderDisabled(String provider);
 }

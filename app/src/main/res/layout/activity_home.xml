@@ -7,12 +7,12 @@
     tools:context=".HomeActivity">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/adList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:id="@+id/adList"
-        android:textSize="30dp"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:textSize="30dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -63,7 +63,11 @@
 
     </LinearLayout>
 
-<!--  del  <ImageView-->
+    <Button
+        android:id="@+id/ha_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <!--  del  <ImageView-->
 <!--        android:src="@drawable/text_location"-->
 <!--        android:layout_width="200dp"-->
 <!--        android:layout_height="200dp"/>-->
