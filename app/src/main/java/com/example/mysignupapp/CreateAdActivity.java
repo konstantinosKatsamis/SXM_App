@@ -125,14 +125,9 @@ public class CreateAdActivity extends DrawerBaseActivity {
     LocationManager locationManager;
     LatLng currentLocation;
 
-    private TextView textView;
-
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private CheckBox first_checkbox, getLocationAutomatically;
     private boolean boolean_location;
-    Button toastBtn;
-
-    Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,17 +140,7 @@ public class CreateAdActivity extends DrawerBaseActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        textView = findViewById(R.id.textViewtemp);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        toastBtn = findViewById(R.id.toast_btn);
-        toastBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), currentLocation.latitude + " " + currentLocation.longitude, Toast.LENGTH_SHORT).show();
-            }
-        });
-
 
         first_checkbox = findViewById(R.id.checkbox);
         first_checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -164,12 +149,10 @@ public class CreateAdActivity extends DrawerBaseActivity {
                 Toast.makeText(getApplicationContext(), "ha", Toast.LENGTH_SHORT).show();
                 if (isChecked) {
                     // Checkbox is checked, show additional input fields
-                    findViewById(R.id.inputField1).setVisibility(View.VISIBLE);
                     findViewById(R.id.inputField2).setVisibility(View.VISIBLE);
                     findViewById(R.id.get_location_cbox).setVisibility(View.VISIBLE);
                 } else {
                     // Checkbox is unchecked, hide additional input fields
-                    findViewById(R.id.inputField1).setVisibility(View.GONE);
                     findViewById(R.id.inputField2).setVisibility(View.GONE);
                     findViewById(R.id.get_location_cbox).setVisibility(View.GONE);
                 }
@@ -182,8 +165,6 @@ public class CreateAdActivity extends DrawerBaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     getLocationCoordinates();
-                }else{
-                    textView.setText("text box is unchecked");
                 }
             }
         });
@@ -575,14 +556,12 @@ public class CreateAdActivity extends DrawerBaseActivity {
         task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                textView.setText("Location settings (GPS) is ON.");
             }
         });
 
         task.addOnFailureListener(this, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                textView.setText("Location settings (GPS) is OFF.");
                 getLocationAutomatically.setChecked(false);
                 setBoolean_location(false);
 
@@ -602,11 +581,8 @@ public class CreateAdActivity extends DrawerBaseActivity {
     private void getLocationCoordinates() {
 
         if(isBoolean_location()){
-            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++OK");
         } else{
             setGPS_ON();
-            System.out.println(" ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------OIIIII");
-
         }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -627,10 +603,8 @@ public class CreateAdActivity extends DrawerBaseActivity {
                             double longitude = location.getLongitude();
 
                             setCurrentLocation(latitude + getRandom(), longitude + getRandom());
-                            textView.setText("set current location");
 
                         } else {
-                            textView.setText("Location is null");
                             setBoolean_location(false);
                         }
                     }
@@ -638,7 +612,6 @@ public class CreateAdActivity extends DrawerBaseActivity {
                 .addOnFailureListener(this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        textView.setText("Failed to get location");
                     }
                 });
     }

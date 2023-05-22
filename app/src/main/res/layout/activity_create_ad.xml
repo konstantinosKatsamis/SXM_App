@@ -42,19 +42,6 @@
             android:gravity="center"
             tools:ignore="TextContrastCheck" />
 
-        <TextView
-            android:id="@+id/textViewtemp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/welcomeMessage"
-            android:layout_gravity="center"
-            android:layout_margin="20dp"
-            android:text="Test"
-            android:textColor="#9CD6DD"
-            android:textSize="20sp"
-            android:gravity="center"
-            tools:ignore="TextContrastCheck" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -139,10 +126,6 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/black" />
 
-            <Button
-                android:id="@+id/toast_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/description_textfield"
@@ -180,8 +163,6 @@
                 android:layout_marginLeft="30dp"
                 android:text="Check to add Location" />
 
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-
             <CheckBox
                 android:id="@+id/get_location_cbox"
                 android:layout_width="wrap_content"
@@ -190,12 +171,6 @@
                 android:onClick="getGPS_Status"
                 android:visibility="gone"/>
 
-            <EditText
-                android:id="@+id/inputField1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Input Field 1"
-                android:visibility="gone" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputField2"

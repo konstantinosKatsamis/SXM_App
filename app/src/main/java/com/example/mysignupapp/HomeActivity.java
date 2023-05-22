@@ -71,18 +71,6 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
         setContentView(activityHomeBinding.getRoot());
         allocateActivityTitle("Home");
 
-        button = findViewById(R.id.ha_btn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent to_checkEnLoc = new Intent(HomeActivity.this, CheckEnableLocation.class);
-                startActivity(to_checkEnLoc);
-            }
-        });
-
-
-
-
         mAuth = FirebaseAuth.getInstance();
         me = mAuth.getCurrentUser();
 
