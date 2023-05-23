@@ -188,6 +188,15 @@ public class AdDetailsActivity extends DrawerBaseActivity
                 startActivity(my_account);
             }
         });
+
+        request_button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(AdDetailsActivity.this, ChooseOfferActivity.class));
+            }
+        });
     }
 
     @Override
