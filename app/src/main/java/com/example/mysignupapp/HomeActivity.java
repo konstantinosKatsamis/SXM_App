@@ -62,7 +62,7 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
 
     ActivityHomeBinding activityHomeBinding;
 
-    Button button;
+    Button btn_addr_coords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -3,11 +3,9 @@ package com.example.mysignupapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -16,15 +14,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
@@ -43,16 +37,11 @@ import android.widget.ViewSwitcher;
 import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.example.mysignupapp.databinding.ActivityCreateAdBinding;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -74,11 +63,9 @@ import com.google.firebase.storage.StorageTask;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
-public class CreateAdActivity extends DrawerBaseActivity {
+public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTask.GeocodingListener {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
     String[] items = {"Collectors", "Vehicles", "Books", "Men Clothing", "Women Clothing", "Music", "Sports"};
@@ -99,7 +86,7 @@ public class CreateAdActivity extends DrawerBaseActivity {
 
     String title_input;
     String category_input;
-    String price_input;
+    String price_input, address_input = "";
     ArrayList<String> switch_inputs;
 
     TextView switch_selections;
@@ -129,6 +116,9 @@ public class CreateAdActivity extends DrawerBaseActivity {
     private CheckBox first_checkbox, getLocationAutomatically;
     private boolean boolean_location;
 
+    Button btnGeoAddr;
+    TextInputLayout ADDRESS_textInputLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setCurrentLocation(0, 0);
@@ -136,6 +126,39 @@ public class CreateAdActivity extends DrawerBaseActivity {
         activityCreateAdBinding = ActivityCreateAdBinding.inflate(getLayoutInflater());
         setContentView(activityCreateAdBinding.getRoot());
         allocateActivityTitle("Ad Creation");
+
+
+        ADDRESS_textInputLayout = findViewById(R.id.textfield_address);
+        ADDRESS_textInputLayout.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    System.out.println("6 EKKKKKKKKKKKKKKKKKKKKKKSSSSSSSSSSSSSSSIIIIIIIIIIIIIIIIIIIII 6666666666666666666666666666666666666666666666666666");
+
+                }else{
+                    System.out.println("EPATITHIKEEEEEEEEENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
+                    address_input = ADDRESS_textInputLayout.getEditText().getText().toString();
+                    System.out.println("button pressed: " + address_input);
+                    findGeocoding(address_input);
+                    getLocationAutomatically.setChecked(false);
+
+                }
+            }
+        });
+
+
+
+        btnGeoAddr = findViewById(R.id.hahaha);
+        btnGeoAddr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                address_input = ADDRESS_textInputLayout.getEditText().getText().toString();
+                System.out.println("button pressed: " + address_input);
+                findGeocoding(address_input);
+            }
+        });
+
+
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -148,13 +171,18 @@ public class CreateAdActivity extends DrawerBaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Toast.makeText(getApplicationContext(), "ha", Toast.LENGTH_SHORT).show();
                 if (isChecked) {
+                    System.out.println("Proto checkbox checked");
                     // Checkbox is checked, show additional input fields
-                    findViewById(R.id.inputField2).setVisibility(View.VISIBLE);
+                    findViewById(R.id.textfield_address).setVisibility(View.VISIBLE);
                     findViewById(R.id.get_location_cbox).setVisibility(View.VISIBLE);
                 } else {
+                    System.out.println("Proto checkbox UNchecked");
                     // Checkbox is unchecked, hide additional input fields
-                    findViewById(R.id.inputField2).setVisibility(View.GONE);
+                    findViewById(R.id.textfield_address).setVisibility(View.GONE);
                     findViewById(R.id.get_location_cbox).setVisibility(View.GONE);
+                    getLocationAutomatically.setChecked(false);
+                    ADDRESS_textInputLayout.getEditText().setText("");
+                    setCurrentLocation(0, 0);
                 }
             }
         });
@@ -165,6 +193,7 @@ public class CreateAdActivity extends DrawerBaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     getLocationCoordinates();
+                    ADDRESS_textInputLayout.getEditText().setText("");
                 }
             }
         });
@@ -647,5 +676,34 @@ public class CreateAdActivity extends DrawerBaseActivity {
         int min = 0, max = 1;
         int randomNum = rand.nextInt((max - min) + 1) + min;
         return randomNum;
+    }
+
+    public void findGeocoding(String address){
+//        String address = "Λακεδαίμονος, Pl. Agiou Dimitriou &, Αμπελόκηποι 115 23";
+        GeocodingTask geocodingTask = new GeocodingTask(this);
+        geocodingTask.execute(address);
+    }
+
+    @Override
+    public void onGeocodingSuccess(LatLng latLng) {
+        // Handle successful geocoding here
+        double latitude = latLng.latitude;
+        double longitude = latLng.longitude;
+        System.out.println(latitude + " " + longitude + "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        // Use the coordinates as needed
+
+        setCurrentLocation(latitude, longitude);
+
+    }
+
+    @Override
+    public void onGeocodingFailure() {
+        Toast.makeText(getApplicationContext(), "Fail to load your Address", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public CreateAdActivity getContext() {
+        return this;
     }
 }
