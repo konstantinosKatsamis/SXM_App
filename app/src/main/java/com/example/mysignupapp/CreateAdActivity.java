@@ -133,12 +133,9 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    System.out.println("6 EKKKKKKKKKKKKKKKKKKKKKKSSSSSSSSSSSSSSSIIIIIIIIIIIIIIIIIIIII 6666666666666666666666666666666666666666666666666666");
 
                 }else{
-                    System.out.println("EPATITHIKEEEEEEEEENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
                     address_input = ADDRESS_textInputLayout.getEditText().getText().toString();
-                    System.out.println("button pressed: " + address_input);
                     findGeocoding(address_input);
                     getLocationAutomatically.setChecked(false);
 
@@ -153,7 +150,6 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
             @Override
             public void onClick(View v) {
                 address_input = ADDRESS_textInputLayout.getEditText().getText().toString();
-                System.out.println("button pressed: " + address_input);
                 findGeocoding(address_input);
             }
         });
@@ -171,13 +167,9 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Toast.makeText(getApplicationContext(), "ha", Toast.LENGTH_SHORT).show();
                 if (isChecked) {
-                    System.out.println("Proto checkbox checked");
-                    // Checkbox is checked, show additional input fields
                     findViewById(R.id.textfield_address).setVisibility(View.VISIBLE);
                     findViewById(R.id.get_location_cbox).setVisibility(View.VISIBLE);
                 } else {
-                    System.out.println("Proto checkbox UNchecked");
-                    // Checkbox is unchecked, hide additional input fields
                     findViewById(R.id.textfield_address).setVisibility(View.GONE);
                     findViewById(R.id.get_location_cbox).setVisibility(View.GONE);
                     getLocationAutomatically.setChecked(false);
@@ -411,7 +403,7 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
 
                         if (myurls.size() == imageUris.size()) {
                             try {
-                                Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls);
+                                Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls, getCurrentLocation());
                                 Toast.makeText(CreateAdActivity.this, "Success!!!!!!!!!!!!!!!!!", Toast.LENGTH_LONG).show();
                                 String user_id = mAuth.getCurrentUser().getUid();
 
@@ -440,6 +432,7 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                                 hashMap.put("Images", myurls);
                                 hashMap.put("Publisher", currentUser.getUid());
                                 hashMap.put("Title", title_input);
+                                hashMap.put("Coordinates", getCurrentLocation());
 
                                 if (price_input.equals("0") || price_input.equals("")) {
                                     hashMap.put("Price", "Free");
@@ -651,6 +644,8 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         System.out.println("longitude: " + currentLocation.longitude);
     }
 
+    public LatLng getCurrentLocation(){ return this.currentLocation; }
+
     public boolean isBoolean_location() {
         return boolean_location;
     }
@@ -689,9 +684,6 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         // Handle successful geocoding here
         double latitude = latLng.latitude;
         double longitude = latLng.longitude;
-        System.out.println(latitude + " " + longitude + "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        // Use the coordinates as needed
-
         setCurrentLocation(latitude, longitude);
 
     }

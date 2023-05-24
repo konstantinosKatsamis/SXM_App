@@ -1,5 +1,7 @@
 package com.example.mysignupapp;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -11,13 +13,15 @@ public class Ad implements Serializable
     ArrayList<String> categories_for_switching = new ArrayList<>();
     ArrayList<String> images = new ArrayList<>();
     Ad(){}
+    private LatLng coordinates;
 
-    public Ad(String title, String category, String price, ArrayList<String> categories_for_switching, ArrayList<String> images) {
+    public Ad(String title, String category, String price, ArrayList<String> categories_for_switching, ArrayList<String> images, LatLng coords) {
         this.title = title;
         this.category = category;
         this.price = price;
         this.categories_for_switching = categories_for_switching;
         this.images = images;
+        this.coordinates = coords;
     }
 
     public String getTitle() {
@@ -57,5 +61,13 @@ public class Ad implements Serializable
     }
     public void setImages(ArrayList<String> images) {
         this.images = images;
+    }
+
+    public LatLng getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(LatLng coordinates) {
+        this.coordinates = coordinates;
     }
 }
