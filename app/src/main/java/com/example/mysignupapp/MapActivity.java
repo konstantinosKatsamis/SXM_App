@@ -139,13 +139,14 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                 }
                 map.setMyLocationEnabled(false);
 
-                CircleOptions circleOptions = new CircleOptions()
+//                TODO o kiklos pou eixa valei ston xarth, isos na mhn xreiazetai telika
+                /*CircleOptions circleOptions = new CircleOptions()
                         .center(latLng)
                         .radius(750) // Set the radius of the circle in meters
                         .strokeWidth(2)
                         .strokeColor(Color.YELLOW)
                         .fillColor(Color.argb(70, 255, 255, 0)); // Transparent red fill color
-                map.addCircle(circleOptions);
+                map.addCircle(circleOptions);*/ // o kiklos pou eixa valei ston xarth, isos na mhn xreiazetai telika
 
                 map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
@@ -167,13 +168,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                     {
                         int count = 1;
                         mapsAds.clear();
-                        /*
-                        * TODO skopos einai na ta valw ola ta Ad tou Firebase se ena Collection
-                        * TODO kai se ena parallilo Collection id me kapoia extra outos wste
-                        * TODO otan eimai mesa stor marker, na kserw to id ths aggelias k na
-                        * TODO phgainw sto katallilo Ad sto megalo Collection gia na vrw tis
-                        * TODO extra plirofories
-                        * */
                         for(DataSnapshot adSnapshot : snapshot.getChildren())
                         {
                             HashMap<String, Object> ad_from_Ads = (HashMap<String, Object>) adSnapshot.getValue();
@@ -213,7 +207,7 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                                         String adID = (String) ad_from_Ads.get("ID");
                                         mapsAds.put(adID, ad);
 
-                                        addMarker(new LatLng(lat, lon), ad.getTitle(), ad.getCategory());
+                                        addMarker(new LatLng(lat, lon), ad.getTitle(), ad.getCategory(), ad);
 
                                     }
                                     else{
@@ -240,16 +234,23 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
-    private void addMarker(LatLng latLng, String title, String snippet) {
+    private void addMarker(LatLng latLng, String title, String snippet, Ad ad) {
 
         marker_btn = findViewById(R.id.button_perki);
+        marker_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
 
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
                 .title(title)
                 .snippet(snippet)
-                .icon(createCustomMarkerIcon(75, 75));
+                .icon(createCustomMarkerIcon(100, 100));
         Marker marker = map.addMarker(markerOptions);
+
+        marker.setTag(ad);
 
         // Set a click listener for the marker
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -274,6 +275,18 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
             public View getInfoContents(Marker marker) {
                 marker_btn.setVisibility(View.VISIBLE);
 
+
+
+//                TODO apo afto to simio tha ginetai kapoio 'task' gia na emfanizi extra plirofories klp
+                Ad ad = (Ad) marker.getTag();
+                Toast.makeText(getApplicationContext(), ad.getTitle(), Toast.LENGTH_SHORT).show();
+
+                System.out.println(ad.getTitle()); // apo afto to simio tha ginetai kapoio 'task' gia na emfanizi extra plirofories klp
+
+
+
+
+
                 // Inflate your custom info window layout
                 infoWindowView = getLayoutInflater().inflate(R.layout.activity_marker_layout, null);
 
@@ -287,8 +300,7 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                 infoWindowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(MapActivity.this, "ATEEEEEE", Toast.LENGTH_LONG).show();
-                        openOtherActivity();
+
                     }
                 });
                 return infoWindowView;
