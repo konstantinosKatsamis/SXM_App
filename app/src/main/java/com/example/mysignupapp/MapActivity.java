@@ -48,8 +48,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallback {
@@ -61,10 +63,11 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
     FirebaseUser currentUser;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+    private HashMap<String, Ad> ads;
 
     ActivityMapBinding activityMapBinding;
     private LatLng latLng = new LatLng(38.00237292320933, 23.735086083815727);
-    private List<HashMap<String, Object>> all_ads;
+    private HashMap<String, Ad> mapsAds;
     private Button marker_btn;
     private View infoWindowView;
 //    private AdAdapter adapter;
@@ -154,7 +157,7 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
                 DatabaseReference ads_ref = FirebaseDatabase.getInstance().getReference("Ads");
 
-                all_ads = new ArrayList<>();
+                mapsAds = new HashMap<>();
 
 //                adapter = new AdAdapter(this, all_ads);
                 ads_ref.addValueEventListener(new ValueEventListener()
@@ -163,7 +166,7 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                     public void onDataChange(@NonNull DataSnapshot snapshot)
                     {
                         int count = 1;
-                        all_ads.clear();
+                        mapsAds.clear();
                         /*
                         * TODO skopos einai na ta valw ola ta Ad tou Firebase se ena Collection
                         * TODO kai se ena parallilo Collection id me kapoia extra outos wste
@@ -174,37 +177,52 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                         for(DataSnapshot adSnapshot : snapshot.getChildren())
                         {
                             HashMap<String, Object> ad_from_Ads = (HashMap<String, Object>) adSnapshot.getValue();
-                            System.out.println(ad_from_Ads);
-                            for(String o: ad_from_Ads.keySet()){ // TODO vlepe ti tiponei dame touto, en kltro pou to *1
-                                System.out.println(o + ": " + ad_from_Ads.get(o));
-                            }
-
-                            /*int i=0; // vlepe ti tiponei dame *1
-                            for(Object o: ad_from_Ads.values()){
-                                System.out.println("\t" + o);
-                                if(i==1){
-                                    ArrayList something = (ArrayList) o;
-//                                    String[] splited = something.split(",");
-                                    for(Object s: something){
-                                        System.out.println("\t\t" + s);
-                                    }
-                                }
-                                i++;
-                            }
-                            i=0;*/ // os dame *1 gia na katalaveis pws na ta kameis Ad Objects
-
-                            Log.d("A", "Ad number " + count);
-                            count++;
 
                             if(!(ad_from_Ads != null && ad_from_Ads.get("Publisher").equals(currentUser.getUid())))
                             {
-                                all_ads.add(ad_from_Ads);
+                                if(ad_from_Ads.get("Coordinates") != null){ // uparxoun oi sintetagmenes os oros sth vash
+                                    HashMap<String, Object> obj = (HashMap<String, Object>) ad_from_Ads.get("Coordinates");
+                                    double lat = (double) obj.get("latitude");
+                                    double lon = (double) obj.get("longitude");
+                                    Ad ad = new Ad();
+
+                                    if(lat != 0){ // sintetagmenes != 0 => tha mpoun ston xarth
+                                        ad.setCoordinates(new LatLng(lat, lon));
+//                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Coordinates added");
+
+                                        String category = (String) ad_from_Ads.get("Category");
+                                        ad.setCategory(category);
+//                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Category added");
+
+                                        String price = (String) ad_from_Ads.get("Price");
+                                        ad.setPrice(price);
+//                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Price added");
+
+                                        String title = (String) ad_from_Ads.get("Title");
+                                        ad.setTitle(title);
+//                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Title added");
+
+                                        ArrayList<String> switch_items = (ArrayList<String>) ad_from_Ads.get("Switch");
+                                        ad.setCategories_for_switching(switch_items);
+//                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Switch added");
+
+                                        ArrayList<String> images = (ArrayList<String>) ad_from_Ads.get("Images");
+                                        ad.setImages(images);
+//                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Image added");
+
+                                        String adID = (String) ad_from_Ads.get("ID");
+                                        mapsAds.put(adID, ad);
+
+                                        addMarker(new LatLng(lat, lon), ad.getTitle(), ad.getCategory());
+
+                                    }
+                                    else{
+                                        System.out.println("??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????");
+                                    }
+                                }
                             }
                         }
-                        GridLayoutManager gridLayoutManager = new GridLayoutManager(MapActivity.this, 2, GridLayoutManager.VERTICAL, false);
-//                        adList.setLayoutManager(gridLayoutManager);
-//                        adList.setAdapter(adapter);
-//                        progressDialog.dismiss();
+//                        GridLayoutManager gridLayoutManager = new GridLayoutManager(MapActivity.this, 2, GridLayoutManager.VERTICAL, false);
                     }
 
                     @Override
@@ -213,9 +231,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
                     }
                 });
-
-//                TODO mallon tha emfanizw: titlo, katigoria, switch items, price(free), publisher
-                addMarker(latLng, "Your Ad Title", "Your Ad Description");
             }
         },9000);
     }
