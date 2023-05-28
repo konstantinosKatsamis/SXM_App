@@ -207,7 +207,7 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                                         String adID = (String) ad_from_Ads.get("ID");
                                         mapsAds.put(adID, ad);
 
-                                        addMarker(new LatLng(lat, lon), ad.getTitle(), ad.getCategory(), ad);
+                                        addMarker(new LatLng(lat, lon), ad);
 
                                     }
                                     else{
@@ -234,7 +234,7 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
-    private void addMarker(LatLng latLng, String title, String snippet, Ad ad) {
+    private void addMarker(LatLng latLng, Ad ad) {
 
         marker_btn = findViewById(R.id.button_perki);
         marker_btn.setOnClickListener(new View.OnClickListener() {
@@ -245,8 +245,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
-                .title(title)
-                .snippet(snippet)
                 .icon(createCustomMarkerIcon(100, 100));
         Marker marker = map.addMarker(markerOptions);
 
@@ -292,10 +290,14 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
                 // Customize the content of your info window
                 TextView titleTextView = infoWindowView.findViewById(R.id.titleTextView);
-                TextView snippetTextView = infoWindowView.findViewById(R.id.snippetTextView);
+                TextView categoryTextView = infoWindowView.findViewById(R.id.categoryTextView);
+                TextView priceTextView = infoWindowView.findViewById(R.id.priceTextView);
+                TextView switchingItemsTextView = infoWindowView.findViewById(R.id.switchingItemsTextView);
 
-                titleTextView.setText(marker.getTitle());
-                snippetTextView.setText(marker.getSnippet());
+                titleTextView.setText("Title: " + ad.getTitle());
+                categoryTextView.setText("Category: " + ad.getCategory());
+                priceTextView.setText("Price: " + ad.getPrice());
+                switchingItemsTextView.setText("Switching items: " + ad.getCategories());
 
                 infoWindowView.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -52,6 +52,23 @@ public class Ad implements Serializable
         return categories_for_switching;
     }
 
+    public String getCategories(){
+        String categories = "";
+        int size = categories_for_switching.size(), i=0;
+        for(String s: categories_for_switching){
+            i++;
+            if(i!=size){
+                categories = categories + s + ", ";
+            }
+            else{
+                categories = categories + s;
+            }
+
+        }
+
+        return categories;
+    }
+
     public void setCategories_for_switching(ArrayList<String> categories_for_switching) {
         this.categories_for_switching = categories_for_switching;
     }
