@@ -8,12 +8,14 @@
     tools:context=".HomeActivity">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/adList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gray"
         android:id="@+id/adList"
         android:textSize="30dp"
         android:padding="16dp">
+
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -64,25 +66,5 @@
 
     </LinearLayout>
 
-<!--  del  <ImageView-->
-<!--        android:src="@drawable/text_location"-->
-<!--        android:layout_width="200dp"-->
-<!--        android:layout_height="200dp"/>-->
-
-<!--  del  <TextView-->
-<!--        android:id="@+id/text_location"-->
-<!--        android:textSize="18sp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:layout_margin="10dp"-->
-<!--        android:text="Current Location"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"/>-->
-
-<!--  del  <Button-->
-<!--        android:id="@+id/button_location"-->
-<!--        android:text="Get Location"-->
-<!--        android:layout_below="@+id/text_location"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"/>-->
 
 </RelativeLayout>

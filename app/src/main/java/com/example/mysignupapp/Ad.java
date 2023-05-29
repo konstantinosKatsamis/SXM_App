@@ -1,5 +1,7 @@
 package com.example.mysignupapp;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -12,14 +14,16 @@ public class Ad implements Serializable
     ArrayList<String> categories_for_switching = new ArrayList<>();
     ArrayList<String> images = new ArrayList<>();
     Ad(){}
+    private LatLng coordinates;
 
-    public Ad(String title, String category, String price, ArrayList<String> categories_for_switching, ArrayList<String> images, String description) {
+    public Ad(String title, String category, String price, ArrayList<String> categories_for_switching, ArrayList<String> images, String description, LatLng coords) {
         this.title = title;
         this.category = category;
         this.price = price;
         this.categories_for_switching = categories_for_switching;
         this.images = images;
         this.description = description;
+        this.coordinates = coords;
     }
 
     public String getTitle() {
@@ -50,6 +54,23 @@ public class Ad implements Serializable
         return categories_for_switching;
     }
 
+    public String getCategories(){
+        String categories = "";
+        int size = categories_for_switching.size(), i=0;
+        for(String s: categories_for_switching){
+            i++;
+            if(i!=size){
+                categories = categories + s + ", ";
+            }
+            else{
+                categories = categories + s;
+            }
+
+        }
+
+        return categories;
+    }
+
     public void setCategories_for_switching(ArrayList<String> categories_for_switching) {
         this.categories_for_switching = categories_for_switching;
     }
@@ -67,5 +88,13 @@ public class Ad implements Serializable
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public LatLng getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(LatLng coordinates) {
+        this.coordinates = coordinates;
     }
 }

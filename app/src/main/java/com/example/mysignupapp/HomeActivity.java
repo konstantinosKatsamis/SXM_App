@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -63,10 +64,12 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
 
     ActivityHomeBinding activityHomeBinding;
 
+    Button btn_addr_coords;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityHomeBinding =ActivityHomeBinding.inflate(getLayoutInflater());
+        activityHomeBinding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(activityHomeBinding.getRoot());
         allocateActivityTitle("Home");
 

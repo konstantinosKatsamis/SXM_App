@@ -10,6 +10,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -17,7 +19,7 @@ import android.widget.FrameLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class DrawerBaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public abstract class DrawerBaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     DrawerLayout drawerLayout;
 
@@ -51,6 +53,14 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
                 break;
             case R.id.nav_my_ads:
                 startActivity(new Intent(this, MyAds.class));
+                overridePendingTransition(0, 0);
+                break;
+            case R.id.nav_my_requests:
+                startActivity(new Intent(this, MyRequests.class));
+                overridePendingTransition(0, 0);
+                break;
+            case R.id.nav_my_appointments:
+                startActivity(new Intent(this, MyAppointments.class));
                 overridePendingTransition(0, 0);
                 break;
             case R.id.nav_account:
@@ -94,4 +104,12 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
             getSupportActionBar().setTitle(titleString);
         }
     }
+
+    public abstract void onLocationChanged(Location location);
+
+    public abstract void onStatusChanged(String provider, int status, Bundle extras);
+
+    public abstract void onProviderEnabled(String provider);
+
+    public abstract void onProviderDisabled(String provider);
 }
