@@ -83,11 +83,11 @@ public class Ad implements Serializable
         this.images = images;
     }
 
-    public LatLng getCoordinates() {
+    public LatLngCustom getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(LatLng coordinates) {
+    public void setCoordinates(LatLngCustom coordinates) {
         this.coordinates = coordinates;
     }
     
@@ -99,9 +99,4 @@ public class Ad implements Serializable
         this.description = description;
     }
 
-
-
-    public void setCoordinates(LatLngCustom coordinates) {
-        this.coordinates = coordinates;
-    }
 }

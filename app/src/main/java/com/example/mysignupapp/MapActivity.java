@@ -302,7 +302,7 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                 infoWindowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        System.out.println("HAHAHA+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                     }
                 });
                 return infoWindowView;

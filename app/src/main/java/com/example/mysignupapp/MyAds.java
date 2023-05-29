@@ -148,16 +148,6 @@ public class MyAds extends DrawerBaseActivity {
         unregisterReceiver(networkChangeListener);
         super.onStop();
     }
-    
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
 
 
     @Override
