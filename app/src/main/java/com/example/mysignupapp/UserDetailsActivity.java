@@ -3,6 +3,7 @@ package com.example.mysignupapp;
 
 import android.app.ProgressDialog;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -107,5 +108,25 @@ public class UserDetailsActivity extends DrawerBaseActivity {
     protected void onStop() {
         unregisterReceiver(networkChangeListener);
         super.onStop();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }
