@@ -24,7 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\Admin\AppData\Local\Temp\baseline_money_off_24.xml" />
+                                                <entry key="imagePath" value="C:\Users\Admin\AppData\Local\Temp\baseline_thumb_up_24.xml" />
                                                 <entry key="opacityPercent" value="80" />
                                               </map>
                                             </option>
@@ -36,7 +36,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/money_off/baseline_money_off_24.xml" />
+                                                <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/thumb_up/baseline_thumb_up_24.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -48,6 +48,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
+                                                <entry key="imagePath" value="C:\Users\Admin\Pictures\Saved Pictures\letter_S.png" />
                                                 <entry key="opacityPercent" value="80" />
                                               </map>
                                             </option>
@@ -80,9 +81,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="free_item_icon" />
+                                      <entry key="imageAsset" value="C:\Users\Admin\Pictures\Saved Pictures\letter_S.png" />
+                                      <entry key="outputName" value="switchable" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="ff0000" />
+                                      <entry key="themeColor" value="000a49" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -335,7 +337,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/search/baseline_search_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/dehaze/baseline_dehaze_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -346,7 +348,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="search_bar_icon" />
+                            <entry key="outputName" value="ic_baseline_dehaze_24" />
                             <entry key="sourceFile" value="C:\Users\Admin\Desktop\SXM_App-main\SXM_App-main" />
                           </map>
                         </option>

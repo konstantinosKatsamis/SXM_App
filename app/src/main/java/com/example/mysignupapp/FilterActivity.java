@@ -5,15 +5,23 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.IntentFilter;
+import android.location.Location;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.mysignupapp.Utility.NetworkChangeListener;
+import com.example.mysignupapp.databinding.ActivityFilterBinding;
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -21,15 +29,15 @@ import java.util.Collections;
 import java.util.Currency;
 import java.util.Locale;
 
-public class FilterActivity extends AppCompatActivity
+public class FilterActivity extends DrawerBaseActivity
 {
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
     String[] criteria ={"User rank", "Increasing price", "Decreasing price", "Item trade off", "Price Only", "Trade off only"};
 
     AutoCompleteTextView choices;
 
     ArrayAdapter<String> adapter_items;
-
-    RangeSlider price_range_slider;
 
     String[] prices_range ={"0-20", "20-50", "50-100", "100-500", "500+"};
 
@@ -43,12 +51,29 @@ public class FilterActivity extends AppCompatActivity
     ArrayList<Integer> daylist = new ArrayList<>();
     String[] dayArray = {"Collectors", "Vehicles", "Books", "Men Clothing", "Women Clothing", "Music", "Sports"};
 
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+
+    ActivityFilterBinding activityFilterBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_filter);
+        activityFilterBinding = ActivityFilterBinding.inflate(getLayoutInflater());
+        setContentView(activityFilterBinding.getRoot());
+        allocateActivityTitle("Choose Filters");
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        if(currentUser != null)
+        {
+            Toast.makeText(FilterActivity.this, "YOU EXIST", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(FilterActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
+        }
 
         choices  = findViewById(R.id.autocomplete_text);
 
@@ -77,18 +102,6 @@ public class FilterActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 String item = parent.getItemAtPosition(position).toString();
-            }
-        });
-
-
-        price_range_slider = findViewById(R.id.price_slider);
-        price_range_slider.setLabelFormatter(new LabelFormatter() {
-            @NonNull
-            @Override
-            public String getFormattedValue(float value) {
-                NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
-                currencyFormat.setCurrency(Currency.getInstance(Locale.GERMANY));
-                return currencyFormat.format(value);
             }
         });
 
@@ -168,6 +181,41 @@ public class FilterActivity extends AppCompatActivity
                 builder.show();
             }
         });
+
+    }
+
+    @Override
+    protected void onStart()
+    {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 }

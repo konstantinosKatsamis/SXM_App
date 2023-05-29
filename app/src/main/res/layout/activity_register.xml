@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@drawable/gray"
     android:orientation="vertical">
 
     <LinearLayout
@@ -12,33 +13,32 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp"
-        tools:context="com.example.mysignupapp.Register">
+        tools:context="com.example.mysignupapp.RegisterActivity">
 
         <TextView
             android:id="@+id/registerTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:text="Become a member of to SXM"
-            android:background="@color/white"
-            android:textColor="#2196F3"
-            android:textSize="25sp"
+            android:textColor="#9CD6DD"
+            android:textSize="27sp"
             android:gravity="center"
             android:textStyle="italic"
             tools:ignore="TextContrastCheck" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:id="@+id/register_message"
             android:text="Please fill all fields below to become our newest member!"
             android:layout_gravity="center"
             android:layout_margin="15dp"
-            android:textColor="#2196F3"
+            android:textColor="#9CD6DD"
+            android:gravity="center"
             android:layout_below="@+id/welcomeMessage"
-            android:background="@color/white"
-            android:textSize="15sp"
+            android:textSize="20sp"
             tools:ignore="TextContrastCheck" />
 
         <LinearLayout
@@ -94,7 +94,7 @@
 
             <Button
                 android:id="@+id/datePickerButton"
-                android:layout_width="250dp"
+                android:layout_width="340dp"
                 android:layout_height="wrap_content"
                 style="?android:spinnerStyle"
                 android:layout_marginStart="15dp"
@@ -102,7 +102,7 @@
                 android:layout_marginTop="10dp"
                 android:onClick="openBirthDatePicker"
                 android:text="Date of Birth"
-                android:textColor="@color/black"
+                android:textColor="#9CD6DD"
                 android:textSize="15sp"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -209,7 +209,7 @@
             android:id="@+id/createAccount"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:backgroundTint="#DA1828"
+            android:backgroundTint="#F60031"
             android:text="Create Account"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
@@ -220,11 +220,13 @@
 
         <TextView
             android:id="@+id/textView6"
-            android:layout_width="200dp"
-            android:layout_height="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
             android:layout_marginStart="10dp"
+            android:textColor="#9CD6DD"
+            android:gravity="center"
             android:text="Already have an account?"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/login_button"
@@ -232,7 +234,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
-            android:backgroundTint="#1F91EC"
+            android:backgroundTint="#9CD6DD"
             android:text="Sign in"
             android:textColor="#FFFFFF"
             tools:ignore="TextContrastCheck" />

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -13,10 +14,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MySignupApp">
         <activity
+            android:name=".CoordsByAdress"
+            android:exported="false" />
+        <activity
+            android:name=".CheckEnableLocation"
+            android:exported="false" />
+        <activity
+            android:name=".MyAppointments"
+            android:exported="false" />
+        <activity
+            android:name=".MyRequests"
+            android:exported="false" />
+        <activity
+            android:name=".MyAds"
+            android:exported="false" />
+        <activity
+            android:name=".DrawerBaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DashboardActivity"
+            android:exported="false" />
+        <activity
             android:name=".FilterActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateAd"
+            android:name=".CreateAdActivity"
             android:exported="false" />
         <activity
             android:name=".MapActivity"
@@ -26,11 +48,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
 
-        <activity
-            android:name=".QuickMenuActivity"
-            android:exported="false"
-            android:label="@string/title_activity_quick_menu"
-            android:theme="@style/Theme.MySignupApp.NoActionBar" />
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
@@ -44,10 +61,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Register"
+            android:name=".RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="false" />
     </application>
 

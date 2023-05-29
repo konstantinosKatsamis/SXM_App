@@ -7,54 +7,15 @@
     tools:context=".MapActivity">
 
     <fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"/>
-
-    <LinearLayout
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:id="@+id/mode_buttons"
-        android:layout_margin="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        android:orientation="horizontal"
-        android:background="@color/black"
-        android:layout_alignParentBottom="true"
-        android:weightSum="3">
+        android:layout_height="match_parent" />
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:backgroundTint="#112715"
-            android:id="@+id/map_mode"
-            android:src="@drawable/map_clip_art"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="707dp"/>
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:backgroundTint="#56BA67"
-            android:id="@+id/create_ad_mode"
-            android:src="@drawable/add_clip_art"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="707dp"/>
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:backgroundTint="#56BA67"
-            android:id="@+id/filter_mode"
-            android:src="@drawable/filter_clip_art"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="707dp"/>
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/button_perki"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
 </RelativeLayout>

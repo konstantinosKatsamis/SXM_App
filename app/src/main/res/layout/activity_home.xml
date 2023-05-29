@@ -7,11 +7,12 @@
     tools:context=".HomeActivity">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/adList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ACE9F1"
-        android:id="@+id/adList"
-        android:padding="16dp">
+        android:background="@color/white"
+        android:padding="16dp"
+        android:textSize="30dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -24,6 +25,8 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
         android:orientation="horizontal"
+        android:textSize="30dp"
+        android:textStyle="bold"
         android:background="@color/black"
         android:layout_alignParentBottom="true"
         android:weightSum="3">
@@ -32,7 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:backgroundTint="#56BA67"
+            android:backgroundTint="#9CD6DD"
             android:id="@+id/map_mode"
             android:src="@drawable/map_clip_art"
             tools:layout_editor_absoluteX="0dp"
@@ -42,7 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:backgroundTint="#56BA67"
+            android:backgroundTint="#9CD6DD"
             android:id="@+id/create_ad_mode"
             android:src="@drawable/add_clip_art"
             tools:layout_editor_absoluteX="0dp"
@@ -52,7 +55,7 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:backgroundTint="#56BA67"
+            android:backgroundTint="#9CD6DD"
             android:id="@+id/filter_mode"
             android:src="@drawable/filter_clip_art"
             tools:layout_editor_absoluteX="0dp"
@@ -60,25 +63,5 @@
 
     </LinearLayout>
 
-<!--  del  <ImageView-->
-<!--        android:src="@drawable/text_location"-->
-<!--        android:layout_width="200dp"-->
-<!--        android:layout_height="200dp"/>-->
-
-<!--  del  <TextView-->
-<!--        android:id="@+id/text_location"-->
-<!--        android:textSize="18sp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:layout_margin="10dp"-->
-<!--        android:text="Current Location"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"/>-->
-
-<!--  del  <Button-->
-<!--        android:id="@+id/button_location"-->
-<!--        android:text="Get Location"-->
-<!--        android:layout_below="@+id/text_location"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"/>-->
 
 </RelativeLayout>

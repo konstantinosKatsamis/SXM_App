@@ -13,34 +13,33 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp"
-        tools:context="com.example.mysignupapp.Register">
+        tools:context="com.example.mysignupapp.RegisterActivity">
 
         <TextView
             android:id="@+id/registerTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
-            android:background="@color/white"
             android:gravity="center"
             android:text="Create your SXM Ad"
-            android:textColor="#2196F3"
-            android:textSize="25sp"
+            android:textColor="#9CD6DD"
+            android:textSize="35sp"
             android:textStyle="italic"
             tools:ignore="TextContrastCheck" />
 
 
         <TextView
             android:id="@+id/register_message"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/welcomeMessage"
             android:layout_gravity="center"
-            android:layout_margin="15dp"
-            android:background="@color/white"
+            android:layout_margin="20dp"
             android:text="Please fill all fields below to create your new SXM ad!"
-            android:textColor="#2196F3"
-            android:textSize="15sp"
+            android:textColor="#9CD6DD"
+            android:textSize="20sp"
+            android:gravity="center"
             tools:ignore="TextContrastCheck" />
 
         <LinearLayout
@@ -54,13 +53,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:textColorHint="#9CD6DD"
+                android:background="@color/black"
                 android:hint="Select Category">
 
                 <AutoCompleteTextView
                     android:id="@+id/select_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="#9CD6DD"
                     android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -108,22 +109,114 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            <TextView
+                android:id="@+id/switch_multiple_selector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:hint="Preferred items for switch">
+                android:layout_centerInParent="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:drawable/editbox_background"
+                android:drawableEnd="@android:drawable/arrow_down_float"
+                android:drawablePadding="16dp"
+                android:hint="Categories for switching"
+                android:padding="13dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/preferred_textfield"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/description_textfield"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:hint="Description"
+                android:textColorHint="#000000">
+
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none" />
+                    android:backgroundTint="#FFFFFF"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHint="#000000"
+                    tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/hahaha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:backgroundTint="#FFFFFF"
+                android:inputType="text"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                tools:ignore="TextContrastCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleX="1.4"
+                android:scaleY="1.4"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="30dp"
+                android:text="Check to add Location" />
+
+            <CheckBox
+                android:id="@+id/get_location_cbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Check this, to get your current location automatically, or"
+                android:onClick="getGPS_Status"
+                android:visibility="gone"/>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textfield_address"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:hint="set the area you want e.g. Χαλάνδρι, 15232"
+                android:textColorHint="#000000"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#FFFFFF"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHint="#000000"
+                    tools:ignore="TextContrastCheck"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+            <TextView
+                android:id="@+id/image_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:drawablePadding="16dp"
+                android:padding="13dp"
+                android:gravity="center"
+                android:textColor="#9CD6DD"
+                android:text="Images: "
+                android:textColorHint="@color/black"/>
+
+        </LinearLayout>
 
         <RelativeLayout
             android:background="@color/black"
@@ -131,7 +224,7 @@
             android:id="@+id/relative_for_image"
             android:layout_gravity="center"
             android:layout_width="400dp"
-            tools:context=".MainActivity">
+            tools:context=".LoginActivity">
 
             <ImageSwitcher
                 android:id="@+id/imagesIs"
@@ -148,41 +241,63 @@
             <Button
                 android:id="@+id/previousBtn"
                 android:text="Previous"
+                android:textColor="@color/white"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:backgroundTint="#9CD6DD"
                 android:layout_width="wrap_content"/>
-
-            <Button
-                android:id="@+id/nextBtn"
-                android:text="Next"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_alignParentEnd="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/pickImagesBtn"
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
+                android:layout_width="120dp"
+                android:backgroundTint="#9CD6DD"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:text="Pick Images" />
+                android:text="Pick Images"
+                android:textColor="@color/white"/>
 
-
+            <Button
+                android:id="@+id/nextBtn"
+                android:text="Next"
+                android:textColor="@color/white"
+                android:backgroundTint="#9CD6DD"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_alignParentBottom="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/login_button"
+        <ImageButton
+            android:id="@+id/deleteBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:backgroundTint="#1F91EC"
+            android:layout_alignParentBottom="true"
+            android:backgroundTint="@color/white"
+            android:layout_gravity="center"
+            android:src="@drawable/delete_image"/>
+
+        <Button
+            android:id="@+id/smart_check"
+            android:text="Smart Check"
+            android:backgroundTint="#FAA71A"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/create_button"
             android:text="Create Ad"
-            android:textColor="#FFFFFF"
-            tools:ignore="TextContrastCheck" />
-
+            android:textColor="@color/white"
+            android:backgroundTint="#9CD6DD"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
-
 </ScrollView>
