@@ -20,11 +20,13 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
 {
     private List<HashMap<String, Object>> ads;
     private Context mcontext;
+    private AdViewClickListener listener;
 
-    public AdAdapter(Context context, List<HashMap<String, Object>> ads)
+    public AdAdapter(Context context, List<HashMap<String, Object>> ads, AdViewClickListener listener)
     {
         this.ads = ads;
         this.mcontext = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -92,7 +94,12 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
         return ads.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
+    public interface AdViewClickListener
+    {
+        void onClick(View v, int position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         ImageView image;
         TextView title;
@@ -109,6 +116,14 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
             category = itemView.findViewById(R.id.ad_category);
             price = itemView.findViewById(R.id.ad_price);
             switchable = itemView.findViewById(R.id.ad_switch);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            listener.onClick(v, getAdapterPosition());
+
         }
     }
 }

@@ -15,6 +15,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -55,6 +56,7 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
     LocationManager locationManager;
     LatLng currentLocation;
     RecyclerView adList;
+    AdAdapter.AdViewClickListener listener;
     AdAdapter adapter;
     List<HashMap<String, Object>> all_ads;
     FirebaseAuth mAuth;
@@ -92,8 +94,8 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
         DatabaseReference ads_ref = FirebaseDatabase.getInstance().getReference("Ads");
 
         all_ads = new ArrayList<>();
-
-        adapter = new AdAdapter(this, all_ads);
+        setOnClickAdListener();
+        adapter = new AdAdapter(this, all_ads, listener);
         ads_ref.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -121,9 +123,11 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
             @Override
             public void onCancelled(@NonNull DatabaseError error)
             {
-
+                Toast.makeText(HomeActivity.this, "Failed to load ads", Toast.LENGTH_LONG).show();
             }
         });
+
+
 
         to_map_button = findViewById(R.id.map_mode);
         to_create_Ad_button = findViewById(R.id.create_ad_mode);
@@ -190,6 +194,21 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
                 startActivity(to_map);
             }
         });
+    }
+
+    private void setOnClickAdListener()
+    {
+        listener = new AdAdapter.AdViewClickListener() {
+            @Override
+            public void onClick(View v, int position)
+            {
+                Toast.makeText(HomeActivity.this, "Clicked Ad: " + all_ads.get(position).get("Title"), Toast.LENGTH_LONG).show();
+                Intent ad_details_intent = new Intent(HomeActivity.this, AdDetailsActivity.class);
+                String key_for_ad = all_ads.get(position).get("Category") + " " + all_ads.get(position).get("Title");
+                ad_details_intent.putExtra("Ad_id", key_for_ad);
+                startActivity(ad_details_intent);
+            }
+        };
     }
 
 

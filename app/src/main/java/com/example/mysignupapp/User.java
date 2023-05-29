@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class User
 {
-
     public String id;
     public String firstName;
     public String lastName;
@@ -12,11 +11,13 @@ public class User
     public String emailAddress;
     public String username;
     public String password;
+    public String profile_picture;
     public ArrayList<Ad> ads = new ArrayList<>();
 
     public User(){}
 
-    public User(String id, String firstName, String lastName, String dateOfBirth, String emailAddress, String username, String password, ArrayList<Ad> ads) {
+    public User(String id, String firstName, String lastName, String dateOfBirth, String emailAddress,
+                String username, String password, ArrayList<Ad> ads, String profile_picture) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -25,6 +26,15 @@ public class User
         this.username = username;
         this.password = password;
         this.ads = ads;
+        this.profile_picture = profile_picture;
+    }
+
+    public String getProfile_picture() {
+        return profile_picture;
+    }
+
+    public void setProfile_picture(String profile_picture) {
+        this.profile_picture = profile_picture;
     }
 
     public String getId() {

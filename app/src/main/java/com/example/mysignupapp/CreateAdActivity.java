@@ -68,7 +68,9 @@ import java.util.Random;
 public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTask.GeocodingListener {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
-    String[] items = {"Collectors", "Vehicles", "Books", "Men Clothing", "Women Clothing", "Music", "Sports"};
+
+    String[] items = {"Vehicles", "Men Clothing", "Women Clothing", "Music",
+            "Sports", "Office", "Books", "Electronics", "Toys", "Movies", "Collectibles"};
     AutoCompleteTextView autoCompleteTxt;
     ArrayAdapter<String> adapterItems;
 
@@ -77,16 +79,16 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
     private Button create_ad_button;
 
     private ImageButton delete_image;
-
     private ArrayList<Uri> imageUris;
     private ArrayList<String> myurls;
-
     StorageTask uploadTask;
     StorageReference storageReference;
 
     String title_input;
     String category_input;
-    String price_input, address_input = "";
+    String address_input = "";
+    String price_input;
+    String description_input;
     ArrayList<String> switch_inputs;
 
     TextView switch_selections;
@@ -95,7 +97,8 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
     boolean[] selected_switch;
 
     ArrayList<Integer> switch_list = new ArrayList<>();
-    String[] category_array = {"Collectors", "Vehicles", "Books", "Men Clothing", "Women Clothing", "Music", "Sports"};
+    String[] category_array = {"Vehicles", "Men Clothing", "Women Clothing", "Music",
+            "Sports", "Office", "Books", "Electronics", "Toys", "Movies", "Collectibles"};
 
     private static final int PICK_IMAGES_CODE = 0;
 
@@ -104,6 +107,8 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
     TextInputLayout TITLE_textInputLayout;
 
     TextInputLayout PRICE_textInputLayout;
+
+    TextInputLayout DESCRIPTION_textInputLayout;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
@@ -210,6 +215,8 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
 
         PRICE_textInputLayout = (TextInputLayout) findViewById(R.id.price_textfield);
 
+        DESCRIPTION_textInputLayout = (TextInputLayout) findViewById(R.id.description_textfield);
+
         autoCompleteTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -284,7 +291,8 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                     String image_number_now = "Images: " + imageUris.size() + "/5";
                     image_number.setText(image_number_now);
                 }
-                if (imageUris.size() >= 2) {
+                else if(imageUris.size() >= 2)
+                {
                     imageUris.remove(position);
                     imageIs.setImageURI(imageUris.get(0));
                     String image_number_now = "Images: " + imageUris.size() + "/5";
@@ -377,6 +385,7 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
 
         title_input = TITLE_textInputLayout.getEditText().getText().toString();
         price_input = PRICE_textInputLayout.getEditText().getText().toString();
+        description_input = DESCRIPTION_textInputLayout.getEditText().getText().toString();
 
         if (imageUris.size() > 0) {
             ArrayList<String> myurls = new ArrayList<>();
@@ -401,9 +410,11 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                         String myurl = image.toString();
                         myurls.add(myurl);
 
-                        if (myurls.size() == imageUris.size()) {
-                            try {
-                                Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls, getCurrentLocation());
+                        if (myurls.size() == imageUris.size())
+                        {
+                            try
+                            {
+                                Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls, getCurrentLocation(), description_input);
                                 Toast.makeText(CreateAdActivity.this, "Success!!!!!!!!!!!!!!!!!", Toast.LENGTH_LONG).show();
                                 String user_id = mAuth.getCurrentUser().getUid();
 
@@ -441,6 +452,7 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                                 }
 
                                 hashMap.put("Category", category_input);
+                                hashMap.put("Description", description_input);
                                 hashMap.put("Switch", switch_inputs);
 
                                 reference.child(category_input + " " + title_input).setValue(hashMap);
@@ -498,7 +510,6 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                     if (count > 5) {
                         count = 5;
                     }
-
                     for (int i = 0; i < count; i++) {
                         Uri imageUri = data.getClipData().getItemAt(i).getUri();
                         imageUris.add(imageUri);

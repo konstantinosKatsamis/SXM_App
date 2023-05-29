@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.app_name);
-        builder.setIcon(R.drawable.letter_s);
+        builder.setIcon(R.drawable.logo_for_appeal);
         builder.setMessage("Are you sure you want to exit?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -165,7 +165,6 @@ public class LoginActivity extends AppCompatActivity
                 });
         AlertDialog alert = builder.create();
         alert.show();
-
     }
 
     @Override

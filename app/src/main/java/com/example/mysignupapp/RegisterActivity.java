@@ -1,35 +1,55 @@
 package com.example.mysignupapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.example.mysignupapp.Utility.NetworkChangeListener;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,7 +61,6 @@ public class RegisterActivity extends AppCompatActivity
     private Button dateOfBirthButton;
     Button verification;
     Button login;
-
     String firstName;
     String lastName;
     String userName;
@@ -50,7 +69,11 @@ public class RegisterActivity extends AppCompatActivity
     int year;
     String password;
     String re_enter_password;
-
+    Uri profile_picture_uri;
+    String profile_picture_string;
+    ImageView profile_picture_imageview;
+    FirebaseDatabase db;
+    FirebaseStorage storage;
     ArrayList<Ad> user_ads;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
@@ -83,6 +106,24 @@ public class RegisterActivity extends AppCompatActivity
 
         TextInputLayout PASSWORD_2_textInputLayout = (TextInputLayout) findViewById(R.id.password_confirm);
         re_enter_password = String.valueOf(PASSWORD_2_textInputLayout.getEditText().getText());
+
+        profile_picture_uri = null;
+        profile_picture_string = "";
+        profile_picture_imageview = (ImageView) findViewById(R.id.no_profile_picture);
+        db = FirebaseDatabase.getInstance();
+        storage = FirebaseStorage.getInstance();
+
+        profile_picture_imageview.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent pick_image_intent = new Intent();
+                pick_image_intent.setAction(Intent.ACTION_GET_CONTENT);
+                pick_image_intent.setType("image/*");
+                startActivityForResult(pick_image_intent, 45);
+            }
+        });
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,6 +210,7 @@ public class RegisterActivity extends AppCompatActivity
                                 && checkPasswords(password, re_enter_password))
                 {
                     Log.d("Reg", "All fields are correct syntax-wise!");
+
                     registerUser();
                 }
             }
@@ -184,25 +226,46 @@ public class RegisterActivity extends AppCompatActivity
         Log.d("Reg", "Username: " + new_user_username);
         Log.d("Reg", "Password: " + new_user_password);
 
-
         mAuth.createUserWithEmailAndPassword(new_user_username + "@mydomain.com", new_user_password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
+                    public void onComplete(@NonNull Task<AuthResult> task)
+                    {
                         if(task.isSuccessful())
                         {
+
                             Log.d("Reg", "Successful");
                             Log.d("Reg", "Username: " + new_user_username);
                             Log.d("Reg", "Password: " + new_user_password);
                             Log.d("Reg", "User: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
+
                             User newUser = new User(FirebaseAuth.getInstance().getCurrentUser().getUid(), firstName, lastName,
-                                    birthDate, email, new_user_username, new_user_password,user_ads);
+                                    birthDate, email, new_user_username, new_user_password,user_ads, profile_picture_string);
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    .setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>()
+                                    {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
+                                        public void onComplete(@NonNull Task<Void> task)
+                                        {
+                                            DatabaseReference user_ref = db.getReference("Users/" + mAuth.getCurrentUser().getUid());
+                                            user_ref.addListenerForSingleValueEvent(new ValueEventListener()
+                                            {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot)
+                                                {
+                                                    User user_now = snapshot.getValue(User.class);
+                                                    user_now.setProfile_picture(profile_picture_string);
+                                                    user_ref.setValue(user_now);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error)
+                                                {
+                                                    Toast.makeText(RegisterActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+
                                             EnterHome();
                                         }
                                     });
@@ -218,12 +281,49 @@ public class RegisterActivity extends AppCompatActivity
                     }
                 });
     }
-
     public void EnterHome()
     {
         Intent register_to_home = new Intent(this, HomeActivity.class);
         startActivity(register_to_home);
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(data != null)
+        {
+            if(data.getData() != null)
+            {
+                Uri uri = data.getData();
+                FirebaseStorage strg = FirebaseStorage.getInstance();
+                long time = new Date().getTime();
+                StorageReference reference = strg.getReference().child("Profiles").child(time + "");
+                reference.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>()
+                {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if(task.isSuccessful())
+                        {
+                            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+                            {
+                                @Override
+                                public void onSuccess(Uri uri)
+                                {
+                                    String filepath = uri.toString();
+                                    profile_picture_string = filepath;
+                                    profile_picture_uri = uri;
+                                }
+                            });
+                        }
+                    }
+                });
+                profile_picture_imageview.setImageURI(data.getData());
+                profile_picture_uri = data.getData();
+            }
+        }
     }
 
     public void showPop(View view, String error_message)
@@ -356,6 +456,8 @@ public class RegisterActivity extends AppCompatActivity
         unregisterReceiver(networkChangeListener);
         super.onStop();
     }
+
+
 
     public void openBirthDatePicker(View view)
     {
