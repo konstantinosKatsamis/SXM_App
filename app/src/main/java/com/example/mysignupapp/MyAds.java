@@ -8,6 +8,9 @@ import android.app.ProgressDialog;
 import android.location.Location;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -118,10 +121,7 @@ public class MyAds extends DrawerBaseActivity {
 
     }
 
-    @Override
-    public void onProviderDisabled(String provider) {
-        
-    }
+
 
     private void setOnClickAdListener()
     {
@@ -147,5 +147,21 @@ public class MyAds extends DrawerBaseActivity {
     {
         unregisterReceiver(networkChangeListener);
         super.onStop();
+    }
+    
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }

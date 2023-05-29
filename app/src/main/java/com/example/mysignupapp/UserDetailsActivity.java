@@ -68,7 +68,12 @@ public class UserDetailsActivity extends DrawerBaseActivity {
         user_ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                Object obj = snapshot.getValue();
+                System.out.println("+++++++++++++++++++++++++++++++++++++++++++++" + obj + "+++++++++++++++++++++++++++++++++++++++++++++");
+
                 User user_now = snapshot.getValue(User.class);
+
 
                 String user_profile_picture = user_now.getProfile_picture();
                 String user_fullname = "Fullname: " + user_now.getFirstName() + " " + user_now.getLastName();

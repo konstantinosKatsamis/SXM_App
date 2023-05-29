@@ -86,9 +86,8 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
 
     String title_input;
     String category_input;
-    String address_input = "";
-    String price_input;
     String description_input;
+    String price_input, address_input = "";
     ArrayList<String> switch_inputs;
 
     TextView switch_selections;
@@ -369,7 +368,8 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         });
 
         storageReference = FirebaseStorage.getInstance().getReference("Ads");
-        create_ad_button.setOnClickListener(new View.OnClickListener() {
+        create_ad_button.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
                 makeAd();
@@ -410,11 +410,15 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                         String myurl = image.toString();
                         myurls.add(myurl);
 
-                        if (myurls.size() == imageUris.size())
-                        {
-                            try
-                            {
-                                Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls, getCurrentLocation(), description_input);
+            
+                        
+        
+                        Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls, getCurrentLocation(), description_input);
+
+
+                        if (myurls.size() == imageUris.size()) {
+                            try {
+                                Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls, description_input, new LatLngCustom(getCurrentLocation().latitude, getCurrentLocation().longitude));
                                 Toast.makeText(CreateAdActivity.this, "Success!!!!!!!!!!!!!!!!!", Toast.LENGTH_LONG).show();
                                 String user_id = mAuth.getCurrentUser().getUid();
 
