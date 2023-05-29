@@ -14,9 +14,9 @@ public class Ad implements Serializable
     ArrayList<String> categories_for_switching = new ArrayList<>();
     ArrayList<String> images = new ArrayList<>();
     Ad(){}
-    private LatLng coordinates;
+    LatLngCustom coordinates;
 
-    public Ad(String title, String category, String price, ArrayList<String> categories_for_switching, ArrayList<String> images, String description, LatLng coords) {
+    public Ad(String title, String category, String price, ArrayList<String> categories_for_switching, ArrayList<String> images, String description, LatLngCustom coords) {
         this.title = title;
         this.category = category;
         this.price = price;
@@ -90,11 +90,11 @@ public class Ad implements Serializable
         this.description = description;
     }
     
-    public LatLng getCoordinates() {
+    public LatLngCustom getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(LatLng coordinates) {
+    public void setCoordinates(LatLngCustom coordinates) {
         this.coordinates = coordinates;
     }
 }

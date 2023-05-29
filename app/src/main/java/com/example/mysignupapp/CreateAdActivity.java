@@ -413,7 +413,7 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
 
                         if (myurls.size() == imageUris.size()) {
                             try {
-                                Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls, description_input, getCurrentLocation());
+                                Ad new_ad = new Ad(title_input, category_input, price_input, switch_inputs, myurls, description_input, new LatLngCustom(getCurrentLocation().latitude, getCurrentLocation().longitude));
                                 Toast.makeText(CreateAdActivity.this, "Success!!!!!!!!!!!!!!!!!", Toast.LENGTH_LONG).show();
                                 String user_id = mAuth.getCurrentUser().getUid();
 

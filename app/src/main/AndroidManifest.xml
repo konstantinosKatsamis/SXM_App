@@ -25,10 +25,6 @@
             android:exported="false" />
         <activity
             android:name=".UserDetailsActivity"
-            android:name=".CoordsByAdress"
-            android:exported="false" />
-        <activity
-            android:name=".CheckEnableLocation"
             android:exported="false" />
         <activity
             android:name=".MyAppointments"

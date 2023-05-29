@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gray"
-        android:id="@+id/adList"
         android:textSize="30dp"
         android:padding="16dp">
 

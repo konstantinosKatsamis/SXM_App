@@ -121,8 +121,8 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
             public void run() {
                 map = googleMap;
                 googleMap.setIndoorEnabled(false);
-//                LatLng athens = new LatLng(receivedCurrentLocation.latitude + getRandom(), receivedCurrentLocation.longitude + getRandom());
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+                LatLng athens = new LatLng(receivedCurrentLocation.latitude + getRandom(), receivedCurrentLocation.longitude + getRandom());
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(athens, 14));
 
                 map.getUiSettings().setMyLocationButtonEnabled(false);
 
@@ -181,7 +181,7 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                                     Ad ad = new Ad();
 
                                     if(lat != 0){ // sintetagmenes != 0 => tha mpoun ston xarth
-                                        ad.setCoordinates(new LatLng(lat, lon));
+                                        ad.setCoordinates(new LatLngCustom(lat, lon));
 //                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Coordinates added");
 
                                         String category = (String) ad_from_Ads.get("Category");
@@ -245,7 +245,7 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
-                .icon(createCustomMarkerIcon(100, 100));
+                .icon(createCustomMarkerIcon(120, 120));
         Marker marker = map.addMarker(markerOptions);
 
         marker.setTag(ad);
