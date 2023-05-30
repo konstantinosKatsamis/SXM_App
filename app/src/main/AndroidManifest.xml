@@ -14,15 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MySignupApp">
         <activity
+            android:name=".RequestDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".MyAppointments"
             android:exported="false" />
         <activity
             android:name=".MyRequests"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".MakeOffer"
-            android:exported="false"/>
-
+            android:exported="false" />
         <activity
             android:name=".ChooseOfferActivity"
             android:exported="false"

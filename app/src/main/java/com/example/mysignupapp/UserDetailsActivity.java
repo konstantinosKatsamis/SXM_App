@@ -86,7 +86,7 @@ public class UserDetailsActivity extends DrawerBaseActivity {
                 email.setText(user_email);
                 total_ads.setText(user_ads);
 
-                if(user_profile_picture != null)
+                if(user_profile_picture == "")
                 {
                     Picasso.get().load(user_profile_picture).into(profile_picture);
                 }
