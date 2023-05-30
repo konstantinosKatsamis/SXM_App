@@ -270,7 +270,7 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                 Toast.makeText(MapActivity.this, getSelectedAd().getTitle(), Toast.LENGTH_LONG).show();
                 Intent ad_details_intent = new Intent(MapActivity.this, AdDetailsActivity.class);
 //                String key_for_ad = getSelectedAd(); //mapsAds.get(position).get("Category") + " " + all_ads.get(position).get("Title");
-                ad_details_intent.putExtra("Ad_id", getID_ofSelectedAd());
+                ad_details_intent.putExtra("Ad_id", selectedAd.getCategory() + " " + selectedAd.getTitle());
                 startActivity(ad_details_intent);
 
             }
@@ -315,11 +315,7 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                 setID_ofSelectedAd(adID);
                 Toast.makeText(getApplicationContext(), ad.getTitle(), Toast.LENGTH_SHORT).show();
 
-                System.out.println(ad.getTitle()); // apo afto to simio tha ginetai kapoio 'task' gia na emfanizi extra plirofories klp
-
-
-
-
+                setSelectedAd(ad);
 
                 // Inflate your custom info window layout
                 infoWindowView = getLayoutInflater().inflate(R.layout.activity_marker_layout, null);
