@@ -9,6 +9,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +30,12 @@ import android.widget.Toast;
 
 import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.example.mysignupapp.databinding.ActivityMapBinding;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,6 +46,9 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -57,7 +67,7 @@ import java.util.Random;
 public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallback {
 
     GoogleMap map;
-    LatLng receivedCurrentLocation;
+//    LatLngCustom receivedCurrentLocation;
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
@@ -70,7 +80,12 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
     private HashMap<String, Ad> mapsAds;
     private Button marker_btn;
     private View infoWindowView;
-//    private AdAdapter adapter;
+    //    private AdAdapter adapter;
+    private Ad selectedAd;
+    private String ID_ofSelectedAd;
+    LatLngCustom currentLocation;
+    private boolean boolean_location;
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,26 +103,15 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
             Toast.makeText(MapActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
-        builder.setMessage("We are already here");
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dialog.dismiss();
-
-            }
-        }, 4000); // 3000 milliseconds = 3 seconds
-
-        receivedCurrentLocation = getIntent().getParcelableExtra("currentLocation");
-        if (receivedCurrentLocation != null) {
-            System.out.println("ReceivingActivity" + "Received location: " + receivedCurrentLocation.toString());
-        } else {
-            System.out.println("ReceivingActivity" + "Location parameter is null");
-        }
+//        receivedCurrentLocation = getIntent().getParcelableExtra("currentLocation");
+//        System.out.println(receivedCurrentLocation + "{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{");
+//        if (receivedCurrentLocation != null) {
+//            System.out.println("ReceivingActivity" + "Received location: " + receivedCurrentLocation.toString());
+//        } else {
+//            System.out.println("ReceivingActivity" + "Location parameter is null");
+//        }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -116,28 +120,46 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
                 map = googleMap;
                 googleMap.setIndoorEnabled(false);
-                LatLng athens = new LatLng(receivedCurrentLocation.latitude + getRandom(), receivedCurrentLocation.longitude + getRandom());
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(athens, 14));
 
-                map.getUiSettings().setMyLocationButtonEnabled(false);
+                getLocationCoordinates();
 
-                // Remove the default location icon
-                if (ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                map.setMyLocationEnabled(false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
+                builder.setMessage("We are already here");
+//
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        //                System.out.println(receivedCurrentLocation + "THTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+                        LatLngCustom athens = new LatLngCustom(currentLocation.getLat() + getRandom(), currentLocation.getLon() + getRandom());
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(athens.getLat(), athens.getLon()), 14));
+
+                        map.getUiSettings().setMyLocationButtonEnabled(false);
+
+                        // Remove the default location icon
+                        if (ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
+                        }
+                        map.setMyLocationEnabled(false);
+
+                    }
+                }, 2500); // 3000 milliseconds = 3 seconds
+
 
 //                TODO o kiklos pou eixa valei ston xarth, isos na mhn xreiazetai telika
                 /*CircleOptions circleOptions = new CircleOptions()
@@ -171,13 +193,17 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                         for(DataSnapshot adSnapshot : snapshot.getChildren())
                         {
                             HashMap<String, Object> ad_from_Ads = (HashMap<String, Object>) adSnapshot.getValue();
+//                            System.out.println(ad_from_Ads + ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
 
                             if(!(ad_from_Ads != null && ad_from_Ads.get("Publisher").equals(currentUser.getUid())))
                             {
                                 if(ad_from_Ads.get("Coordinates") != null){ // uparxoun oi sintetagmenes os oros sth vash
-                                    HashMap<String, Object> obj = (HashMap<String, Object>) ad_from_Ads.get("Coordinates");
-                                    double lat = (double) obj.get("latitude");
-                                    double lon = (double) obj.get("longitude");
+
+                                    HashMap<String, Object> switch_itemsss = (HashMap<String, Object>) ad_from_Ads.get("Coordinates");
+                                    String la = (String) switch_itemsss.get("latitude").toString();
+                                    String lo = (String) switch_itemsss.get("longitude").toString();
+                                    double lat = (double) Double.parseDouble(la);
+                                    double lon = (double) Double.parseDouble(lo);
                                     Ad ad = new Ad();
 
                                     if(lat != 0){ // sintetagmenes != 0 => tha mpoun ston xarth
@@ -206,12 +232,13 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
                                         String adID = (String) ad_from_Ads.get("ID");
                                         mapsAds.put(adID, ad);
+                                        System.out.println(adID + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
-                                        addMarker(new LatLng(lat, lon), ad);
+                                        addMarker(new LatLng(lat, lon), ad, adID);
 
                                     }
                                     else{
-                                        System.out.println("??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????");
+                                        System.out.println("?????????");
                                     }
                                 }
                             }
@@ -225,8 +252,8 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
                     }
                 });
-            }
-        },9000);
+//            }
+//        },1000);
     }
 
     private void openOtherActivity() {
@@ -234,17 +261,24 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
-    private void addMarker(LatLng latLng, Ad ad) {
+    private void addMarker(LatLng latLng, Ad ad, String adID) {
 
-        marker_btn = findViewById(R.id.button_perki);
+        marker_btn = findViewById(R.id.button_viewAdDetails);
         marker_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(MapActivity.this, getSelectedAd().getTitle(), Toast.LENGTH_LONG).show();
+                Intent ad_details_intent = new Intent(MapActivity.this, AdDetailsActivity.class);
+//                String key_for_ad = getSelectedAd(); //mapsAds.get(position).get("Category") + " " + all_ads.get(position).get("Title");
+                ad_details_intent.putExtra("Ad_id", getID_ofSelectedAd());
+                startActivity(ad_details_intent);
+
             }
         });
 
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
+                .title(adID) // 
                 .icon(createCustomMarkerIcon(120, 120));
         Marker marker = map.addMarker(markerOptions);
 
@@ -277,6 +311,8 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
 //                TODO apo afto to simio tha ginetai kapoio 'task' gia na emfanizi extra plirofories klp
                 Ad ad = (Ad) marker.getTag();
+                setSelectedAd(ad);
+                setID_ofSelectedAd(adID);
                 Toast.makeText(getApplicationContext(), ad.getTitle(), Toast.LENGTH_SHORT).show();
 
                 System.out.println(ad.getTitle()); // apo afto to simio tha ginetai kapoio 'task' gia na emfanizi extra plirofories klp
@@ -370,4 +406,112 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
     public void onProviderDisabled(String provider) {
 
     }
+
+    public Ad getSelectedAd() {
+        return selectedAd;
+    }
+
+    public void setSelectedAd(Ad selectedAd) {
+        this.selectedAd = selectedAd;
+    }
+
+    public String getID_ofSelectedAd() {
+        return ID_ofSelectedAd;
+    }
+
+    public void setID_ofSelectedAd(String ID_ofSelectedAd) {
+        this.ID_ofSelectedAd = ID_ofSelectedAd;
+    }
+
+    public boolean isBoolean_location() {
+        return boolean_location;
+    }
+
+    public void setGPS_ON(){
+
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(10000/2);
+
+        LocationSettingsRequest.Builder locationSettingsRequestBuilder = new LocationSettingsRequest.Builder();
+
+        locationSettingsRequestBuilder.addLocationRequest(locationRequest);
+        locationSettingsRequestBuilder.setAlwaysShow(true);
+
+        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(locationSettingsRequestBuilder.build());
+        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+            }
+        });
+
+        task.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+//                getLocationAutomatically.setChecked(false);
+                setBoolean_location(false);
+
+                if (e instanceof ResolvableApiException){
+                    try {
+                        ResolvableApiException resolvableApiException = (ResolvableApiException) e;
+                        resolvableApiException.startResolutionForResult(MapActivity.this,
+                                REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException sendIntentException) {
+                        sendIntentException.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    public void setBoolean_location(boolean boolean_location) {
+        this.boolean_location = boolean_location;
+    }
+
+    private void getLocationCoordinates() {
+
+        if(isBoolean_location()){
+        } else{
+            setGPS_ON();
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Handle permissions if not granted
+            return;
+        }
+
+        LocationServices.getFusedLocationProviderClient(this)
+                .getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            double latitude = location.getLatitude();
+                            double longitude = location.getLongitude();
+
+                            setCurrentLocation(latitude + getRandom(), longitude + getRandom());
+
+                        } else {
+                            setBoolean_location(false);
+                        }
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+    }
+
+    public void setCurrentLocation(double lat, double lon){
+        this.currentLocation = new LatLngCustom(lat, lon);
+        System.out.println("latitude: " + currentLocation.getLat());
+        System.out.println("longitude: " + currentLocation.getLon());
+    }
+
 }
