@@ -317,6 +317,8 @@ public class MakeOffer extends DrawerBaseActivity
 
                 progressDialog.dismiss();
 
+                startActivity(new Intent(MakeOffer.this, HomeActivity.class));
+
             } else if (isDouble) {
                 showPop(getWindow().getDecorView().getRootView(), "You must put positive number for money");
             }
@@ -377,6 +379,8 @@ public class MakeOffer extends DrawerBaseActivity
                                     reference.child(title_for_request).setValue(send_request);
 
                                     progressDialog.dismiss();
+
+                                    startActivity(new Intent(MakeOffer.this, HomeActivity.class));
 
                                 } catch (NullPointerException e) {
                                     Toast.makeText(MakeOffer.this, "!!!!!!!!!!!!!!!!!", Toast.LENGTH_LONG).show();

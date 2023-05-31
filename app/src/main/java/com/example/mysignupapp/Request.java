@@ -26,6 +26,11 @@ public class Request
         this.accepted = accepted;
     }
 
+    public Request()
+    {
+
+    }
+
     public String getRequest_id() {
         return request_id;
     }
