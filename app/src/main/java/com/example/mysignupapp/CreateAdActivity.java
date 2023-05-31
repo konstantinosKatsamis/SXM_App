@@ -120,7 +120,6 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
     private CheckBox first_checkbox, getLocationAutomatically;
     private boolean boolean_location;
 
-    Button btnGeoAddr;
     TextInputLayout ADDRESS_textInputLayout;
 
     @Override
@@ -146,19 +145,6 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                 }
             }
         });
-
-
-
-        btnGeoAddr = findViewById(R.id.hahaha);
-        btnGeoAddr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                address_input = ADDRESS_textInputLayout.getEditText().getText().toString();
-                findGeocoding(address_input);
-            }
-        });
-
-
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();

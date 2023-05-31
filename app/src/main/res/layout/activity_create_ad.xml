@@ -148,11 +148,6 @@
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/hahaha"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
             <CheckBox
                 android:id="@+id/checkbox"
                 android:backgroundTint="#FFFFFF"
