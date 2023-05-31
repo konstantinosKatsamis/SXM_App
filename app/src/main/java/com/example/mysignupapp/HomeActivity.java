@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -37,7 +38,16 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 
 import com.example.mysignupapp.Utility.NetworkChangeListener;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -58,7 +68,7 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
 //    Button button_location; del
 //    TextView textView_location; del
     LocationManager locationManager;
-    LatLng currentLocation;
+//    LatLng currentLocation;
     RecyclerView adList;
     AdAdapter.AdViewClickListener listener;
     AdAdapter adapter;
@@ -69,6 +79,7 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
     ActivityHomeBinding activityHomeBinding;
 
     Button btn_addr_coords;
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
@@ -148,37 +159,7 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
             @Override
             public void onClick(View v)
             {
-                getLocation();
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-//                builder.setTitle("");
-                builder.setMessage("Google Maps is Loading...");
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog.dismiss();
-
-                    }
-                }, 4500); // 3000 milliseconds = 3 seconds
-
-                new Handler().postDelayed(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        Intent to_map = new Intent(HomeActivity.this, MapActivity.class);
-                        to_map.putExtra("currentLocation", currentLocation);
-                        startActivity(to_map);
-
-                    }
-                },4500);
-
-
-
+                setGPS_ON();
             }
         });
 
@@ -217,6 +198,43 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
         };
     }
 
+    public void setGPS_ON(){
+
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(10000/2);
+
+        LocationSettingsRequest.Builder locationSettingsRequestBuilder = new LocationSettingsRequest.Builder();
+
+        locationSettingsRequestBuilder.addLocationRequest(locationRequest);
+        locationSettingsRequestBuilder.setAlwaysShow(true);
+
+        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(locationSettingsRequestBuilder.build());
+        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                Intent to_map = new Intent(HomeActivity.this, MapActivity.class);
+                startActivity(to_map);
+            }
+        });
+
+        task.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException){
+                    try {
+                        ResolvableApiException resolvableApiException = (ResolvableApiException) e;
+                        resolvableApiException.startResolutionForResult(HomeActivity.this,
+                                REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException sendIntentException) {
+                        sendIntentException.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 
     @SuppressLint("MissingPermission")
     private void getLocation() {
@@ -235,7 +253,7 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
     @Override
     public void onLocationChanged(Location location) {
 
-        setCurrentLocation(location.getLatitude(), location.getLongitude());
+//        setCurrentLocation(location.getLatitude(), location.getLongitude());
 
         try {
             Geocoder geocoder = new Geocoder(HomeActivity.this, Locale.getDefault());
@@ -282,4 +300,7 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
         unregisterReceiver(networkChangeListener);
         super.onStop();
     }
+//    public void setCurrentLocation(double lat, double lon){
+//        this.currentLocation = new LatLng(lat, lon);
+//    }
 }
