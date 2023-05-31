@@ -60,11 +60,14 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
                 User user_now = snapshot.getValue(User.class);
-                firebase_link = user_now.getProfile_picture();
 
-                if(firebase_link != null)
+                if(user_now.getProfile_picture() != null)
                 {
-                    Picasso.get().load(firebase_link).into(holder.profile_picture);
+                    if(!user_now.getProfile_picture().isEmpty())
+                    {
+                        firebase_link = user_now.getProfile_picture();
+                        Picasso.get().load(firebase_link).into(holder.profile_picture);
+                    }
                 }
 
                 holder.sender_name.setText(user_now.getUsername());
@@ -108,5 +111,4 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             listener.onClick(v, getAdapterPosition());
         }
     }
-
 }

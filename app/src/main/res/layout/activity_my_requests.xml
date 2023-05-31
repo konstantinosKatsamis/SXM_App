@@ -15,8 +15,4 @@
         android:layout_marginTop="15dp"
         android:id="@+id/recycler_request"/>
 
-
-
-
-
 </RelativeLayout>

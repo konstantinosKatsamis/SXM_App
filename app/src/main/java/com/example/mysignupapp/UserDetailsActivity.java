@@ -74,8 +74,6 @@ public class UserDetailsActivity extends DrawerBaseActivity {
 
                 User user_now = snapshot.getValue(User.class);
 
-
-                String user_profile_picture = user_now.getProfile_picture();
                 String user_fullname = "Fullname: " + user_now.getFirstName() + " " + user_now.getLastName();
                 String user_username = "Username: " + user_now.getUsername();
                 String user_email = "Email: " + user_now.getEmailAddress();
@@ -86,9 +84,13 @@ public class UserDetailsActivity extends DrawerBaseActivity {
                 email.setText(user_email);
                 total_ads.setText(user_ads);
 
-                if(user_profile_picture == "")
+                if((user_now.getProfile_picture() != null))
                 {
-                    Picasso.get().load(user_profile_picture).into(profile_picture);
+                    if(!user_now.getProfile_picture().isEmpty())
+                    {
+                        String user_profile_picture = user_now.getProfile_picture();
+                        Picasso.get().load(user_profile_picture).into(profile_picture);
+                    }
                 }
 
                 progressDialog.dismiss();
