@@ -283,9 +283,9 @@ public class HomeActivity extends DrawerBaseActivity implements LocationListener
 
     }
 
-    public void setCurrentLocation(double lat, double lon){
-        this.currentLocation = new LatLng(lat, lon);
-    }
+//    public void setCurrentLocation(double lat, double lon){
+//        this.currentLocation = new LatLng(lat, lon);
+//    }
 
 
     @Override
