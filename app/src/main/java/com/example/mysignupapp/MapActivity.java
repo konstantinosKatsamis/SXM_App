@@ -71,7 +71,6 @@ import java.util.Random;
 public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallback {
 
     GoogleMap map;
-//    LatLngCustom receivedCurrentLocation;
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
@@ -84,7 +83,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
     private HashMap<String, Ad> mapsAds;
     private Button marker_btn;
     private View infoWindowView;
-    //    private AdAdapter adapter;
     private Ad selectedAd;
     private String ID_ofSelectedAd, str_la, str_lo, ad_id = "", publisher;
     LatLngCustom currentLocation;
@@ -92,7 +90,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private double la = 0.0, lo = 0.0;
     private FirebaseDatabase db;
-    private Button show_data_temp;
 
     private String title, category, id;
     private Ad ad_from_adsDetails = new Ad();
@@ -103,15 +100,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
         activityMapBinding = ActivityMapBinding.inflate(getLayoutInflater());
         setContentView(activityMapBinding.getRoot());
         allocateActivityTitle("Find Ads");
-
-        show_data_temp = findViewById(R.id.show_data_temp);
-        show_data_temp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println(title);
-                System.out.println(category);
-            }
-        });
 
         ad_id = getIntent().getStringExtra("Ad_id");
 
@@ -176,26 +164,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
         });
 
-//        str_la = getIntent().getStringExtra("la");
-//        str_lo = getIntent().getStringExtra("lo");
-//        if(str_la.equals("0") || str_lo.equals("0")){
-//            la = 0.0;
-//            lo = 0.0;
-//        }else{
-//            la = Double.parseDouble(str_la);
-//            lo = Double.parseDouble(str_lo);
-//        }
-
-
-
-//        receivedCurrentLocation = getIntent().getParcelableExtra("currentLocation");
-//        System.out.println(receivedCurrentLocation + "{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{");
-//        if (receivedCurrentLocation != null) {
-//            System.out.println("ReceivingActivity" + "Received location: " + receivedCurrentLocation.toString());
-//        } else {
-//            System.out.println("ReceivingActivity" + "Location parameter is null");
-//        }
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -203,9 +171,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
                 map = googleMap;
                 googleMap.setIndoorEnabled(false);
 
@@ -213,7 +178,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
                 builder.setMessage("We are already here");
-//
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
@@ -287,7 +251,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
                 mapsAds = new HashMap<>();
 
-//                adapter = new AdAdapter(this, all_ads);
                 ads_ref.addValueEventListener(new ValueEventListener()
                 {
                     @Override
@@ -298,8 +261,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                         for(DataSnapshot adSnapshot : snapshot.getChildren())
                         {
                             HashMap<String, Object> ad_from_Ads = (HashMap<String, Object>) adSnapshot.getValue();
-//                            System.out.println(ad_from_Ads + ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-
                             if(!(ad_from_Ads != null && ad_from_Ads.get("Publisher").equals(currentUser.getUid())))
                             {
                                 if(ad_from_Ads.get("Coordinates") != null){ // uparxoun oi sintetagmenes os oros sth vash
@@ -313,31 +274,24 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
                                     if(lat != 0){ // sintetagmenes != 0 => tha mpoun ston xarth
                                         ad.setCoordinates(new LatLngCustom(lat, lon));
-//                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Coordinates added");
 
                                         String category = (String) ad_from_Ads.get("Category");
                                         ad.setCategory(category);
-//                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Category added");
 
                                         String price = (String) ad_from_Ads.get("Price");
                                         ad.setPrice(price);
-//                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Price added");
 
                                         String title = (String) ad_from_Ads.get("Title");
                                         ad.setTitle(title);
-//                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Title added");
 
                                         ArrayList<String> switch_items = (ArrayList<String>) ad_from_Ads.get("Switch");
                                         ad.setCategories_for_switching(switch_items);
-//                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Switch added");
 
                                         ArrayList<String> images = (ArrayList<String>) ad_from_Ads.get("Images");
                                         ad.setImages(images);
-//                                        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Image added");
 
                                         String adID = (String) ad_from_Ads.get("ID");
                                         mapsAds.put(adID, ad);
-                                        System.out.println(adID + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
                                         addMarker(new LatLng(lat, lon), ad, adID);
 
@@ -348,7 +302,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                                 }
                             }
                         }
-//                        GridLayoutManager gridLayoutManager = new GridLayoutManager(MapActivity.this, 2, GridLayoutManager.VERTICAL, false);
                     }
 
                     @Override
@@ -357,8 +310,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
                     }
                 });
-//            }
-//        },1000);
     }
 
     private void openOtherActivity() {
@@ -374,7 +325,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 Toast.makeText(MapActivity.this, getSelectedAd().getTitle(), Toast.LENGTH_LONG).show();
                 Intent ad_details_intent = new Intent(MapActivity.this, AdDetailsActivity.class);
-//                String key_for_ad = getSelectedAd(); //mapsAds.get(position).get("Category") + " " + all_ads.get(position).get("Title");
                 ad_details_intent.putExtra("Ad_id", selectedAd.getCategory() + " " + selectedAd.getTitle());
                 startActivity(ad_details_intent);
 
@@ -383,7 +333,7 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
-                .title(adID) // 
+                .title(adID)
                 .icon(createCustomMarkerIcon(120, 120));
         Marker marker = map.addMarker(markerOptions);
 
@@ -395,14 +345,11 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                 }
         }
 
-
-
         // Set a click listener for the marker
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker clickedMarker) {
                 if (clickedMarker.equals(marker)) {
-//                    openOtherActivity();
                 }
                 // Return 'false' to allow the default marker click behavior (info window display, etc.)
                 return false;
@@ -419,9 +366,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
             public View getInfoContents(Marker marker) {
                 marker_btn.setVisibility(View.VISIBLE);
 
-
-
-//                TODO apo afto to simio tha ginetai kapoio 'task' gia na emfanizi extra plirofories klp
                 Ad ad = (Ad) marker.getTag();
                 setSelectedAd(ad);
                 setID_ofSelectedAd(adID);
@@ -446,7 +390,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                 infoWindowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        System.out.println("HAHAHA+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                     }
                 });
                 return infoWindowView;
@@ -558,7 +501,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
         task.addOnFailureListener(this, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-//                getLocationAutomatically.setChecked(false);
                 setBoolean_location(false);
 
                 if (e instanceof ResolvableApiException){
@@ -618,8 +560,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
     public void setCurrentLocation(double lat, double lon){
         this.currentLocation = new LatLngCustom(lat, lon);
-        System.out.println("latitude: " + currentLocation.getLat());
-        System.out.println("longitude: " + currentLocation.getLon());
     }
 
 }

@@ -40,7 +40,7 @@ public class AdDetailsActivity extends DrawerBaseActivity
 
     Button publisher_button;
     Button map_button;
-    Button request_button, show_data;
+    Button request_button;
 
     String title;
     String category;
@@ -80,17 +80,6 @@ public class AdDetailsActivity extends DrawerBaseActivity
         price_ad = (TextView) findViewById(R.id.ad_price);
         switch_ad = (TextView) findViewById(R.id.ad_preffered_items);
         description_ad = (TextView) findViewById(R.id.ad_description);
-
-        show_data = findViewById(R.id.show_data);
-        show_data.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println(title);
-                System.out.println(coords);
-                System.out.println(la);
-                System.out.println(lo);
-            }
-        });
 
         viewPager2 = findViewById(R.id.ViewPagerForImages);
 
@@ -229,7 +218,6 @@ public class AdDetailsActivity extends DrawerBaseActivity
                 else{
                     Intent my_account = new Intent(AdDetailsActivity.this, MapActivity.class);
                     my_account.putExtra("Ad_id", category + " " + title);
-//                    my_account.putExtra("lo", lo);
                     startActivity(my_account);
                 }
             }
