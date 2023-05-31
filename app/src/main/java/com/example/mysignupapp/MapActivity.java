@@ -4,6 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.CompositePageTransformer;
+import androidx.viewpager2.widget.MarginPageTransformer;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -82,10 +86,16 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
     private View infoWindowView;
     //    private AdAdapter adapter;
     private Ad selectedAd;
-    private String ID_ofSelectedAd;
+    private String ID_ofSelectedAd, str_la, str_lo, ad_id = "", publisher;
     LatLngCustom currentLocation;
     private boolean boolean_location;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private double la = 0.0, lo = 0.0;
+    private FirebaseDatabase db;
+    private Button show_data_temp;
+
+    private String title, category, id;
+    private Ad ad_from_adsDetails = new Ad();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +103,17 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
         activityMapBinding = ActivityMapBinding.inflate(getLayoutInflater());
         setContentView(activityMapBinding.getRoot());
         allocateActivityTitle("Find Ads");
+
+        show_data_temp = findViewById(R.id.show_data_temp);
+        show_data_temp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(title);
+                System.out.println(category);
+            }
+        });
+
+        ad_id = getIntent().getStringExtra("Ad_id");
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -102,6 +123,68 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
         } else {
             Toast.makeText(MapActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
         }
+
+        db = FirebaseDatabase.getInstance();
+        DatabaseReference ad_ref = db.getReference("Ads/" + ad_id);
+
+        ad_ref.addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(ad_id != null){
+                    if(!ad_id.equals("")){
+                        HashMap<String, Object> map_of_ad = (HashMap<String, Object>) snapshot.getValue();
+                        title = (String) map_of_ad.get("Title");
+                        category = (String) map_of_ad.get("Category");
+                        id = (String) map_of_ad.get("ID");
+                        publisher = (String) map_of_ad.get("Publisher");
+                        ArrayList<String> images = (ArrayList<String>) map_of_ad.get("Images");
+                        ArrayList<String> switches = (ArrayList<String>) map_of_ad.get("Switch");
+                        String description = (String) map_of_ad.get("Description");
+                        String price = (String) map_of_ad.get("Price");
+
+                        HashMap<String, Object> coords = (HashMap<String, Object>) map_of_ad.get("Coordinates");
+
+                        String str_la = (String) coords.get("latitude").toString();
+                        String str_lo = (String) coords.get("longitude").toString();
+                        if (str_la.equals("0") || str_lo.equals("0")) {
+                            la = 0.0;
+                            lo = 0.0;
+                        } else {
+                            la = (double) coords.get("latitude");
+                            lo = (double) coords.get("longitude");
+                        }
+
+                        ad_from_adsDetails.setTitle(title);
+                        ad_from_adsDetails.setCategory(category);
+                        ad_from_adsDetails.setImages(images);
+                        ad_from_adsDetails.setCategories_for_switching(switches);
+                        ad_from_adsDetails.setDescription(description);
+                        ad_from_adsDetails.setPrice(price);
+                        ad_from_adsDetails.setCoordinates(new LatLngCustom(la, lo));
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MapActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+
+
+        });
+
+//        str_la = getIntent().getStringExtra("la");
+//        str_lo = getIntent().getStringExtra("lo");
+//        if(str_la.equals("0") || str_lo.equals("0")){
+//            la = 0.0;
+//            lo = 0.0;
+//        }else{
+//            la = Double.parseDouble(str_la);
+//            lo = Double.parseDouble(str_lo);
+//        }
 
 
 
@@ -138,9 +221,31 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                     @Override
                     public void run() {
                         dialog.dismiss();
-                        //                System.out.println(receivedCurrentLocation + "THTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-                        LatLngCustom athens = new LatLngCustom(currentLocation.getLat() + getRandom(), currentLocation.getLon() + getRandom());
-                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(athens.getLat(), athens.getLon()), 14));
+                        LatLngCustom athens = null;
+                        if(ad_id != null){
+                            if(!ad_id.equals("")){
+
+                                double lat = ad_from_adsDetails.getCoordinates().getLat() + getRandom(),
+                                    lon = ad_from_adsDetails.getCoordinates().getLon() + getRandom();
+                                athens = new LatLngCustom(lat, lon);
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, ad_from_adsDetails.getCoordinates().getLon()), 14));
+
+                                CircleOptions circleOptions = new CircleOptions()
+                                        .center(new LatLng(ad_from_adsDetails.getCoordinates().getLat(), lon))
+                                        .radius(550) // Set the radius of the circle in meters
+                                        .strokeWidth(2)
+                                        .strokeColor(Color.YELLOW)
+                                        .fillColor(Color.argb(70, 255, 255, 0)); // Transparent red fill color
+                                map.addCircle(circleOptions);
+
+                            }
+                        }
+                        else{
+                            double current_lat = currentLocation.getLat() + getRandom(), current_lon = currentLocation.getLon() + getRandom();
+                            athens = new LatLngCustom(current_lat, current_lon);
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(current_lat, current_lon), 14));
+                        }
+
 
                         map.getUiSettings().setMyLocationButtonEnabled(false);
 
@@ -199,9 +304,9 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
                             {
                                 if(ad_from_Ads.get("Coordinates") != null){ // uparxoun oi sintetagmenes os oros sth vash
 
-                                    HashMap<String, Object> switch_itemsss = (HashMap<String, Object>) ad_from_Ads.get("Coordinates");
-                                    String la = (String) switch_itemsss.get("latitude").toString();
-                                    String lo = (String) switch_itemsss.get("longitude").toString();
+                                    HashMap<String, Object> coords = (HashMap<String, Object>) ad_from_Ads.get("Coordinates");
+                                    String la = (String) coords.get("latitude").toString();
+                                    String lo = (String) coords.get("longitude").toString();
                                     double lat = (double) Double.parseDouble(la);
                                     double lon = (double) Double.parseDouble(lo);
                                     Ad ad = new Ad();
@@ -284,12 +389,19 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
 
         marker.setTag(ad);
 
+
+        if(ad_id != null) {
+            if (!ad_id.equals("")) {
+                }
+        }
+
+
+
         // Set a click listener for the marker
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker clickedMarker) {
                 if (clickedMarker.equals(marker)) {
-//                    TODO isos na emfanizi apo edw kapos, kapoies leptomeries gia thn aggelia
 //                    openOtherActivity();
                 }
                 // Return 'false' to allow the default marker click behavior (info window display, etc.)

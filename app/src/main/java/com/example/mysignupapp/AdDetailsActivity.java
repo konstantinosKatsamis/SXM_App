@@ -20,6 +20,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.example.mysignupapp.databinding.ActivityAdDetailsBinding;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,7 +40,7 @@ public class AdDetailsActivity extends DrawerBaseActivity
 
     Button publisher_button;
     Button map_button;
-    Button request_button;
+    Button request_button, show_data;
 
     String title;
     String category;
@@ -60,6 +61,8 @@ public class AdDetailsActivity extends DrawerBaseActivity
     private ViewPager2 viewPager2;
 
     private Handler handler_for_images = new Handler();
+    private HashMap<String, Object> coords;
+    private double la, lo;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
     @Override
@@ -77,6 +80,17 @@ public class AdDetailsActivity extends DrawerBaseActivity
         price_ad = (TextView) findViewById(R.id.ad_price);
         switch_ad = (TextView) findViewById(R.id.ad_preffered_items);
         description_ad = (TextView) findViewById(R.id.ad_description);
+
+        show_data = findViewById(R.id.show_data);
+        show_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(title);
+                System.out.println(coords);
+                System.out.println(la);
+                System.out.println(lo);
+            }
+        });
 
         viewPager2 = findViewById(R.id.ViewPagerForImages);
 
@@ -103,6 +117,20 @@ public class AdDetailsActivity extends DrawerBaseActivity
                 switches = (ArrayList<String>) map_of_ad.get("Switch");
                 description = (String) map_of_ad.get("Description");
                 price = (String) map_of_ad.get("Price");
+
+                coords = (HashMap<String, Object>) map_of_ad.get("Coordinates");
+
+                String str_la = (String) coords.get("latitude").toString();
+                String str_lo = (String) coords.get("longitude").toString();
+                if(str_la.equals("0") || str_lo.equals("0")){
+                    la = 0.0;
+                    lo = 0.0;
+                }else{
+                    la = (double) coords.get("latitude");
+                    lo = (double) coords.get("longitude");
+                }
+
+
                 allocateActivityTitle(title);
 
                 for(String path: images)
@@ -189,6 +217,21 @@ public class AdDetailsActivity extends DrawerBaseActivity
                 Intent my_account = new Intent(AdDetailsActivity.this, UserDetailsActivity.class);
                 my_account.putExtra("ID", publisher);
                 startActivity(my_account);
+            }
+        });
+
+        map_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(la == 0){
+                    Toast.makeText(AdDetailsActivity.this, "This ad is not available in Maps", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Intent my_account = new Intent(AdDetailsActivity.this, MapActivity.class);
+                    my_account.putExtra("Ad_id", category + " " + title);
+//                    my_account.putExtra("lo", lo);
+                    startActivity(my_account);
+                }
             }
         });
 
