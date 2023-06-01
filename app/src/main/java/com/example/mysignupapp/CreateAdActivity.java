@@ -14,11 +14,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
@@ -36,6 +38,7 @@ import android.widget.ViewSwitcher;
 
 import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.example.mysignupapp.databinding.ActivityCreateAdBinding;
+import com.example.mysignupapp.ml.ModelUnquant;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -60,6 +63,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 
+import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -68,60 +77,46 @@ import java.util.Random;
 public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTask.GeocodingListener {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
-
-    String[] items = {"Vehicles", "Men Clothing", "Women Clothing", "Music",
-            "Sports", "Office", "Books", "Electronics", "Toys", "Movies", "Collectibles"};
+    String[] items = {"Vehicles", "Clothing", "Book","Toy","Music",
+            "Sports", "Office"};
     AutoCompleteTextView autoCompleteTxt;
     ArrayAdapter<String> adapterItems;
-
     private ImageSwitcher imageIs;
     private Button previousBtn, nextBtn, pickImagesBtn;
     private Button create_ad_button;
-
+    private Button smart_check_button;
     private ImageButton delete_image;
     private ArrayList<Uri> imageUris;
     private ArrayList<String> myurls;
     StorageTask uploadTask;
     StorageReference storageReference;
-
     String title_input;
     String category_input;
     String description_input;
     String price_input, address_input = "";
     ArrayList<String> switch_inputs;
-
     TextView switch_selections;
-
     TextView image_number;
     boolean[] selected_switch;
-
     ArrayList<Integer> switch_list = new ArrayList<>();
-    String[] category_array = {"Vehicles", "Men Clothing", "Women Clothing", "Music",
-            "Sports", "Office", "Books", "Electronics", "Toys", "Movies", "Collectibles"};
-
+    String[] category_array = {"Vehicles", "Clothing", "Book","Toy","Music",
+            "Sports", "Office"};
     private static final int PICK_IMAGES_CODE = 0;
-
     int position = 0;
-
     TextInputLayout TITLE_textInputLayout;
-
     TextInputLayout PRICE_textInputLayout;
-
     TextInputLayout DESCRIPTION_textInputLayout;
-
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
-
     ActivityCreateAdBinding activityCreateAdBinding;
-
     LocationManager locationManager;
     LatLng currentLocation;
-
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private CheckBox first_checkbox, getLocationAutomatically;
     private boolean boolean_location;
-
     TextInputLayout ADDRESS_textInputLayout;
+    int images_size_for_recognition = 224;
 
+    ArrayList<Bitmap> image_bitmaps;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setCurrentLocation(0, 0);
@@ -217,9 +212,11 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         pickImagesBtn = findViewById(R.id.pickImagesBtn);
         delete_image = findViewById(R.id.deleteBtn);
         image_number = (TextView) findViewById(R.id.image_number);
+        smart_check_button = findViewById(R.id.smart_check);
 
         imageUris = new ArrayList<>();
         myurls = new ArrayList<>();
+        image_bitmaps = new ArrayList<>();
 
         String image_number_so_far = "Images: " + imageUris.size() + "/5";
         image_number.setText(image_number_so_far);
@@ -235,9 +232,11 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         pickImagesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imageUris.size() >= 5) {
+                if (imageUris.size() >= 5)
+                {
                     Toast.makeText(CreateAdActivity.this, "Max image input reached!", Toast.LENGTH_SHORT).show();
-                } else {
+                } else
+                {
                     pickImagesIntent();
                 }
             }
@@ -273,16 +272,20 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                 if (imageUris.size() == 1) {
                     imageIs.setImageURI(null);
                     imageUris.remove(position);
+                    image_bitmaps.remove(position);
                     String image_number_now = "Images: " + imageUris.size() + "/5";
                     image_number.setText(image_number_now);
                 }
                 else if(imageUris.size() >= 2)
                 {
                     imageUris.remove(position);
+                    image_bitmaps.remove(position);
                     imageIs.setImageURI(imageUris.get(0));
                     String image_number_now = "Images: " + imageUris.size() + "/5";
                     image_number.setText(image_number_now);
-                } else if (imageUris.isEmpty()) {
+                }
+                else if (imageUris.isEmpty())
+                {
                     Toast.makeText(CreateAdActivity.this, "No images to delete", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -354,6 +357,30 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         });
 
         storageReference = FirebaseStorage.getInstance().getReference("Ads");
+
+        smart_check_button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                System.out.println("Smart Check Button clicked");
+                System.out.println("Total images converted to bitmaps: " + image_bitmaps.size());
+                if(image_bitmaps.size() > 0)
+                {
+                    int counter = 1;
+                    for(Bitmap image_sample: image_bitmaps)
+                    {
+                        System.out.println("Image Sample Number " + counter);
+                        classifyImage(image_sample);
+                        counter++;
+                    }
+                }
+                else
+                {
+                    System.out.println("Image classification can't be reached!!!!!!!!!!!!!!");
+                }
+            }
+        });
         create_ad_button.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -362,6 +389,77 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
             }
         });
 
+    }
+
+    public void classifyImage(Bitmap image)
+    {
+        try
+        {
+            ModelUnquant model = ModelUnquant.newInstance(getApplicationContext());
+
+            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * images_size_for_recognition * images_size_for_recognition * 3);
+            byteBuffer.order(ByteOrder.nativeOrder());
+
+            int[] intValues = new int[images_size_for_recognition * images_size_for_recognition];
+            image.getPixels(intValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
+            int pixel = 0;
+
+
+            for(int i = 0; i < images_size_for_recognition; i++)
+            {
+                for(int j = 0; j < images_size_for_recognition; j++)
+                {
+                    int val = intValues[pixel++];
+                    byteBuffer.putFloat(((val >> 16) & 0xFF)*(1.f/255.f));
+                    byteBuffer.putFloat(((val >> 8) & 0xFF)*(1.f/255.f));
+                    byteBuffer.putFloat((val & 0xFF)*(1.f/255.f));
+                }
+            }
+
+            inputFeature0.loadBuffer(byteBuffer);
+
+            // Runs model inference and gets result.
+            ModelUnquant.Outputs outputs = model.process(inputFeature0);
+            TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
+
+            float[] percentages = outputFeature0.getFloatArray();
+            int maxPos = 0;
+            float max_percentage = 0;
+
+            for(int i = 0; i < percentages.length; i++)
+            {
+                if(percentages[i] > max_percentage)
+                {
+                    max_percentage = percentages[i];
+                    maxPos = i;
+                }
+            }
+
+            String[] classes = {"Vehicles", "Clothing", "Book","Toy","Music",
+                    "Sports", "Office"};
+
+            String result = "CLASSIFIED AS: " + classes[maxPos];
+            String s = "";
+            for(int i = 0; i < classes.length; i++)
+            {
+                s+= String.format("%s: %.1f%%\n", classes[i], percentages[i] * 100);
+            }
+
+            System.out.println("-------------------------Classification------------------------");
+            System.out.println(result);
+            System.out.println("---------------------------------------------------------------");
+            System.out.println("---------------------------Statistics--------------------------");
+            System.out.println(s);
+            System.out.println("---------------------------------------------------------------");
+
+            // Releases model resources if no longer used.
+            model.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void makeAd() {
@@ -498,13 +596,38 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                     for (int i = 0; i < count; i++) {
                         Uri imageUri = data.getClipData().getItemAt(i).getUri();
                         imageUris.add(imageUri);
+                        Bitmap bitmap_of_image = null;
+                        try
+                        {
+                            bitmap_of_image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                        }
+                        catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        bitmap_of_image = Bitmap.createScaledBitmap(bitmap_of_image, images_size_for_recognition, images_size_for_recognition, false);
+                        image_bitmaps.add(bitmap_of_image);
                     }
 
                     imageIs.setImageURI(imageUris.get(0));
                     position = 0;
-                } else {
+
+                }
+                else
+                {
                     Uri imageUri = data.getData();
                     imageUris.add(imageUri);
+                    Bitmap bitmap_of_image = null;
+                    try
+                    {
+                        bitmap_of_image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    bitmap_of_image = Bitmap.createScaledBitmap(bitmap_of_image, images_size_for_recognition, images_size_for_recognition, false);
+                    image_bitmaps.add(bitmap_of_image);
                     imageIs.setImageURI(imageUris.get(0));
                     position = 0;
                 }
