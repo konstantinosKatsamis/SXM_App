@@ -8,11 +8,13 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
@@ -33,6 +35,7 @@ import androidx.annotation.RequiresApi;
 
 import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.example.mysignupapp.databinding.ActivityMakeOfferBinding;
+import com.example.mysignupapp.ml.ModelUnquant;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,6 +50,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 
+import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,8 +88,8 @@ public class MakeOffer extends DrawerBaseActivity
     Button pick_image_button;
     Button send_request_button;
     Button smart_check;
-    String[] categories_to_choose = {"Vehicles", "Men Clothing", "Women Clothing", "Music",
-            "Sports", "Office", "Books", "Electronics", "Toys", "Movies", "Collectibles"};
+    String[] categories_to_choose = {"Vehicles", "Clothing", "Book","Toy","Music",
+            "Sports", "Office"};
     AutoCompleteTextView text_of_chosen_category;
     ArrayAdapter<String> adapter_for_categories;
     String chosen_category_input;
@@ -94,6 +103,12 @@ public class MakeOffer extends DrawerBaseActivity
     String offer_title_input;
     String offer_category_input;
     String offer_description_input;
+
+    int images_size_for_recognition = 224;
+    boolean smart_check_at_least_once = false;
+    boolean smart_check_complete = false;
+    ArrayList<Bitmap> image_bitmaps;
+    ArrayList<Boolean> image_matches;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -128,7 +143,8 @@ public class MakeOffer extends DrawerBaseActivity
         adapter_for_categories = new ArrayAdapter<String>(this, R.layout.list_item, categories_to_choose);
         text_of_chosen_category.setAdapter(adapter_for_categories);
 
-        if (offer_money_choice) {
+        if (offer_money_choice)
+        {
             SELECT_CATEGORY_TEXT_INPUT.setVisibility(View.GONE);
             TITLE_TEXT_INPUT.setVisibility(View.GONE);
             DESCRIPTION_TEXT_INPUT.setVisibility(View.GONE);
@@ -137,9 +153,12 @@ public class MakeOffer extends DrawerBaseActivity
             previous_image_button.setVisibility(View.GONE);
             delete_image_button.setVisibility(View.GONE);
             next_image_button.setVisibility(View.GONE);
+            smart_check.setVisibility(View.GONE);
             image_switcher_offer.setVisibility(View.GONE);
             RELATIVE_LAYOUT_REQUEST.setVisibility(View.GONE);
-        } else if (offer_ad_choice) {
+        }
+        else if (offer_ad_choice)
+        {
             PRICE_TEXT_INPUT.setVisibility(View.GONE);
         }
 
@@ -198,6 +217,8 @@ public class MakeOffer extends DrawerBaseActivity
 
         imageUris = new ArrayList<>();
         image_url_paths = new ArrayList<>();
+        image_bitmaps = new ArrayList<>();
+        image_matches = new ArrayList<>();
 
         String image_number_so_far = "Images: " + imageUris.size() + "/5";
         image_number_text.setText(image_number_so_far);
@@ -235,19 +256,23 @@ public class MakeOffer extends DrawerBaseActivity
 
         delete_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (imageUris.size() == 1) {
-                    image_switcher_offer.setImageURI(null);
-                    imageUris.remove(position);
-                    String image_number_now = "Images: " + imageUris.size() + "/5";
-                    image_number_text.setText(image_number_now);
-                } else if (imageUris.size() >= 2) {
-                    imageUris.remove(position);
-                    image_switcher_offer.setImageURI(imageUris.get(0));
-                    String image_number_now = "Images: " + imageUris.size() + "/5";
-                    image_number_text.setText(image_number_now);
-                } else if (imageUris.isEmpty()) {
+            public void onClick(View v)
+            {
+                if (imageUris.isEmpty())
+                {
                     Toast.makeText(MakeOffer.this, "No images to delete", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    image_switcher_offer.setImageURI(null);
+                    imageUris.clear();
+                    image_bitmaps.clear();
+                    image_matches.clear();
+                    String image_number_now = "Images: " + imageUris.size() + "/5";
+                    image_number_text.setText(image_number_now);
+                    position = 0;
+                    smart_check_complete = false;
+                    smart_check_at_least_once = false;
                 }
             }
         });
@@ -262,6 +287,34 @@ public class MakeOffer extends DrawerBaseActivity
                 }
             }
         });
+        smart_check.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if(chosen_category_input == null)
+                {
+                    showPop(getWindow().getDecorView().getRootView(), "Your ad must have a category");
+                }
+                else if(image_bitmaps.size() == 0)
+                {
+                    showPop(getWindow().getDecorView().getRootView(), "No image input to check");
+                }
+                else if(chosen_category_input != null && image_bitmaps.size() > 0)
+                {
+                    smart_check_at_least_once = true;
+                    System.out.println("Smart Check Button clicked");
+                    System.out.println("Total images converted to bitmaps: " + image_bitmaps.size());
+                    int counter = 1;
+                    for(Bitmap image_sample: image_bitmaps)
+                    {
+                        System.out.println("Image Sample Number " + counter);
+                        classifyImage(image_sample);
+                        counter++;
+                    }
+                }
+            }
+        });
 
 
         send_request_button.setOnClickListener(new View.OnClickListener()
@@ -270,11 +323,147 @@ public class MakeOffer extends DrawerBaseActivity
             @Override
             public void onClick(View v)
             {
-                sendRequestToUser();
+                offer_title_input = TITLE_TEXT_INPUT.getEditText().getText().toString();
+                offer_category_input = chosen_category_input;
+                offer_description_input = DESCRIPTION_TEXT_INPUT.getEditText().getText().toString();
+
+                if(!smart_check_at_least_once)
+                {
+                    androidx.appcompat.app.AlertDialog.Builder dlgAlert1  = new androidx.appcompat.app.AlertDialog.Builder(MakeOffer.this);
+                    dlgAlert1.setMessage("You must Smart Check your ad at least once.");
+                    dlgAlert1.setTitle("Not so fast");
+                    dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+
+                        }
+                    });
+                    dlgAlert1.setCancelable(true);
+                    dlgAlert1.create().show();
+                }
+
+                String error_for_images = "Your Smart Check detected problem: Your images don't match the selected category\n";
+                boolean found_problem = false;
+                for(int j = 0; j < image_matches.size(); j++)
+                {
+                    if(!image_matches.get(j))
+                    {
+                        found_problem = true;
+                        error_for_images += "Picture number: " + (j + 1) + "\n";
+                    }
+                }
+
+                smart_check_complete = !found_problem;
+
+                if(offer_category_input != null && imageUris.size() == 0 && image_bitmaps.size() > 0 && image_matches.size() > 0)
+                {
+                    showPop(getWindow().getDecorView().getRootView(), "Your ad doesn't have pictures");
+                }
+
+                if(smart_check_at_least_once && !smart_check_complete)
+                {
+                    androidx.appcompat.app.AlertDialog.Builder dlgAlert1  = new androidx.appcompat.app.AlertDialog.Builder(MakeOffer.this);
+                    dlgAlert1.setMessage(error_for_images);
+                    dlgAlert1.setTitle("Not so fast");
+                    dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+
+                        }
+                    });
+                    dlgAlert1.setCancelable(true);
+                    dlgAlert1.create().show();
+                }
+
+                else if(smart_check_at_least_once && smart_check_complete && imageUris.size() > 0
+                        && image_bitmaps.size() > 0 && image_matches.size() > 0)
+                {
+                    sendRequestToUser();
+                }
             }
         });
 
     }
+
+    public void classifyImage(Bitmap image)
+    {
+        try
+        {
+            ModelUnquant model = ModelUnquant.newInstance(getApplicationContext());
+
+            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * images_size_for_recognition * images_size_for_recognition * 3);
+            byteBuffer.order(ByteOrder.nativeOrder());
+
+            int[] intValues = new int[images_size_for_recognition * images_size_for_recognition];
+            image.getPixels(intValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
+            int pixel = 0;
+
+
+            for(int i = 0; i < images_size_for_recognition; i++)
+            {
+                for(int j = 0; j < images_size_for_recognition; j++)
+                {
+                    int val = intValues[pixel++];
+                    byteBuffer.putFloat(((val >> 16) & 0xFF)*(1.f/255.f));
+                    byteBuffer.putFloat(((val >> 8) & 0xFF)*(1.f/255.f));
+                    byteBuffer.putFloat((val & 0xFF)*(1.f/255.f));
+                }
+            }
+
+            inputFeature0.loadBuffer(byteBuffer);
+
+            // Runs model inference and gets result.
+            ModelUnquant.Outputs outputs = model.process(inputFeature0);
+            TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
+
+            float[] percentages = outputFeature0.getFloatArray();
+            int maxPos = 0;
+            float max_percentage = 0;
+
+            for(int i = 0; i < percentages.length; i++)
+            {
+                if(percentages[i] > max_percentage)
+                {
+                    max_percentage = percentages[i];
+                    maxPos = i;
+                }
+            }
+
+            String[] classes = {"Vehicles", "Clothing", "Book","Toy","Music",
+                    "Sports", "Office"};
+
+            boolean val_boo;
+            val_boo = offer_category_input.equals(classes[maxPos]);
+            image_matches.add(val_boo);
+
+            String result = "CLASSIFIED AS: " + classes[maxPos];
+            String s = "";
+            for(int i = 0; i < classes.length; i++)
+            {
+                s+= String.format("%s: %.1f%%\n", classes[i], percentages[i] * 100);
+            }
+
+            System.out.println("-------------------------Classification------------------------");
+            System.out.println(result);
+            System.out.println("---------------------------------------------------------------");
+            System.out.println("---------------------------Statistics--------------------------");
+            System.out.println(s);
+            System.out.println("---------------------------------------------------------------");
+
+            // Releases model resources if no longer used.
+            model.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 
     private void sendRequestToUser()
     {
@@ -440,6 +629,17 @@ public class MakeOffer extends DrawerBaseActivity
                     for (int i = 0; i < count; i++) {
                         Uri imageUri = data.getClipData().getItemAt(i).getUri();
                         imageUris.add(imageUri);
+                        Bitmap bitmap_of_image = null;
+                        try
+                        {
+                            bitmap_of_image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                        }
+                        catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        bitmap_of_image = Bitmap.createScaledBitmap(bitmap_of_image, images_size_for_recognition, images_size_for_recognition, false);
+                        image_bitmaps.add(bitmap_of_image);
                     }
 
                     image_switcher_offer.setImageURI(imageUris.get(0));
@@ -449,6 +649,17 @@ public class MakeOffer extends DrawerBaseActivity
                 {
                     Uri imageUri = data.getData();
                     imageUris.add(imageUri);
+                    Bitmap bitmap_of_image = null;
+                    try
+                    {
+                        bitmap_of_image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    bitmap_of_image = Bitmap.createScaledBitmap(bitmap_of_image, images_size_for_recognition, images_size_for_recognition, false);
+                    image_bitmaps.add(bitmap_of_image);
                     image_switcher_offer.setImageURI(imageUris.get(0));
                     position = 0;
                 }

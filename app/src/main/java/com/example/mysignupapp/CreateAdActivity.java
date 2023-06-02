@@ -115,8 +115,10 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
     private boolean boolean_location;
     TextInputLayout ADDRESS_textInputLayout;
     int images_size_for_recognition = 224;
-
+    boolean smart_check_at_least_once = false;
+    boolean smart_check_complete = false;
     ArrayList<Bitmap> image_bitmaps;
+    ArrayList<Boolean> image_matches;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setCurrentLocation(0, 0);
@@ -217,6 +219,7 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         imageUris = new ArrayList<>();
         myurls = new ArrayList<>();
         image_bitmaps = new ArrayList<>();
+        image_matches = new ArrayList<>();
 
         String image_number_so_far = "Images: " + imageUris.size() + "/5";
         image_number.setText(image_number_so_far);
@@ -268,25 +271,23 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
 
         delete_image.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (imageUris.size() == 1) {
-                    imageIs.setImageURI(null);
-                    imageUris.remove(position);
-                    image_bitmaps.remove(position);
-                    String image_number_now = "Images: " + imageUris.size() + "/5";
-                    image_number.setText(image_number_now);
-                }
-                else if(imageUris.size() >= 2)
-                {
-                    imageUris.remove(position);
-                    image_bitmaps.remove(position);
-                    imageIs.setImageURI(imageUris.get(0));
-                    String image_number_now = "Images: " + imageUris.size() + "/5";
-                    image_number.setText(image_number_now);
-                }
-                else if (imageUris.isEmpty())
+            public void onClick(View v)
+            {
+                if (imageUris.isEmpty())
                 {
                     Toast.makeText(CreateAdActivity.this, "No images to delete", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    imageIs.setImageURI(null);
+                    imageUris.clear();
+                    image_bitmaps.clear();
+                    image_matches.clear();
+                    String image_number_now = "Images: " + imageUris.size() + "/5";
+                    image_number.setText(image_number_now);
+                    position = 0;
+                    smart_check_complete = false;
+                    smart_check_at_least_once = false;
                 }
             }
         });
@@ -363,10 +364,20 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
             @Override
             public void onClick(View v)
             {
-                System.out.println("Smart Check Button clicked");
-                System.out.println("Total images converted to bitmaps: " + image_bitmaps.size());
-                if(image_bitmaps.size() > 0)
+
+                if(category_input == null)
                 {
+                    showPop(getWindow().getDecorView().getRootView(), "Your ad must have a category");
+                }
+                else if(image_bitmaps.size() == 0)
+                {
+                    showPop(getWindow().getDecorView().getRootView(), "No image input to check");
+                }
+                else if(category_input != null && image_bitmaps.size() > 0)
+                {
+                    smart_check_at_least_once = true;
+                    System.out.println("Smart Check Button clicked");
+                    System.out.println("Total images converted to bitmaps: " + image_bitmaps.size());
                     int counter = 1;
                     for(Bitmap image_sample: image_bitmaps)
                     {
@@ -375,22 +386,78 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                         counter++;
                     }
                 }
-                else
-                {
-                    System.out.println("Image classification can't be reached!!!!!!!!!!!!!!");
-                }
             }
         });
         create_ad_button.setOnClickListener(new View.OnClickListener()
         {
+
             @Override
-            public void onClick(View v) {
-                makeAd();
+            public void onClick(View v)
+            {
+
+                title_input = TITLE_textInputLayout.getEditText().getText().toString();
+                price_input = PRICE_textInputLayout.getEditText().getText().toString();
+                description_input = DESCRIPTION_textInputLayout.getEditText().getText().toString();
+
+                if(!smart_check_at_least_once)
+                {
+                    AlertDialog.Builder dlgAlert1  = new AlertDialog.Builder(CreateAdActivity.this);
+                    dlgAlert1.setMessage("You must Smart Check your ad at least once.");
+                    dlgAlert1.setTitle("Not so fast");
+                    dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+
+                        }
+                    });
+                    dlgAlert1.setCancelable(true);
+                    dlgAlert1.create().show();
+                }
+
+                String error_for_images = "Your Smart Check detected problem: Your images don't match the selected category\n";
+                boolean found_problem = false;
+                for(int j = 0; j < image_matches.size(); j++)
+                {
+                    if(!image_matches.get(j))
+                    {
+                        found_problem = true;
+                        error_for_images += "Picture number: " + (j + 1) + "\n";
+                    }
+                }
+
+                smart_check_complete = !found_problem;
+
+                if(category_input != null && imageUris.size() == 0 && image_bitmaps.size() > 0 && image_matches.size() > 0)
+                {
+                    showPop(getWindow().getDecorView().getRootView(), "Your ad doesn't have pictures");
+                }
+
+                if(smart_check_at_least_once && !smart_check_complete)
+                {
+                    AlertDialog.Builder dlgAlert1  = new AlertDialog.Builder(CreateAdActivity.this);
+                    dlgAlert1.setMessage(error_for_images);
+                    dlgAlert1.setTitle("Not so fast");
+                    dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+
+                        }
+                    });
+                    dlgAlert1.setCancelable(true);
+                    dlgAlert1.create().show();
+                }
+                else if(smart_check_at_least_once && smart_check_complete && imageUris.size() > 0
+                        && image_bitmaps.size() > 0 && image_matches.size() > 0)
+                {
+                    makeAd();
+                }
             }
         });
-
     }
-
     public void classifyImage(Bitmap image)
     {
         try
@@ -438,6 +505,10 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
 
             String[] classes = {"Vehicles", "Clothing", "Book","Toy","Music",
                     "Sports", "Office"};
+
+            boolean val_boo;
+            val_boo = category_input.equals(classes[maxPos]);
+            image_matches.add(val_boo);
 
             String result = "CLASSIFIED AS: " + classes[maxPos];
             String s = "";
@@ -530,7 +601,9 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
 
                                 if (price_input.equals("0") || price_input.equals("")) {
                                     hashMap.put("Price", "Free");
-                                } else {
+                                }
+                                else
+                                {
                                     hashMap.put("Price", price_input + "$");
                                 }
 
@@ -817,4 +890,18 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
     public CreateAdActivity getContext() {
         return this;
     }
+
+    public void showPop(View view, String error_message)
+    {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        View customLayout = getLayoutInflater().inflate(R.layout.wrong_input_popup, null);
+        builder.setView(customLayout);
+        androidx.appcompat.app.AlertDialog dialog = builder.create();
+        Button OK = customLayout.findViewById(R.id.OK);
+        TextView errorMsg = customLayout.findViewById(R.id.error_message);
+        errorMsg.setText(error_message);
+        OK.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+    }
 }
+
