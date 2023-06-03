@@ -23,7 +23,7 @@
             android:layout_marginTop="25dp"
             android:gravity="center"
             android:text="Create your SXM Ad"
-            android:textColor="#9CD6DD"
+            android:textColor="@color/textColor"
             android:textSize="35sp"
             android:textStyle="italic"
             tools:ignore="TextContrastCheck" />
@@ -37,7 +37,7 @@
             android:layout_gravity="center"
             android:layout_margin="20dp"
             android:text="Please fill all fields below to create your new SXM ad!"
-            android:textColor="#9CD6DD"
+            android:textColor="@color/textColor"
             android:textSize="20sp"
             android:gravity="center"
             tools:ignore="TextContrastCheck" />
@@ -53,15 +53,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="#9CD6DD"
-                android:background="@color/black"
+                android:textColorHint="@color/textColor"
+                android:background="@color/backgroundColor"
                 android:hint="Select Category">
 
                 <AutoCompleteTextView
                     android:id="@+id/select_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#9CD6DD"
+                    android:textColor="@color/textColor"
                     android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,15 +74,14 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:hint="Title of Ad"
-                android:textColorHint="#000000">
+                android:textColorHint="@color/textColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#FFFFFF"
                     android:inputType="text"
-                    android:textColor="#000000"
-                    android:textColorHint="#000000"
+                    android:textColor="@color/textColor"
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,15 +95,14 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:hint="Price(if needed)"
-                android:textColorHint="#000000">
+                android:textColorHint="@color/textColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#FFFFFF"
+                    android:backgroundTint="@color/backgroundColor"
                     android:inputType="text"
-                    android:textColor="#000000"
-                    android:textColorHint="#000000"
+                    android:textColor="@color/textColor"
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,8 +121,8 @@
                 android:drawablePadding="16dp"
                 android:hint="Categories for switching"
                 android:padding="13dp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/textColor" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -136,15 +134,14 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:hint="Description"
-                android:textColorHint="#000000">
+                android:textColorHint="@color/textColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#FFFFFF"
+                    android:backgroundTint="@color/backgroundColor"
                     android:inputType="textMultiLine"
-                    android:textColor="#000000"
-                    android:textColorHint="#000000"
+                    android:textColor="@color/textColor"
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -152,7 +149,7 @@
                 android:id="@+id/checkbox"
                 android:backgroundTint="#FFFFFF"
                 android:inputType="text"
-                android:textColor="#000000"
+                android:textColor="@color/textColor"
                 android:textColorHint="#000000"
                 tools:ignore="TextContrastCheck"
                 android:layout_width="wrap_content"

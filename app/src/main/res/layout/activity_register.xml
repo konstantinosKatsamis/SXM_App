@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@drawable/gray"
+    android:background="@color/backgroundColor"
     android:orientation="vertical">
 
     <LinearLayout
@@ -21,8 +21,8 @@
             android:layout_height="70dp"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
-            android:text="Become a member of to SXM"
-            android:textColor="#9CD6DD"
+            android:text="Become a member of SXM"
+            android:textColor="@color/textColorHint"
             android:textSize="27sp"
             android:gravity="center"
             android:textStyle="italic"
@@ -35,7 +35,7 @@
             android:text="Please fill all fields below to become our newest member!"
             android:layout_gravity="center"
             android:layout_margin="15dp"
-            android:textColor="#9CD6DD"
+            android:textColor="@color/textColorHint"
             android:gravity="center"
             android:layout_below="@+id/welcomeMessage"
             android:textSize="20sp"
@@ -51,7 +51,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                app:cardBackgroundColor="#9CD6DD"
+                app:cardBackgroundColor="@color/textColorHint"
                 android:layout_marginBottom="25dp"
                 android:layout_gravity="center"
                 app:cardCornerRadius="100dp">
@@ -74,16 +74,15 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:hint="First Name"
-                android:textColorHint="#000000">
+                android:textColorHint="@color/textColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:id="@+id/first_name_filled"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#FFFFFF"
+                    android:backgroundTint="@color/backgroundColor"
                     android:inputType="text"
-                    android:textColorHint="#000000"
-                    android:textColor="#000000"
+                    android:textColor="@color/textColor"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -97,15 +96,14 @@
                 android:layout_marginEnd="15dp"
                 android:layout_marginTop="20dp"
                 android:hint="Last Name"
-                android:textColorHint="#000000">
+                android:textColorHint="@color/textColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#FFFFFF"
+                    android:backgroundTint="@color/backgroundColor"
                     android:inputType="text"
-                    android:textColorHint="#000000"
-                    android:textColor="#000000"
+                    android:textColor="@color/textColor"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -120,8 +118,9 @@
                 android:layout_marginTop="10dp"
                 android:onClick="openBirthDatePicker"
                 android:text="Date of Birth"
-                android:textColor="#9CD6DD"
-                android:textSize="15sp"/>
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/textColor"
+                android:textSize="15sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/email_address_textfield"
@@ -132,15 +131,14 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:hint="Email Address"
-                android:textColorHint="#000000">
+                android:textColorHint="@color/textColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#FFFFFF"
                     android:inputType="text"
-                    android:textColor="#000000"
-                    android:textColorHint="#000000"
+                    android:textColor="@color/textColor"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -156,15 +154,14 @@
                 app:counterEnabled="true"
                 app:counterMaxLength="20"
                 android:hint="Username"
-                android:textColorHint="#000000">
+                android:textColorHint="@color/textColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#FFFFFF"
+                    android:backgroundTint="@color/backgroundColor"
                     android:inputType="text"
-                    android:textColorHint="#000000"
-                    android:textColor="#000000"
+                    android:textColor="@color/textColor"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -180,17 +177,15 @@
                 app:counterEnabled="true"
                 app:counterMaxLength="10"
                 android:hint="Password"
-
                 app:passwordToggleEnabled="true"
-                android:textColorHint="#000000">
+                android:textColorHint="@color/textColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#FDFDFD"
+                    android:backgroundTint="@color/backgroundColor"
                     android:inputType="textPassword"
-                    android:textColorHint="#000000"
-                    android:textColor="#000000"
+                    android:textColor="@color/textColor"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -206,17 +201,15 @@
                 app:counterEnabled="true"
                 app:counterMaxLength="10"
                 android:hint="Re-enter Password"
-
                 app:passwordToggleEnabled="true"
-                android:textColorHint="#000000">
+                android:textColorHint="@color/textColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#FDFDFD"
+                    android:backgroundTint="@color/backgroundColor"
                     android:inputType="textPassword"
-                    android:textColorHint="#000000"
-                    android:textColor="#000000"
+                    android:textColor="@color/textColor"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>

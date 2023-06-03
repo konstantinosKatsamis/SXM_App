@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gray"
+    android:background="@color/backgroundColor"
     tools:context=".FilterActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="50dp"
+        android:paddingTop="60dp"
         tools:context=".FilterActivity">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -20,15 +22,16 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:textColor="@color/textColor"
             android:layout_marginBottom="16dp"
-            android:textColorHint="#9CD6DD"
+            android:textColorHint="@color/textColor"
             android:hint="@string/Sort">
 
             <AutoCompleteTextView
                 android:id="@+id/autocomplete_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#9CD6DD"
+                android:textColor="@color/textColor"
                 android:textSize="20sp"
                 android:inputType="none" />
 
@@ -44,7 +47,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:textColorHint="#9CD6DD"
+            android:textColorHint="@color/textColor"
             android:hint="Price range:">
 
 
@@ -52,7 +55,7 @@
                 android:id="@+id/autocomplete_text2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#9CD6DD"
+                android:textColor="@color/textColor"
                 android:textSize="20sp"
                 android:inputType="none"/>
 
@@ -62,6 +65,7 @@
             android:id="@+id/category_multiple_selector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/secondInputLayout"
             android:layout_centerInParent="true"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
@@ -71,18 +75,18 @@
             android:drawablePadding="16dp"
             android:hint="Category:"
             android:padding="13dp"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black" />
+            android:textColor="@color/textColor"
+            android:textColorHint="@color/textColor"
+            android:textSize="20sp" />
 
         <Button
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
-            android:text="Search"
-            android:gravity="center"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:text="Search" />
 
     </RelativeLayout>
 

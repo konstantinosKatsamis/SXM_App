@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gray"
+    android:background="@color/backgroundColor"
     tools:context=".RequestDetailsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
-
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="50dp">
 
         <TextView
             android:id="@+id/who_sent_message"
@@ -20,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="User username1 sent you an offer. Please enter the Accept button if you want to make an appointment with them, otherwise press the Decline button "
-            android:textColor="#9CD6DD"
+            android:textColor="@color/textColor"
             android:textSize="16sp"
             android:gravity="center"
             tools:ignore="TextContrastCheck" />
@@ -31,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="This is a title"
-            android:textColor="#9CD6DD"
+            android:textColor="@color/textColor"
             android:textSize="20sp"
             android:gravity="center"
             tools:ignore="TextContrastCheck"/>
@@ -55,7 +56,7 @@
             android:layout_marginBottom="20dp"
             android:inputType="textMultiLine"
             android:text="Category: "
-            android:textColor="#9CD6DD"
+            android:textColor="@color/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/request_price"/>
 
@@ -68,7 +69,7 @@
             android:layout_marginBottom="20dp"
             android:inputType="textMultiLine"
             android:text="Price: "
-            android:textColor="#9CD6DD"
+            android:textColor="@color/textColor"
             android:textSize="25sp"
             app:layout_constraintBottom_toTopOf="@+id/request_description"/>
 
@@ -81,7 +82,7 @@
             android:layout_marginBottom="50dp"
             android:inputType="textMultiLine"
             android:text="Description: "
-            android:textColor="#9CD6DD"
+            android:textColor="@color/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/accept_button" />
 
@@ -93,7 +94,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginBottom="20dp"
-            android:backgroundTint="#060871"
+            android:backgroundTint="@color/green"
             android:text="Accept"
             android:textColor="@color/white"
             android:textSize="15sp"

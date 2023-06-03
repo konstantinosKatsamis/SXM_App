@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gray"
+    android:background="@color/backgroundColor"
     tools:context=".MyAds">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gray"
+        android:background="@color/backgroundColor"
         android:id="@+id/my_ad_list"
         android:textSize="30dp"
         android:padding="16dp">

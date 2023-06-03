@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gray"
+    android:background="@color/backgroundColor"
     tools:context=".AdDetailsActivity">
 
     <LinearLayout
@@ -32,7 +32,7 @@
             android:layout_marginBottom="20dp"
             android:inputType="textMultiLine"
             android:text="Category: "
-            android:textColor="#9CD6DD"
+            android:textColor="@color/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/ad_price"/>
 
@@ -45,7 +45,7 @@
             android:layout_marginBottom="20dp"
             android:inputType="textMultiLine"
             android:text="Price: "
-            android:textColor="#9CD6DD"
+            android:textColor="@color/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/ad_preffered_items"/>
 
@@ -58,7 +58,7 @@
             android:layout_marginBottom="20dp"
             android:inputType="textMultiLine"
             android:text="Prefferred items for switch: "
-            android:textColor="#9CD6DD"
+            android:textColor="@color/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/ad_description"/>
 
@@ -71,7 +71,7 @@
             android:layout_marginBottom="50dp"
             android:inputType="textMultiLine"
             android:text="Description: "
-            android:textColor="#9CD6DD"
+            android:textColor="@color/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/publisher_button" />
 
@@ -113,7 +113,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginBottom="20dp"
-            android:backgroundTint="#289146"
+            android:backgroundTint="@color/green"
             android:text="Send Request"
             android:textColor="@color/white"
             android:textSize="15sp"
