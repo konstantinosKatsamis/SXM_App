@@ -18,22 +18,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.ViewHolder>
 {
     Context context;
-
     List<Appointment> appointments;
-
     FirebaseDatabase db;
-
     FirebaseAuth mAuth;
-
     String firebase_link;
-
     private AppointmentAdapter.AppointmentClickListener listener;
 
     public AppointmentAdapter(Context context, List<Appointment> appointments, AppointmentAdapter.AppointmentClickListener listener)
@@ -84,7 +77,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
                     }
 
                     holder.switcher_name.setText(user_now.getUsername());
-                    String date = chosen_appointment.getRequest().getWhen();
+                    String date = chosen_appointment.getRequest().getWhen_created();
                     holder.when.setText(date);
                     String ad_of_interest = chosen_appointment.getRequest().getAbout().get("Title").toString();
                     holder.interested_for.setText(ad_of_interest);
@@ -128,7 +121,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
                     }
 
                     holder.switcher_name.setText(user_now.getUsername());
-                    String date = chosen_appointment.getRequest().getWhen();
+                    String date = chosen_appointment.getRequest().getWhen_created();
                     holder.when.setText(date);
                     String ad_of_interest = chosen_appointment.getRequest().getAbout().get("Title").toString();
                     holder.trade_with.setText(ad_of_interest);

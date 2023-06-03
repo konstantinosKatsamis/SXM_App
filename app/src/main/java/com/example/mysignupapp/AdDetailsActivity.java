@@ -20,7 +20,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.mysignupapp.Utility.NetworkChangeListener;
 import com.example.mysignupapp.databinding.ActivityAdDetailsBinding;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,39 +31,41 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/*
+    AdDetailsActivity is called after we press one Ad from the Homepage.
+    Its main goal is to display an ad's details.
+    Also there are three buttons which:
+    1) Shows us who posted the ad
+    2) Views the ad's location on Google Maps
+    3) Gives the user the choice to create an offer in case they are interested for switching
+ */
 public class AdDetailsActivity extends DrawerBaseActivity
 {
     ActivityAdDetailsBinding activityAdDetailsBinding;
-    String ad_id;
-    FirebaseDatabase db;
+    String ad_id; // To view an ad's details we need its unique id
+    FirebaseDatabase db; // The Database of Firebase where we search for the selected Ad from the Homepage
+    Button publisher_button; // It shows the ad's publisher and their details
+    Button map_button; // It views the ad's location on the map
+    Button request_button; // It opens two choices for the user to pick what kind of offer they'll send
+    String title; // Title used to find the id of the ad in MakeOfferActivity
+    String category; // Category used to find the id of the ad in MakeOfferActivity
+    String id; // String to save the ad's id for MakeOfferActivity
+    String publisher; // String to save the id of the ad's publisher
+    ArrayList<String> images; // List of all images' paths
+    ArrayList<String> switches; // List of all preferable categories for switching, if they exist
+    String price; // Ad's price either Free or with cost
+    String description; // Ad's description
+    TextView category_ad; // TextView of the ad's category
+    TextView price_ad; // TextView of the ad's price
+    TextView switch_ad; // TextView of the ad's price
+    TextView description_ad; // TextView of the ad's description
+    HashMap<String, Object> map_of_ad; // Hashmap of the ad we'll find in Firebase Ads/
+    private ViewPager2 viewPager2; // ViewPager used to automatically switch the ad's images
+    private Handler handler_for_images = new Handler(); // Handler used for the ViewPager
+    private HashMap<String, Object> coords; // Hashmap for the ad's location
+    private double la, lo; // double variables used to find location's longitude and latitude
 
-    Button publisher_button;
-    Button map_button;
-    Button request_button;
-
-    String title;
-    String category;
-    String id;
-    String publisher;
-    ArrayList<String> images;
-    ArrayList<String> switches;
-    String price;
-    String description;
-    
-    TextView category_ad;
-    TextView price_ad;
-    TextView switch_ad;
-    TextView description_ad;
-
-    HashMap<String, Object> map_of_ad;
-
-    private ViewPager2 viewPager2;
-
-    private Handler handler_for_images = new Handler();
-    private HashMap<String, Object> coords;
-    private double la, lo;
-
-    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener(); // Listener to check Internet Connection
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,32 +73,38 @@ public class AdDetailsActivity extends DrawerBaseActivity
         setContentView(activityAdDetailsBinding.getRoot());
         ad_id = getIntent().getStringExtra("Ad_id");
 
+//---------------------------------------BUTTONS----------------------------------------------------
         publisher_button = (Button) findViewById(R.id.publisher_button);
         map_button = (Button) findViewById(R.id.map_button);
         request_button = (Button) findViewById(R.id.request_button);
+//--------------------------------------------------------------------------------------------------
 
+//---------------------------------------TEXTVIEWS--------------------------------------------------
         category_ad = (TextView) findViewById(R.id.ad_category);
         price_ad = (TextView) findViewById(R.id.ad_price);
         switch_ad = (TextView) findViewById(R.id.ad_preffered_items);
         description_ad = (TextView) findViewById(R.id.ad_description);
+//--------------------------------------------------------------------------------------------------
 
         viewPager2 = findViewById(R.id.ViewPagerForImages);
 
-        List<Image_For_Slider> slider_items = new ArrayList<>();
+        List<Image_For_Slider> slider_items = new ArrayList<>(); // list for the ViewPager's images
 
         ProgressDialog progressDialog = new ProgressDialog(AdDetailsActivity.this);
         progressDialog.setMessage("Loading ad...");
         progressDialog.show();
 
-        db = FirebaseDatabase.getInstance();
-        DatabaseReference ad_ref = db.getReference("Ads/" + ad_id);
+        db = FirebaseDatabase.getInstance(); // we get the Firebase Database
+        DatabaseReference ad_ref = db.getReference("Ads/" + ad_id); // we find the ad we clicked inside the database
 
         ad_ref.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot)
+            public void onDataChange(@NonNull DataSnapshot snapshot) // The snapshot is the Hashmap inside Ads/
             {
-                map_of_ad = (HashMap<String, Object>) snapshot.getValue();
+                map_of_ad = (HashMap<String, Object>) snapshot.getValue(); //We get the ad from the snapshot
+
+//------------------------------------------------AD'S DETAILS--------------------------------------
                 title = (String) map_of_ad.get("Title");
                 category = (String) map_of_ad.get("Category");
                 id = (String) map_of_ad.get("ID");
@@ -106,7 +113,6 @@ public class AdDetailsActivity extends DrawerBaseActivity
                 switches = (ArrayList<String>) map_of_ad.get("Switch");
                 description = (String) map_of_ad.get("Description");
                 price = (String) map_of_ad.get("Price");
-
                 coords = (HashMap<String, Object>) map_of_ad.get("Coordinates");
 
                 String str_la = (String) coords.get("latitude").toString();
@@ -118,15 +124,16 @@ public class AdDetailsActivity extends DrawerBaseActivity
                     la = (double) coords.get("latitude");
                     lo = (double) coords.get("longitude");
                 }
-
+//--------------------------------------------------------------------------------------------------
 
                 allocateActivityTitle(title);
 
                 for(String path: images)
                 {
-                    slider_items.add(new Image_For_Slider(path));
+                    slider_items.add(new Image_For_Slider(path)); // We add all images as viewpager's slides
                 }
 
+//---------------------------------------VIEWPAGER SETUP--------------------------------------------
                 viewPager2.setAdapter(new ImageSliderAdapter(slider_items, viewPager2));
                 viewPager2.setClipToPadding(false);
                 viewPager2.setClipChildren(false);
@@ -156,6 +163,9 @@ public class AdDetailsActivity extends DrawerBaseActivity
                         handler_for_images.postDelayed(slider_runnable, 3000);
                     }
                 });
+//--------------------------------------------------------------------------------------------------
+
+//--------------------------TEXTVIEW SETUPS---------------------------------------------------------
 
                 String what_category = "Category: " + category;
                 category_ad.setText(what_category);
@@ -167,7 +177,7 @@ public class AdDetailsActivity extends DrawerBaseActivity
 
                 if(switches.isEmpty())
                 {
-                    what_switches = "Preferred categories for switching: " + "Nothing";
+                    what_switches = "Preferred categories for switching: " + "No preferences";
                 }
                 else
                 {
@@ -189,6 +199,7 @@ public class AdDetailsActivity extends DrawerBaseActivity
 
                 description_ad.setText(what_description);
             }
+//--------------------------------------------------------------------------------------------------
 
             @Override
             public void onCancelled(@NonNull DatabaseError error)
@@ -199,7 +210,8 @@ public class AdDetailsActivity extends DrawerBaseActivity
 
         progressDialog.dismiss();
 
-        publisher_button.setOnClickListener(new View.OnClickListener() {
+        publisher_button.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
@@ -246,7 +258,7 @@ public class AdDetailsActivity extends DrawerBaseActivity
         super.onStart();
     }
 
-    private Runnable slider_runnable = new Runnable()
+    private Runnable slider_runnable = new Runnable() // thread to switch the viewpager's image
     {
         @Override
         public void run() {
