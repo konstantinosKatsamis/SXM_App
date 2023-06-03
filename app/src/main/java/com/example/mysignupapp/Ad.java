@@ -1,23 +1,27 @@
 package com.example.mysignupapp;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/*
+    The Ad class is used to save all ads one user creates
+    In Firebase, the Ad type objects are put inside Users/"user id"/ads
+ */
 public class Ad implements Serializable
 {
-    String title;
-    String category;
-    String price;
-    String description;
-    ArrayList<String> categories_for_switching = new ArrayList<>();
-    ArrayList<String> images = new ArrayList<>();
-    Ad(){}
+    String title; // Ad's title
+    String category; // Ad's category
+    String price; // Ad's price. It can be Free(0$) in case the user prefers to switch only
+    String description; //Ad's description
+    ArrayList<String> categories_for_switching = new ArrayList<>(); // All categories the user prefers to switch their ad
+    ArrayList<String> images = new ArrayList<>(); // List of the ad's images. They can be from 1 to 5
     LatLngCustom coordinates;
 
-    public Ad(String title, String category, String price, ArrayList<String> categories_for_switching, ArrayList<String> images, String description, LatLngCustom coords) {
+    Ad(){} // Default constructor of an Ad
 
+    public Ad(String title, String category, String price, ArrayList<String> categories_for_switching, ArrayList<String> images, String description, LatLngCustom coords)
+    {
+        //custom constructor of the Ad
         this.title = title;
         this.category = category;
         this.price = price;
@@ -26,8 +30,9 @@ public class Ad implements Serializable
         this.coordinates = coords;
         this.description = description;
     }
-
-    public String getTitle() {
+//------------------------------------------SETTERS AND GETTERS-----------------------------------------------------------
+    public String getTitle()
+    {
         return title;
     }
 
@@ -98,5 +103,5 @@ public class Ad implements Serializable
     public void setDescription(String description) {
         this.description = description;
     }
-
+//------------------------------------------------------------------------------------------------------------------------
 }

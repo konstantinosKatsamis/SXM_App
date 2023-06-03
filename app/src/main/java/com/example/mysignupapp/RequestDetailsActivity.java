@@ -59,6 +59,9 @@ public class RequestDetailsActivity extends DrawerBaseActivity
 
     List<Image_For_Slider> slider_items;
 
+    String what_time;
+    String what_date;
+
     private Handler handler_for_images = new Handler();
 
     @Override
@@ -166,6 +169,8 @@ public class RequestDetailsActivity extends DrawerBaseActivity
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
                 Request req = snapshot.getValue(Request.class);
+                what_time = req.getAppointment_hour();
+                what_date = req.getAppointment_date();
 
                 if(req.getPrice_offer() != null)
                 {
@@ -247,7 +252,7 @@ public class RequestDetailsActivity extends DrawerBaseActivity
                         req.accepted = true;
                         DatabaseReference appointment_reference = FirebaseDatabase.getInstance().getReference("Appointments");
                         String appointmentId = appointment_reference.push().getKey();
-                        Appointment new_appointment = new Appointment(req, sender_id, sender_username, receiver_id, receiver_username);
+                        Appointment new_appointment = new Appointment(req, sender_id, sender_username, receiver_id, receiver_username, what_time, what_date);
                         String title_for_appointment = appointmentId + ": " + receiver_username + "-" + sender_username;
                         appointment_reference.child(title_for_appointment).setValue(new_appointment);
 

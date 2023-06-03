@@ -2,12 +2,14 @@ package com.example.mysignupapp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,6 +21,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -33,6 +36,7 @@ import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -69,9 +73,17 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Random;
 
 public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTask.GeocodingListener {
@@ -101,6 +113,7 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
     ArrayList<Integer> switch_list = new ArrayList<>();
     String[] category_array = {"Vehicles", "Clothing", "Book","Toy","Music",
             "Sports", "Office"};
+
     private static final int PICK_IMAGES_CODE = 0;
     int position = 0;
     TextInputLayout TITLE_textInputLayout;
@@ -119,6 +132,26 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
     boolean smart_check_complete = false;
     ArrayList<Bitmap> image_bitmaps;
     ArrayList<Boolean> image_matches;
+
+    AutoCompleteTextView from_hour;
+    AutoCompleteTextView to_hour;
+    LocalTime appointment_from;
+    LocalTime appointment_to;
+    ArrayAdapter<String> ToHourItems;
+    ArrayAdapter<String> FromHourItems;
+
+    String[] hours1 =
+            { "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00",
+                    "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "19:00", "20:00",
+                    "20:30", "21:00"
+            };
+
+    String[] hours2 =
+            { "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00",
+                    "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "19:00", "20:00",
+                    "20:30", "21:00"
+            };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setCurrentLocation(0, 0);
@@ -126,7 +159,6 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         activityCreateAdBinding = ActivityCreateAdBinding.inflate(getLayoutInflater());
         setContentView(activityCreateAdBinding.getRoot());
         allocateActivityTitle("Ad Creation");
-
 
         ADDRESS_textInputLayout = findViewById(R.id.textfield_address);
         ADDRESS_textInputLayout.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -193,6 +225,14 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         adapterItems = new ArrayAdapter<String>(this, R.layout.list_item, items);
         autoCompleteTxt.setAdapter(adapterItems);
 
+        from_hour = findViewById(R.id.select_from_hour);
+        FromHourItems = new ArrayAdapter<String>(this, R.layout.list_item, hours1);
+        from_hour.setAdapter(FromHourItems);
+
+        to_hour = findViewById(R.id.select_to_hour);
+        ToHourItems = new ArrayAdapter<String>(this, R.layout.list_item, hours2);
+        to_hour.setAdapter(ToHourItems);
+
         TITLE_textInputLayout = (TextInputLayout) findViewById(R.id.title_textfield);
 
         PRICE_textInputLayout = (TextInputLayout) findViewById(R.id.price_textfield);
@@ -205,6 +245,48 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                 String item = parent.getItemAtPosition(position).toString();
                 category_input = item;
                 Toast.makeText(getApplicationContext(), "Item: " + item, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        from_hour.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                String time_from_input = (String) parent.getItemAtPosition(position);
+
+                try {
+                    appointment_from = LocalTime.parse(time_from_input);
+                    // Use the LocalTime object
+                } catch (DateTimeParseException e) {
+                    // Handle the exception
+                    System.out.println("Invalid time format: " + time_from_input);
+                }
+                System.out.println("----------------------------------FROM------------------------------------------------");
+                System.out.println("Hour selected: " + time_from_input);
+                System.out.println("LocalTime from selection: " + appointment_from);
+                System.out.println("--------------------------------------------------------------------------------------");
+            }
+        });
+
+        to_hour.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                String time_to_input = (String) parent.getItemAtPosition(position);
+
+                try {
+                    appointment_to = LocalTime.parse(time_to_input);
+                    // Use the LocalTime object
+                } catch (DateTimeParseException e) {
+                    // Handle the exception
+                    System.out.println("Invalid time format: " + time_to_input);
+                }
+                System.out.println("------------------------------------TO------------------------------------------------");
+                System.out.println("Hour selected: " + time_to_input);
+                System.out.println("LocalTime from selection: " + appointment_to);
+                System.out.println("--------------------------------------------------------------------------------------");
             }
         });
 
@@ -391,6 +473,7 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         create_ad_button.setOnClickListener(new View.OnClickListener()
         {
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v)
             {
@@ -398,6 +481,29 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                 title_input = TITLE_textInputLayout.getEditText().getText().toString();
                 price_input = PRICE_textInputLayout.getEditText().getText().toString();
                 description_input = DESCRIPTION_textInputLayout.getEditText().getText().toString();
+
+                if(appointment_from == null)
+                {
+                    showPop(getWindow().getDecorView().getRootView(), "Choose from what time you wish to make appointments");
+                }
+
+                if(appointment_to == null)
+                {
+                    showPop(getWindow().getDecorView().getRootView(), "Choose to what time you wish to make appointments");
+                }
+
+                if(appointment_from != null && appointment_to != null)
+                {
+                    if(appointment_to.isBefore(appointment_from))
+                    {
+                        showPop(getWindow().getDecorView().getRootView(), "Your time inputs are incorrect");
+                    }
+
+                    if(appointment_to.equals(appointment_from))
+                    {
+                        showPop(getWindow().getDecorView().getRootView(), "Your time schedule must have at least half an hour gap!");
+                    }
+                }
 
                 if(!smart_check_at_least_once)
                 {
@@ -451,13 +557,16 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                     dlgAlert1.create().show();
                 }
                 else if(smart_check_at_least_once && smart_check_complete && imageUris.size() > 0
-                        && image_bitmaps.size() > 0 && image_matches.size() > 0)
+                        && image_bitmaps.size() > 0 && image_matches.size() > 0 &&
+                        appointment_from != null && appointment_to != null && appointment_from.isBefore(appointment_to))
                 {
                     makeAd();
                 }
             }
         });
     }
+
+
     public void classifyImage(Bitmap image)
     {
         try
@@ -533,6 +642,7 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void makeAd() {
         ProgressDialog progressDialog = new ProgressDialog(CreateAdActivity.this);
         progressDialog.setMessage("Creating ad...");
@@ -592,14 +702,21 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Ads");
                                 String adId = reference.push().getKey();
 
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
                                 HashMap<String, Object> hashMap = new HashMap<>();
                                 hashMap.put("ID", adId);
                                 hashMap.put("Images", myurls);
                                 hashMap.put("Publisher", currentUser.getUid());
                                 hashMap.put("Title", title_input);
                                 hashMap.put("Coordinates", getCurrentLocation());
+                                hashMap.put("Appointment_From", appointment_from.format(formatter));
+                                hashMap.put("Appointment_To", appointment_to.format(formatter));
 
-                                if (price_input.equals("0") || price_input.equals("")) {
+                                if (price_input.equals("0") || price_input.equals("")
+                                        || price_input.equals("Free") || price_input.equals("FREE") ||
+                                        price_input.equals("free"))
+                                {
                                     hashMap.put("Price", "Free");
                                 }
                                 else

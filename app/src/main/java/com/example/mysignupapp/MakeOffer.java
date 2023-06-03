@@ -3,6 +3,7 @@ package com.example.mysignupapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -21,9 +22,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,8 +60,13 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -99,7 +108,6 @@ public class MakeOffer extends DrawerBaseActivity
     String receiver_username;
     StorageTask uploadTask2;
     StorageReference storageReference;
-
     String offer_title_input;
     String offer_category_input;
     String offer_description_input;
@@ -110,6 +118,22 @@ public class MakeOffer extends DrawerBaseActivity
     ArrayList<Bitmap> image_bitmaps;
     ArrayList<Boolean> image_matches;
 
+    AutoCompleteTextView hour_of_appointment;
+    String appointment_from;
+    String appointment_to;
+    LocalTime appointment_from_date;
+    LocalTime appointment_to_date;
+    LocalTime time_of_appointment;
+    ArrayAdapter<String> AvailableHoursItems;
+    ArrayList<String> available_hours;
+
+    Button calendar_editText;
+    String chosen_date;
+    int cal_year;
+    int cal_month;
+    int cal_day;
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -131,6 +155,7 @@ public class MakeOffer extends DrawerBaseActivity
         pick_image_button = (Button) findViewById(R.id.request_pickImagesBtn);
         send_request_button = (Button) findViewById(R.id.create_request);
         smart_check = (Button) findViewById(R.id.request_smart_check);
+        calendar_editText = (Button) findViewById(R.id.calendar_editText);
 
         SELECT_CATEGORY_TEXT_INPUT = findViewById(R.id.request_category_box);
         text_of_chosen_category = findViewById(R.id.request_category);
@@ -189,20 +214,115 @@ public class MakeOffer extends DrawerBaseActivity
 
             }
         });
+
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading Ad Details");
+        progressDialog.show();
         ads_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot child : snapshot.getChildren()) {
+                for (DataSnapshot child : snapshot.getChildren())
+                {
                     HashMap<String, Object> child_hashmap = (HashMap<String, Object>) child.getValue();
-                    if (child_hashmap.get("ID").equals(offer_about_ad_id)) {
+                    if (child_hashmap.get("ID").equals(offer_about_ad_id))
+                    {
+                        System.out.println("------------------------FOUND AD FROM DATABASE-------------------------------------------");
                         which_ad_i_am_interested = child_hashmap;
+                        appointment_from = (String) which_ad_i_am_interested.get("Appointment_From");
+                        System.out.println("Available From: " + appointment_from);
+                        appointment_to = (String) which_ad_i_am_interested.get("Appointment_To");
+                        System.out.println("Available To: " + appointment_to);
+                        appointment_from_date = LocalTime.parse(appointment_from);
+                        System.out.println("LocalTime From: " + appointment_from_date.toString());
+                        appointment_to_date = LocalTime.parse(appointment_to);
+                        System.out.println("LocalTime To: " + appointment_to_date.toString());
+                        System.out.println("------------------------------Available times--------------------------------------------");
+
+                        available_hours = new ArrayList<>();
+                        LocalTime current_time = appointment_from_date;
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+                        while (current_time.isBefore(appointment_to_date) || current_time.equals(appointment_to_date)) {
+
+                            String current_time_string = current_time.format(formatter);
+                            available_hours.add(current_time_string);
+                            current_time = current_time.plusMinutes(30);
+                        }
+                        for(String t: available_hours)
+                        {
+                            System.out.println("Choice: " + t);
+                        }
+                        System.out.println("-----------------------------------------------------------------------------------------");
+
+                        hour_of_appointment = findViewById(R.id.select_appointment_hour);
+                        AvailableHoursItems = new ArrayAdapter<String>(MakeOffer.this, R.layout.list_item, available_hours);
+                        hour_of_appointment.setAdapter(AvailableHoursItems);
                         break;
                     }
+
                 }
+                progressDialog.dismiss();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        calendar_editText.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                final Calendar cal = Calendar.getInstance();
+                cal_day = cal.get(Calendar.DATE);
+                cal_month = cal.get(Calendar.MONTH);
+                cal_year = cal.get(Calendar.YEAR);
+
+                // Set the minimum date to one week after today
+                Calendar minDate = Calendar.getInstance();
+                minDate.add(Calendar.DAY_OF_MONTH, 7);
+
+                // Set the maximum date to one month after today
+                Calendar maxDate = Calendar.getInstance();
+                maxDate.add(Calendar.MONTH, 1);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MakeOffer.this, android.R.style.Theme_DeviceDefault_Dialog, new DatePickerDialog.OnDateSetListener()
+                {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int date)
+                    {
+                        chosen_date = date + "/" + month + "/" + year;
+                        calendar_editText.setText(chosen_date);
+                    }
+                }, cal_year, cal_month, cal_day);
+
+                datePickerDialog.getDatePicker().setMinDate(minDate.getTimeInMillis());
+                datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
+                datePickerDialog.show();
+            }
+        });
+
+        hour_of_appointment = findViewById(R.id.select_appointment_hour);
+        hour_of_appointment.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                String time_from_input = (String) parent.getItemAtPosition(position);
+
+                try {
+                    time_of_appointment = LocalTime.parse(time_from_input);
+                    // Use the LocalTime object
+                } catch (DateTimeParseException e) {
+                    // Handle the exception
+                    System.out.println("Invalid time format: " + time_from_input);
+                }
+                System.out.println("----------------------------------APPOINTMENT------------------------------------------------");
+                System.out.println("Hour selected: " + time_from_input);
+                System.out.println("LocalTime from selection: " + time_of_appointment);
+                System.out.println("---------------------------------------------------------------------------------------------");
             }
         });
 
@@ -327,60 +447,77 @@ public class MakeOffer extends DrawerBaseActivity
                 offer_category_input = chosen_category_input;
                 offer_description_input = DESCRIPTION_TEXT_INPUT.getEditText().getText().toString();
 
-                if(!smart_check_at_least_once)
+                if(time_of_appointment == null)
                 {
-                    androidx.appcompat.app.AlertDialog.Builder dlgAlert1  = new androidx.appcompat.app.AlertDialog.Builder(MakeOffer.this);
-                    dlgAlert1.setMessage("You must Smart Check your ad at least once.");
-                    dlgAlert1.setTitle("Not so fast");
-                    dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-
-                        }
-                    });
-                    dlgAlert1.setCancelable(true);
-                    dlgAlert1.create().show();
+                    showPop(getWindow().getDecorView().getRootView(), "Choose what time you wish for an appointment");
                 }
 
-                String error_for_images = "Your Smart Check detected problem: Your images don't match the selected category\n";
-                boolean found_problem = false;
-                for(int j = 0; j < image_matches.size(); j++)
+                if(chosen_date == null)
                 {
-                    if(!image_matches.get(j))
+                    showPop(getWindow().getDecorView().getRootView(), "Choose what date you wish for an appointment");
+                }
+
+                if(offer_ad_choice)
+                {
+                    if(!smart_check_at_least_once)
                     {
-                        found_problem = true;
-                        error_for_images += "Picture number: " + (j + 1) + "\n";
+                        androidx.appcompat.app.AlertDialog.Builder dlgAlert1  = new androidx.appcompat.app.AlertDialog.Builder(MakeOffer.this);
+                        dlgAlert1.setMessage("You must Smart Check your ad at least once.");
+                        dlgAlert1.setTitle("Not so fast");
+                        dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+
+                            }
+                        });
+                        dlgAlert1.setCancelable(true);
+                        dlgAlert1.create().show();
+                    }
+
+                    String error_for_images = "Your Smart Check detected problem: Your images don't match the selected category\n";
+                    boolean found_problem = false;
+                    for(int j = 0; j < image_matches.size(); j++)
+                    {
+                        if(!image_matches.get(j))
+                        {
+                            found_problem = true;
+                            error_for_images += "Picture number: " + (j + 1) + "\n";
+                        }
+                    }
+
+                    smart_check_complete = !found_problem;
+
+                    if(offer_category_input != null && imageUris.size() == 0 && image_bitmaps.size() > 0 && image_matches.size() > 0)
+                    {
+                        showPop(getWindow().getDecorView().getRootView(), "Your ad doesn't have pictures");
+                    }
+
+                    if(smart_check_at_least_once && !smart_check_complete)
+                    {
+                        androidx.appcompat.app.AlertDialog.Builder dlgAlert1  = new androidx.appcompat.app.AlertDialog.Builder(MakeOffer.this);
+                        dlgAlert1.setMessage(error_for_images);
+                        dlgAlert1.setTitle("Not so fast");
+                        dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+
+                            }
+                        });
+                        dlgAlert1.setCancelable(true);
+                        dlgAlert1.create().show();
                     }
                 }
 
-                smart_check_complete = !found_problem;
-
-                if(offer_category_input != null && imageUris.size() == 0 && image_bitmaps.size() > 0 && image_matches.size() > 0)
+                if(offer_ad_choice && smart_check_at_least_once && smart_check_complete && imageUris.size() > 0
+                        && image_bitmaps.size() > 0 && image_matches.size() > 0 && time_of_appointment != null && chosen_date != null)
                 {
-                    showPop(getWindow().getDecorView().getRootView(), "Your ad doesn't have pictures");
+                    sendRequestToUser();
                 }
-
-                if(smart_check_at_least_once && !smart_check_complete)
-                {
-                    androidx.appcompat.app.AlertDialog.Builder dlgAlert1  = new androidx.appcompat.app.AlertDialog.Builder(MakeOffer.this);
-                    dlgAlert1.setMessage(error_for_images);
-                    dlgAlert1.setTitle("Not so fast");
-                    dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-
-                        }
-                    });
-                    dlgAlert1.setCancelable(true);
-                    dlgAlert1.create().show();
-                }
-
-                else if(smart_check_at_least_once && smart_check_complete && imageUris.size() > 0
-                        && image_bitmaps.size() > 0 && image_matches.size() > 0)
+                else if(offer_money_choice && time_of_appointment != null && chosen_date != null)
                 {
                     sendRequestToUser();
                 }
@@ -465,6 +602,7 @@ public class MakeOffer extends DrawerBaseActivity
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void sendRequestToUser()
     {
         if (offer_money_choice)
@@ -497,9 +635,10 @@ public class MakeOffer extends DrawerBaseActivity
                 Date now = new Date();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
                 String date_now = dateFormat.format(now);
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
 
                 Request send_request = new Request(request_id, offer_sender, offer_receiver, date_now,
-                        which_ad_i_am_interested, price_input + "$", null, false);
+                        which_ad_i_am_interested, price_input + "$", null, false, time_of_appointment.format(format), chosen_date);
 
                 String title_for_request = which_ad_i_am_interested.get("Title") + ": " + sender_username + "to " + receiver_username;
                 reference.child(title_for_request).setValue(send_request);
@@ -551,6 +690,7 @@ public class MakeOffer extends DrawerBaseActivity
                                     db = FirebaseDatabase.getInstance();
                                     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Requests");
                                     String requestId = reference.push().getKey();
+                                    DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
 
                                     request_offer.put("Title", offer_title_input);
                                     request_offer.put("Description", offer_description_input);
@@ -562,7 +702,7 @@ public class MakeOffer extends DrawerBaseActivity
                                     String date_now = dateFormat.format(now);
 
                                     Request send_request = new Request(requestId, offer_sender, offer_receiver, date_now,
-                                            which_ad_i_am_interested, null, request_offer, false);
+                                            which_ad_i_am_interested, null, request_offer, false, time_of_appointment.format(format), chosen_date);
 
                                     String title_for_request = which_ad_i_am_interested.get("Title") + ": " + sender_username + "to " + receiver_username;
                                     reference.child(title_for_request).setValue(send_request);
