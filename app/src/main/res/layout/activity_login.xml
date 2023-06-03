@@ -16,7 +16,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="25dp"
         android:text="Welcome to SXM"
-        android:textColor="#9CD6DD"
+        android:textColor="@color/textColor"
         android:textSize="35sp"
         android:gravity="center"
         android:textStyle="italic"
@@ -30,7 +30,7 @@
         android:layout_gravity="center"
         android:layout_margin="15dp"
         android:gravity="center"
-        android:textColor="#9CD6DD"
+        android:textColor="@color/textColor"
         android:layout_below="@+id/welcomeMessage"
         android:textSize="20sp"
         tools:ignore="TextContrastCheck" />
@@ -50,15 +50,14 @@
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:hint="Username"
-            android:textColorHint="#000000">
+            android:textColorHint="@color/myThemeColor">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#FFFFFF"
+                android:backgroundTint="@color/backgroundColor"
                 android:inputType="text"
                 android:text="conkats2"
-                android:textColorHint="#000000"
                 android:textColor="#000000"
                 tools:ignore="TextContrastCheck" />
 
@@ -80,7 +79,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#FDFDFD"
+                android:backgroundTint="@color/backgroundColor"
                 android:inputType="textPassword"
                 android:text="123456789"
                 android:textColorHint="#000000"
@@ -95,7 +94,7 @@
         android:id="@+id/completeLogin"
         android:layout_width="match_parent"
         android:layout_height="54dp"
-        android:backgroundTint="#9CD6DD"
+        android:backgroundTint="@color/teal_200"
         android:text="Enter"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
@@ -109,7 +108,7 @@
         android:layout_width="300dp"
         android:layout_height="60dp"
         android:layout_marginStart="10dp"
-        android:textColor="#9CD6DD"
+        android:textColor="@color/textColor"
         android:gravity="center"
         android:layout_gravity="center"
         android:text="Don't have an account?"
@@ -121,7 +120,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
-        android:backgroundTint="#F60031"
+        android:backgroundTint="@color/myRed"
         android:text="Sign up"
         android:textColor="#FFFFFF"
         tools:ignore="TextContrastCheck" />

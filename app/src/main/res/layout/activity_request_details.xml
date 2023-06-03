@@ -109,7 +109,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginBottom="20dp"
-            android:backgroundTint="#DF0B0B"
+            android:backgroundTint="@color/myRed"
             android:text="Decline"
             android:textColor="@color/white"
             android:textSize="15sp"
