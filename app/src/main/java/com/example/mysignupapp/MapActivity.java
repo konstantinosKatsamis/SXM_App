@@ -90,7 +90,6 @@ public class MapActivity extends DrawerBaseActivity implements OnMapReadyCallbac
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private double la = 0.0, lo = 0.0;
     private FirebaseDatabase db;
-
     private String title, category, id;
     private Ad ad_from_adsDetails = new Ad();
 

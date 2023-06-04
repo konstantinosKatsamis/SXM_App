@@ -9,9 +9,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.google.firebase.database.FirebaseDatabase;
+/*
+    ChooseOfferActivity opens a small pop up window where the user has two choices:
+    1) Make a money offer where they must fill how much money they wish to give
+    2) Make a trade offer where they must create an ad of their own to switch with the ad
+
+ */
 
 public class ChooseOfferActivity extends Activity
 {
