@@ -185,27 +185,13 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         first_checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast.makeText(getApplicationContext(), "ha", Toast.LENGTH_SHORT).show();
                 if (isChecked) {
                     getLocationCoordinates();
                     location_checkbox = true;
-                    System.out.println(" ------------------------------------------------------ button checked");
-//                    ADDRESS_textInputLayout.getEditText().setText("");
                 }
                 else{
                     location_checkbox = false;
-                    System.out.println(" ------------------------------------------------------ button UN checked");
                 }
-//                if (isChecked) {
-//                    findViewById(R.id.textfield_address).setVisibility(View.VISIBLE);
-//                    findViewById(R.id.get_location_cbox).setVisibility(View.VISIBLE);
-//                } else {
-//                    findViewById(R.id.textfield_address).setVisibility(View.GONE);
-//                    findViewById(R.id.get_location_cbox).setVisibility(View.GONE);
-//                    getLocationAutomatically.setChecked(false);
-//                    ADDRESS_textInputLayout.getEditText().setText("");
-//                    setCurrentLocation(0, 0);
-//                }
             }
         });
 
@@ -989,8 +975,6 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
 
     public void setCurrentLocation(double lat, double lon){
         this.currentLocation = new LatLng(lat, lon);
-        System.out.println("latitude: " + currentLocation.latitude);
-        System.out.println("longitude: " + currentLocation.longitude);
     }
 
     public LatLng getCurrentLocation(){ return this.currentLocation; }
