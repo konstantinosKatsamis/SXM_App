@@ -6,11 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:id="@+id/create_ad_activity"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/create_ad_linear_layout"
         android:orientation="vertical"
         android:padding="20dp"
         tools:context="com.example.mysignupapp.RegisterActivity">
@@ -81,6 +83,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="#FFFFFF"
                     android:inputType="text"
+                    android:text="1"
                     android:textColor="#000000"
                     android:textColorHint="#000000"
                     tools:ignore="TextContrastCheck" />
@@ -103,6 +106,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="#FFFFFF"
                     android:inputType="text"
+                    android:text="1"
                     android:textColor="#000000"
                     android:textColorHint="#000000"
                     tools:ignore="TextContrastCheck" />
@@ -143,10 +147,58 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="#FFFFFF"
                     android:inputType="textMultiLine"
+                    android:text="1"
                     android:textColor="#000000"
                     android:textColorHint="#000000"
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:backgroundTint="#FFFFFF"
+                android:inputType="text"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                tools:ignore="TextContrastCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleX="1.4"
+                android:scaleY="1.4"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="30dp"
+                android:text="Check to add Location" />
+
+            <CheckBox
+                android:id="@+id/get_location_cbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Check this, to get your current location automatically, or"
+                android:onClick="getGPS_Status"
+                android:visibility="gone"/>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textfield_address"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:hint="set the area you want e.g. Χαλάνδρι, 15232"
+                android:textColorHint="#000000"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#FFFFFF"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHint="#000000"
+                    tools:ignore="TextContrastCheck"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -154,6 +206,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:paddingTop="25dp"
                 android:text="From what time you wish to make appointments for your ad?"
                 android:textColor="#3F51B5"
                 android:textSize="18sp">
@@ -208,53 +261,12 @@
                     android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <CheckBox
-                android:id="@+id/checkbox"
-                android:backgroundTint="#FFFFFF"
-                android:inputType="text"
-                android:textColor="#000000"
-                android:textColorHint="#000000"
-                tools:ignore="TextContrastCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleX="1.4"
-                android:scaleY="1.4"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="30dp"
-                android:text="Check to add Location" />
-
-            <CheckBox
-                android:id="@+id/get_location_cbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Check this, to get your current location automatically, or"
-                android:onClick="getGPS_Status"
-                android:visibility="gone"/>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textfield_address"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            <Button
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="15dp"
-                android:hint="set the area you want e.g. Χαλάνδρι, 15232"
-                android:textColorHint="#000000"
-                android:visibility="gone">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#FFFFFF"
-                    android:inputType="text"
-                    android:textColor="#000000"
-                    android:textColorHint="#000000"
-                    tools:ignore="TextContrastCheck"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-
+                android:layout_height="match_parent"
+                android:id="@+id/location_ha"/>
 
 
             <TextView

@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,6 +36,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -125,11 +129,12 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
     LatLng currentLocation;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private CheckBox first_checkbox, getLocationAutomatically;
+    private boolean location_manualy = false;
     private boolean boolean_location;
     TextInputLayout ADDRESS_textInputLayout;
     int images_size_for_recognition = 224;
     boolean smart_check_at_least_once = false;
-    boolean smart_check_complete = false;
+    boolean smart_check_complete = false, location_failure = false;
     ArrayList<Bitmap> image_bitmaps;
     ArrayList<Boolean> image_matches;
 
@@ -139,6 +144,7 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
     LocalTime appointment_to;
     ArrayAdapter<String> ToHourItems;
     ArrayAdapter<String> FromHourItems;
+    Button find_ha_location;
 
     String[] hours1 =
             { "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00",
@@ -160,17 +166,38 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
         setContentView(activityCreateAdBinding.getRoot());
         allocateActivityTitle("Ad Creation");
 
+        ScrollView scrollView = (ScrollView) findViewById(R.id.create_ad_activity);
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                System.out.println(address_input.equals(""));
+                if(location_manualy == true){ // && !address_input.equals("")
+                    if(location_failure == true){
+                        System.out.println("????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????");
+
+                        ADDRESS_textInputLayout = findViewById(R.id.textfield_address);
+                        address_input = ADDRESS_textInputLayout.getEditText().getText().toString();
+                        String[] str = address_input.split(", ");
+                        System.out.println(str[0]);
+                        System.out.println(str[1]);
+                        findGeocoding(address_input);
+                    }
+                }
+
+            }
+        });
+
         ADDRESS_textInputLayout = findViewById(R.id.textfield_address);
         ADDRESS_textInputLayout.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-
+                if (hasFocus) {
+                    location_manualy = true;
                 }else{
                     address_input = ADDRESS_textInputLayout.getEditText().getText().toString();
                     findGeocoding(address_input);
+                    System.out.println(currentLocation.latitude + " " + currentLocation.longitude);
                     getLocationAutomatically.setChecked(false);
-
                 }
             }
         });
@@ -446,6 +473,31 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
             @Override
             public void onClick(View v)
             {
+                if(location_manualy == true && currentLocation.latitude == 0){
+
+                    System.out.println("======================================================================================================================= " + location_failure);
+
+
+                        location_failure = true;
+                        AlertDialog.Builder dlgAlert1  = new AlertDialog.Builder(CreateAdActivity.this);
+                        dlgAlert1.setMessage("Wrong Region and Postal code. Try again and Remake the Smart Check");
+                        dlgAlert1.setTitle("Location Failure");
+                        dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+
+                            }
+                        });
+                        dlgAlert1.setCancelable(true);
+                        dlgAlert1.create().show();
+
+
+                }
+                else{
+                    System.out.println("DEN TES VRISKI MANUALLY");
+                }
 
                 if(category_input == null)
                 {
@@ -545,6 +597,21 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                     AlertDialog.Builder dlgAlert1  = new AlertDialog.Builder(CreateAdActivity.this);
                     dlgAlert1.setMessage(error_for_images);
                     dlgAlert1.setTitle("Not so fast");
+                    dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+
+                        }
+                    });
+                    dlgAlert1.setCancelable(true);
+                    dlgAlert1.create().show();
+                }
+                else if(currentLocation.latitude == 0){ // && address_input.equals("")
+                    AlertDialog.Builder dlgAlert1  = new AlertDialog.Builder(CreateAdActivity.this);
+                    dlgAlert1.setMessage("Wrong Region and Postal code. Try again and Remake the Smart Check");
+                    dlgAlert1.setTitle("Location Failure");
                     dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
                     {
                         @Override
