@@ -27,13 +27,25 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/when_sent"
+        android:id="@+id/what_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/profile_switcher"
-        android:text="When sent:"
+        android:text="Date: "
         android:layout_marginTop="10dp"
-        android:textSize="20sp"
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:layout_marginLeft="8dp"/>
+
+    <TextView
+        android:id="@+id/what_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/profile_switcher"
+        android:layout_below="@id/what_date"
+        android:text="Hour: "
+        android:layout_marginTop="10dp"
+        android:textSize="17sp"
         android:textColor="@color/black"
         android:layout_marginLeft="8dp"/>
 
@@ -42,10 +54,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/profile_switcher"
-        android:layout_below="@id/when_sent"
-        android:text="Name of Switcher"
+        android:layout_below="@id/what_time"
+        android:text="Switcher: "
         android:layout_marginTop="10dp"
-        android:textSize="20sp"
+        android:textSize="17sp"
         android:inputType="textMultiLine"
         android:textColor="@color/black"
         android:layout_marginLeft="8dp"/>
@@ -57,8 +69,9 @@
         android:layout_toRightOf="@+id/profile_switcher"
         android:layout_below="@id/switcher_name"
         android:text="Interested for: "
+        android:inputType="textMultiLine"
         android:layout_marginTop="10dp"
-        android:textSize="20sp"
+        android:textSize="17sp"
         android:textColor="@color/black"
         android:layout_marginLeft="8dp"/>
 
@@ -70,7 +83,7 @@
         android:layout_below="@id/interested_for"
         android:text="Trade With:"
         android:layout_marginTop="10dp"
-        android:textSize="20sp"
+        android:textSize="17sp"
         android:inputType="textMultiLine"
         android:textColor="@color/black"
         android:layout_marginLeft="8dp"/>

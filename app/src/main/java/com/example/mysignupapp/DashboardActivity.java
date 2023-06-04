@@ -1,6 +1,5 @@
 package com.example.mysignupapp;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.location.Location;
 import android.os.Bundle;

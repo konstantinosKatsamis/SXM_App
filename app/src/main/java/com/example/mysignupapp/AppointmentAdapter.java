@@ -20,14 +20,17 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+/*
+    AppointmentAdapter is used for viewing the saved appointments a user has
+ */
 public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.ViewHolder>
 {
-    Context context;
-    List<Appointment> appointments;
-    FirebaseDatabase db;
-    FirebaseAuth mAuth;
-    String firebase_link;
-    private AppointmentAdapter.AppointmentClickListener listener;
+    Context context; // Context where the view will be visible
+    List<Appointment> appointments; // List of all appointments
+    FirebaseDatabase db; // Firebase database(necessary to find profile picture and details)
+    FirebaseAuth mAuth; // Firebase authentication
+    String firebase_link; // Link of the profile image
+    private AppointmentAdapter.AppointmentClickListener listener; // Custom click listener
 
     public AppointmentAdapter(Context context, List<Appointment> appointments, AppointmentAdapter.AppointmentClickListener listener)
     {
@@ -55,9 +58,12 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         String sender_id = chosen_appointment.getSender_id();
         String receiver_id = chosen_appointment.getReceiver_id();
 
+        // The appointment concerns two users
         DatabaseReference user_ref1 = db.getReference("Users/" + sender_id);
         DatabaseReference user_ref2 = db.getReference("Users/" + receiver_id);
 
+        // Depending of who is the current user, it is logical in "My Appointments" view to show the other user's details as well as
+        // what the user switches with them and what they give back
         if(current_id.equals(sender_id))
         {
             user_ref2.addListenerForSingleValueEvent(new ValueEventListener()
@@ -76,21 +82,24 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
                         }
                     }
 
-                    holder.switcher_name.setText(user_now.getUsername());
-                    String date = chosen_appointment.getRequest().getWhen_created();
-                    holder.when.setText(date);
-                    String ad_of_interest = chosen_appointment.getRequest().getAbout().get("Title").toString();
-                    holder.interested_for.setText(ad_of_interest);
+                    String date_of_meeting = "Date: " + chosen_appointment.getAppointment_date();
+                    holder.date.setText(date_of_meeting);
+                    String hour_of_meeting = "Hour: " + chosen_appointment.getAppointment_hour();
+                    holder.hour.setText(hour_of_meeting);
+                    String person_of_meeting = "Switcher: " + user_now.getUsername();
+                    holder.switcher.setText(person_of_meeting);
+                    String ad_of_interest = "Interested for: " + chosen_appointment.getRequest().getAbout().get("Title").toString();
+                    holder.interested.setText(ad_of_interest);
 
                     if(chosen_appointment.getRequest().getPrice_offer() != null)
                     {
-                        String price_trade = chosen_appointment.getRequest().getPrice_offer();
-                        holder.trade_with.setText(price_trade);
+                        String price_trade = "Trade with: " + chosen_appointment.getRequest().getPrice_offer();
+                        holder.trade.setText(price_trade);
                     }
                     else if(chosen_appointment.getRequest().getTrade() != null)
                     {
-                        String ad_trade = chosen_appointment.getRequest().getTrade().get("Title").toString();
-                        holder.trade_with.setText(ad_trade);
+                        String ad_trade =  "Trade with: " + chosen_appointment.getRequest().getTrade().get("Title").toString();
+                        holder.trade.setText(ad_trade);
                     }
 
                 }
@@ -120,21 +129,24 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
                         }
                     }
 
-                    holder.switcher_name.setText(user_now.getUsername());
-                    String date = chosen_appointment.getRequest().getWhen_created();
-                    holder.when.setText(date);
-                    String ad_of_interest = chosen_appointment.getRequest().getAbout().get("Title").toString();
-                    holder.trade_with.setText(ad_of_interest);
+                    String date_of_meeting =  "Date: " + chosen_appointment.getAppointment_date();
+                    holder.date.setText(date_of_meeting);
+                    String hour_of_meeting =  "Hour: " + chosen_appointment.getAppointment_hour();
+                    holder.hour.setText(hour_of_meeting);
+                    String person_of_meeting = "Switcher: " + user_now.getUsername();
+                    holder.switcher.setText(person_of_meeting);
+                    String ad_of_interest = "Interested for: " + chosen_appointment.getRequest().getAbout().get("Title").toString();
+                    holder.trade.setText(ad_of_interest);
 
                     if(chosen_appointment.getRequest().getPrice_offer() != null)
                     {
-                        String price_trade = chosen_appointment.getRequest().getPrice_offer();
-                        holder.interested_for.setText(price_trade);
+                        String price_trade = "Trade with: " + chosen_appointment.getRequest().getPrice_offer();
+                        holder.interested.setText(price_trade);
                     }
                     else if(chosen_appointment.getRequest().getTrade() != null)
                     {
-                        String ad_trade = chosen_appointment.getRequest().getTrade().get("Title").toString();
-                        holder.interested_for.setText(ad_trade);
+                        String ad_trade = "Trade with: " + chosen_appointment.getRequest().getTrade().get("Title").toString();
+                        holder.interested.setText(ad_trade);
                     }
                 }
 
@@ -164,19 +176,21 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
     {
 
         ImageView profile_picture_switcher;
-        TextView when;
-        TextView switcher_name;
-        TextView interested_for;
-        TextView trade_with;
+        TextView date;
+        TextView hour;
+        TextView switcher;
+        TextView interested;
+        TextView trade;
 
         public ViewHolder(@NonNull View itemView)
         {
             super(itemView);
             profile_picture_switcher = itemView.findViewById(R.id.switcher_profile_pic);
-            when = itemView.findViewById(R.id.when_sent);
-            switcher_name = itemView.findViewById(R.id.switcher_name);
-            interested_for = itemView.findViewById(R.id.interested_for);
-            trade_with = itemView.findViewById(R.id.trade_with);
+            date = itemView.findViewById(R.id.what_date);
+            hour = itemView.findViewById(R.id.what_time);
+            switcher = itemView.findViewById(R.id.switcher_name);
+            interested = itemView.findViewById(R.id.interested_for);
+            trade = itemView.findViewById(R.id.trade_with);
             itemView.setOnClickListener(this);
         }
 

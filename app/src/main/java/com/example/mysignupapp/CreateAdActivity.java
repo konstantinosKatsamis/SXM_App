@@ -9,7 +9,6 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,7 +35,6 @@ import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -73,19 +71,22 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.time.Instant;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Random;
 
+/*
+    CreateAdActivity allows users to create any kind of ad they wish
+
+    The creation of one ad may sound simple but it isn't.
+    For safety purposes the activity helps the user to create an ad as realistic as possible
+    It also uses Machine Learning model for image recognition so that the pictures match the selected category
+    The image recognition can't be avoided, all users must do it and all pictures must match the chosen category
+ */
 public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTask.GeocodingListener {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
