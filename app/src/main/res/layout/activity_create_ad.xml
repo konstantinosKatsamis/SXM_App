@@ -221,7 +221,7 @@
                 android:scaleY="1.4"
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="30dp"
-                android:text="Check to add Location" />
+                android:text="Add your current Location" />
 
             <CheckBox
                 android:id="@+id/get_location_cbox"

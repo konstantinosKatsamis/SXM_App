@@ -125,6 +125,7 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
     LatLng currentLocation;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private CheckBox first_checkbox, getLocationAutomatically;
+    private boolean location_checkbox = false;
     private boolean boolean_location;
     TextInputLayout ADDRESS_textInputLayout;
     int images_size_for_recognition = 224;
@@ -186,15 +187,25 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Toast.makeText(getApplicationContext(), "ha", Toast.LENGTH_SHORT).show();
                 if (isChecked) {
-                    findViewById(R.id.textfield_address).setVisibility(View.VISIBLE);
-                    findViewById(R.id.get_location_cbox).setVisibility(View.VISIBLE);
-                } else {
-                    findViewById(R.id.textfield_address).setVisibility(View.GONE);
-                    findViewById(R.id.get_location_cbox).setVisibility(View.GONE);
-                    getLocationAutomatically.setChecked(false);
-                    ADDRESS_textInputLayout.getEditText().setText("");
-                    setCurrentLocation(0, 0);
+                    getLocationCoordinates();
+                    location_checkbox = true;
+                    System.out.println(" ------------------------------------------------------ button checked");
+//                    ADDRESS_textInputLayout.getEditText().setText("");
                 }
+                else{
+                    location_checkbox = false;
+                    System.out.println(" ------------------------------------------------------ button UN checked");
+                }
+//                if (isChecked) {
+//                    findViewById(R.id.textfield_address).setVisibility(View.VISIBLE);
+//                    findViewById(R.id.get_location_cbox).setVisibility(View.VISIBLE);
+//                } else {
+//                    findViewById(R.id.textfield_address).setVisibility(View.GONE);
+//                    findViewById(R.id.get_location_cbox).setVisibility(View.GONE);
+//                    getLocationAutomatically.setChecked(false);
+//                    ADDRESS_textInputLayout.getEditText().setText("");
+//                    setCurrentLocation(0, 0);
+//                }
             }
         });
 
@@ -446,6 +457,21 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
             @Override
             public void onClick(View v)
             {
+                if(location_checkbox == false){
+                    AlertDialog.Builder dlgAlert1  = new AlertDialog.Builder(CreateAdActivity.this);
+                    dlgAlert1.setMessage("Check the location checkbox to add yuour current location.");
+                    dlgAlert1.setTitle("Location is not Added");
+                    dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+
+                        }
+                    });
+                    dlgAlert1.setCancelable(true);
+                    dlgAlert1.create().show();
+                }
 
                 if(category_input == null)
                 {
@@ -477,7 +503,6 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
             @Override
             public void onClick(View v)
             {
-
                 title_input = TITLE_textInputLayout.getEditText().getText().toString();
                 price_input = PRICE_textInputLayout.getEditText().getText().toString();
                 description_input = DESCRIPTION_textInputLayout.getEditText().getText().toString();
@@ -545,6 +570,21 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
                     AlertDialog.Builder dlgAlert1  = new AlertDialog.Builder(CreateAdActivity.this);
                     dlgAlert1.setMessage(error_for_images);
                     dlgAlert1.setTitle("Not so fast");
+                    dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+
+                        }
+                    });
+                    dlgAlert1.setCancelable(true);
+                    dlgAlert1.create().show();
+                }
+                else if(location_checkbox == false){
+                    AlertDialog.Builder dlgAlert1  = new AlertDialog.Builder(CreateAdActivity.this);
+                    dlgAlert1.setMessage("Check the location checkbox to add yuour current location.");
+                    dlgAlert1.setTitle("Location is not Added");
                     dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
                     {
                         @Override
@@ -983,7 +1023,6 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
     }
 
     public void findGeocoding(String address){
-//        String address = "Λακεδαίμονος, Pl. Agiou Dimitriou &, Αμπελόκηποι 115 23";
         GeocodingTask geocodingTask = new GeocodingTask(this);
         geocodingTask.execute(address);
     }
