@@ -922,6 +922,8 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
             public void onFailure(@NonNull Exception e) {
                 getLocationAutomatically.setChecked(false);
                 setBoolean_location(false);
+                location_checkbox = false;
+                first_checkbox.setChecked(false);
 
                 if (e instanceof ResolvableApiException){
                     try {
