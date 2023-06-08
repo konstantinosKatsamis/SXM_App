@@ -73,14 +73,15 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder>
             holder.category.setText("No category");
         }
 
-        if(ad.get("Price") != null)
-        {
-            holder.price.setText(ad.get("Price").toString());
-        }
-        else
-        {
-            holder.price.setText("No price");
-        }
+        holder.price.setText("");
+//        if(ad.get("Price") != null)
+//        {
+//            holder.price.setText(ad.get("Price").toString());
+//        }
+//        if(ad.get("Price") != null)
+//        {
+//            holder.price.setText("No price");
+//        }
 
         if(switches != null && switches.size() > 0)
         {

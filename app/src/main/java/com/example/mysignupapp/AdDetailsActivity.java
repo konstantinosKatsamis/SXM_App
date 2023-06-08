@@ -52,7 +52,7 @@ public class AdDetailsActivity extends DrawerBaseActivity
     String description;
     
     TextView category_ad;
-    TextView price_ad;
+//    TextView price_ad;
     TextView switch_ad;
     TextView description_ad;
 
@@ -77,7 +77,7 @@ public class AdDetailsActivity extends DrawerBaseActivity
         request_button = (Button) findViewById(R.id.request_button);
 
         category_ad = (TextView) findViewById(R.id.ad_category);
-        price_ad = (TextView) findViewById(R.id.ad_price);
+//        price_ad = (TextView) findViewById(R.id.ad_price);
         switch_ad = (TextView) findViewById(R.id.ad_preffered_items);
         description_ad = (TextView) findViewById(R.id.ad_description);
 
@@ -161,7 +161,7 @@ public class AdDetailsActivity extends DrawerBaseActivity
                 category_ad.setText(what_category);
 
                 String what_price = "Price: " + price;
-                price_ad.setText(what_price);
+//                price_ad.setText(what_price);
 
                 String what_switches = "";
 

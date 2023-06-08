@@ -95,7 +95,8 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:hint="Price(if needed)"
-                android:textColorHint="@color/textColor">
+                android:textColorHint="@color/textColor"
+                android:visibility="gone">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"

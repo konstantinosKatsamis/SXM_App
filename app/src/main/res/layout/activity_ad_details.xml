@@ -47,7 +47,8 @@
             android:text="Price: "
             android:textColor="@color/textColor"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/ad_preffered_items"/>
+            app:layout_constraintBottom_toTopOf="@+id/ad_preffered_items"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/ad_preffered_items"

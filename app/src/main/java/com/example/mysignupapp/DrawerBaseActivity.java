@@ -69,6 +69,10 @@ public abstract class DrawerBaseActivity extends AppCompatActivity implements Na
                 startActivity(my_account);
                 overridePendingTransition(0, 0);
                 break;
+            case R.id.nav_premium:
+                startActivity(new Intent(this, SXP_Premium.class));
+                overridePendingTransition(0, 0);
+                break;
             case R.id.nav_logout:
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
 

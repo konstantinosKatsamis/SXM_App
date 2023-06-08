@@ -15,4 +15,7 @@
     <color name="backgroundTint">#9CD6DD</color>
     <color name="green">#289146</color>
     <color name="myRed">#AA2D2D</color>
+
+
+    <color name="colorPrimary">#40D8E2</color>
 </resources>

@@ -102,7 +102,7 @@ public class MakeOffer extends DrawerBaseActivity
         setContentView(R.layout.activity_make_offer);
         activityMakeOfferBinding = ActivityMakeOfferBinding.inflate(getLayoutInflater());
         setContentView(activityMakeOfferBinding.getRoot());
-        allocateActivityTitle("Make Offer");
+        allocateActivityTitle("Send Request");
 
         offer_money_choice = getIntent().getBooleanExtra("OFFER_MONEY", false);
         offer_ad_choice = getIntent().getBooleanExtra("OFFER_AD", false);
