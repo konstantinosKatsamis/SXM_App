@@ -446,7 +446,7 @@ public class CreateAdActivity extends DrawerBaseActivity implements GeocodingTas
             {
                 if(location_checkbox == false){
                     AlertDialog.Builder dlgAlert1  = new AlertDialog.Builder(CreateAdActivity.this);
-                    dlgAlert1.setMessage("Check the location checkbox to add yuour current location.");
+                    dlgAlert1.setMessage("Check the location checkbox to add location.");
                     dlgAlert1.setTitle("Location is not Added");
                     dlgAlert1.setPositiveButton("OK", new DialogInterface.OnClickListener()
                     {

@@ -109,7 +109,6 @@ public class MakeOffer extends DrawerBaseActivity
     StorageTask uploadTask2;
     StorageReference storageReference;
     String offer_title_input;
-    String offer_category_input;
     String offer_description_input;
 
     int images_size_for_recognition = 224;
@@ -117,7 +116,6 @@ public class MakeOffer extends DrawerBaseActivity
     boolean smart_check_complete = false;
     ArrayList<Bitmap> image_bitmaps;
     ArrayList<Boolean> image_matches;
-
     AutoCompleteTextView hour_of_appointment;
     String appointment_from;
     String appointment_to;
@@ -444,7 +442,6 @@ public class MakeOffer extends DrawerBaseActivity
             public void onClick(View v)
             {
                 offer_title_input = TITLE_TEXT_INPUT.getEditText().getText().toString();
-                offer_category_input = chosen_category_input;
                 offer_description_input = DESCRIPTION_TEXT_INPUT.getEditText().getText().toString();
 
                 if(time_of_appointment == null)
@@ -489,7 +486,7 @@ public class MakeOffer extends DrawerBaseActivity
 
                     smart_check_complete = !found_problem;
 
-                    if(offer_category_input != null && imageUris.size() == 0 && image_bitmaps.size() > 0 && image_matches.size() > 0)
+                    if(chosen_category_input != null && imageUris.size() == 0 && image_bitmaps.size() > 0 && image_matches.size() > 0)
                     {
                         showPop(getWindow().getDecorView().getRootView(), "Your ad doesn't have pictures");
                     }
@@ -575,7 +572,7 @@ public class MakeOffer extends DrawerBaseActivity
                     "Sports", "Office"};
 
             boolean val_boo;
-            val_boo = offer_category_input.equals(classes[maxPos]);
+            val_boo = chosen_category_input.equals(classes[maxPos]);
             image_matches.add(val_boo);
 
             String result = "CLASSIFIED AS: " + classes[maxPos];
@@ -658,7 +655,6 @@ public class MakeOffer extends DrawerBaseActivity
             progressDialog.show();
 
             offer_title_input = TITLE_TEXT_INPUT.getEditText().getText().toString();
-            offer_category_input = chosen_category_input;
             offer_description_input = DESCRIPTION_TEXT_INPUT.getEditText().getText().toString();
 
             if (imageUris.size() > 0) {
@@ -694,7 +690,7 @@ public class MakeOffer extends DrawerBaseActivity
 
                                     request_offer.put("Title", offer_title_input);
                                     request_offer.put("Description", offer_description_input);
-                                    request_offer.put("Category", offer_category_input);
+                                    request_offer.put("Category", chosen_category_input);
                                     request_offer.put("Images", my_urls);
 
                                     Date now = new Date();
