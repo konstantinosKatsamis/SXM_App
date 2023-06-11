@@ -52,12 +52,6 @@ public class UserDetailsActivity extends DrawerBaseActivity {
         total_ads = (TextView) findViewById(R.id.user_total_ads);
         profile_picture = (ImageView) findViewById(R.id.no_profile_picture);
 
-        if (me != null) {
-            Toast.makeText(UserDetailsActivity.this, "YOU EXIST", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(UserDetailsActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
-        }
-
         String user_id = getIntent().getStringExtra("ID");
         db = FirebaseDatabase.getInstance();
         DatabaseReference user_ref = db.getReference("Users/" + user_id);

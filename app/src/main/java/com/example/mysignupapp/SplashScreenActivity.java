@@ -61,14 +61,12 @@ public class SplashScreenActivity extends AppCompatActivity
 
                 if(currentUser != null)
                 {
-                    Toast.makeText(SplashScreenActivity.this, "YOU EXIST", Toast.LENGTH_LONG).show();
                     Intent login_intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
                     startActivity(login_intent);
                     finish();
                 }
                 else
                 {
-                    Toast.makeText(SplashScreenActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
                     // We create and start a new Intent from splash activity to MainActivity
                     // MainActivity : Sign in/ Login screen
                     Intent login_intent = new Intent(SplashScreenActivity.this, LoginActivity.class);

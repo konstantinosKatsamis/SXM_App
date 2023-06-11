@@ -115,8 +115,6 @@ public class RequestDetailsActivity extends DrawerBaseActivity
                         key_for_request = key_for_request + sender_username + "to " + receiver_username;
                         useCompleteKey();
                     }
-
-                    Toast.makeText(RequestDetailsActivity.this, sender_username, Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -145,7 +143,6 @@ public class RequestDetailsActivity extends DrawerBaseActivity
                         key_for_request = key_for_request + sender_username + "to " + receiver_username;
                         useCompleteKey();
                     }
-                    Toast.makeText(RequestDetailsActivity.this, receiver_username, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -160,8 +157,6 @@ public class RequestDetailsActivity extends DrawerBaseActivity
 
     private void useCompleteKey()
     {
-        Toast.makeText(RequestDetailsActivity.this, key_for_request, Toast.LENGTH_LONG).show();
-
         requests = FirebaseDatabase.getInstance().getReference("Requests/" + key_for_request);
 
         requests.addListenerForSingleValueEvent(new ValueEventListener() {

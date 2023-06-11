@@ -86,15 +86,6 @@ public class RegisterActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        if(currentUser != null)
-        {
-            Toast.makeText(RegisterActivity.this, "YOU EXIST", Toast.LENGTH_LONG).show();
-        }
-        else
-        {
-            Toast.makeText(RegisterActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
-        }
-
         initDatePicker();
         dateOfBirthButton = findViewById(R.id.datePickerButton);
 
