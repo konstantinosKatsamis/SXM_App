@@ -49,15 +49,6 @@ public class LoginActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        if(currentUser != null) //if running user exists inside Firebase
-        {
-            Toast.makeText(LoginActivity.this, "YOU EXIST", Toast.LENGTH_LONG).show();
-        }
-        else
-        {
-            Toast.makeText(LoginActivity.this, "WHO ARE YOU", Toast.LENGTH_LONG).show();
-        }
-
         //we give our buttons ids from the activity_login.xml file
         button_for_login = findViewById(R.id.completeLogin);
         button_for_register = findViewById(R.id.register_button);
