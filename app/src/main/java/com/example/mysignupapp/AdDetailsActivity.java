@@ -175,16 +175,23 @@ public class AdDetailsActivity extends DrawerBaseActivity
 
                 String what_switches = "";
 
-                if(switches.isEmpty())
-                {
-                    what_switches = "Preferred categories for switching: " + "No preferences";
+                if(switches != null){
+                    if(switches.isEmpty())
+                    {
+                        what_switches = "Preferred categories for switching: " + "No preferences";
+                    }
+                    else
+                    {
+                        what_switches = "Preferred categories for switching: " + String.join(",", switches);
+                    }
+                    switch_ad.setText(what_switches);
                 }
-                else
-                {
-                    what_switches = "Preferred categories for switching: " + String.join(",", switches);
+                else{
+                    switch_ad.setText("");
                 }
 
-                switch_ad.setText(what_switches);
+
+
 
                 String what_description = "";
 
